@@ -1,6 +1,8 @@
 import * as React from 'react';
 
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 
 import { Logo, Home, Profile, HomeActive, ProfileActive } from './icons';
 
@@ -47,8 +49,8 @@ function TabBar({ state, descriptors, navigation }) {
 
 
                 return label === 'Home' ? (
-                    <View style={styles.midContainer} >
-                        <TouchableOpacity key={label} style={[styles.button, styles.midButton]} onPress={onPress}>
+                    <View key={label} style={styles.midContainer} >
+                        <TouchableOpacity style={[styles.button, styles.midButton]} onPress={onPress}>
                             <Logo />
                         </TouchableOpacity>
                     </View>
@@ -57,7 +59,7 @@ function TabBar({ state, descriptors, navigation }) {
                         {label === 'Task' && <TaskButton />}
                         {label === 'Profile' && <ProfileButton />}
 
-                        <View key={label} style={[
+                        <View style={[
                             styles.selected,
                             isFocused ?
                                 { backgroundColor: 'black' }
@@ -76,9 +78,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
-        height: 56,
+        height: 75,
+        // height: hp('12%'),
         paddingTop: 5,
-        paddingBottom: 5
+        paddingBottom: 25
     },
 
     midContainer: {

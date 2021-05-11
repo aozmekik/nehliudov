@@ -19,7 +19,7 @@ function App() {
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
-        <Tab.Navigator tabBar={props => <TabBar {...props} />}>
+        <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props} />}>
           <Tab.Screen name="Task" component={TaskScreen} />
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
