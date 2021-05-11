@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import TaskCard from '../components/home/task-card';
+import TaskCard from '../components/task/task-card';
 
 function TaskScreen() {
     return (
