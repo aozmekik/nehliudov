@@ -1,3 +1,5 @@
+export { default as ChevronLeft } from './ChevronLeft'
+export { default as ChevronRight } from './ChevronRight'
 export { default as HomeActive } from './HomeActive'
 export { default as Home } from './Home'
 export { default as Logo } from './Logo'

@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
+import FamilyScreen from './family/family';
 
 function HomeScreen() {
     return (
         <View style={styles.container} >
-            <Text style={styles.taskItem}>Selam</Text>
+            <FamilyScreen />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
-        paddingTop: 50,
-        backgroundColor: '#F8F8F8',
+        // paddingTop: 50,
+        // backgroundColor: '#F8F8F8',
         height: '100%',
     },
 
