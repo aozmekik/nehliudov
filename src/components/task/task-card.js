@@ -1,48 +1,15 @@
 import * as React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
-
-
-
-class TaskCard extends React.Component {
-    state = {
-        fontLoaded: false,
-    };
-
-    componentDidMount() {
-        this.loadAssetsAsync();
-    }
-
-    async loadAssetsAsync() {
-        await Font.loadAsync({
-            'SFProText-Bold': require('../../assets/fonts/SFProText-Bold.otf'),
-            'SFProText-Regular': require('../../assets/fonts/SFProText-Regular.otf')
-
-        });
-        this.setState({ fontLoaded: true });
-    }
-
-
-    render() {
-        const { title, desc, } = this.props
-        if (!this.state.fontLoaded)
-            return (<AppLoading />)
-        else {
-            return (
-                <TouchableOpacity style={[this.props.style, styles.container]}>
-                    <View style={styles.leftItem} />
-                    <View style={styles.rightItem}>
-                        <Text style={styles.h1}>{title}</Text>
-                        <Text style={styles.h2}>{desc}</Text>
-                    </View>
-                </TouchableOpacity>
-            );
-        }
-    }
-
-
+function TaskCard({ style, title, desc }) {
+    return (
+        <TouchableOpacity style={[style, styles.container]} >
+            <View style={styles.leftItem} />
+            <View style={styles.rightItem}>
+                <Text style={styles.h1}>{title}</Text>
+                <Text style={styles.h2}>{desc}</Text>
+            </View>
+        </TouchableOpacity>)
 }
 
 
