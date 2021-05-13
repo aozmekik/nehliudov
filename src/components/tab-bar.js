@@ -78,10 +78,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
-        height: 75,
+        height: 60,
         // height: hp('12%'),
         paddingTop: 5,
-        paddingBottom: 25
+        paddingBottom: 15
     },
 
     midContainer: {
