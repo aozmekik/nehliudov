@@ -4,29 +4,22 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { ChevronLeft, ChevronRight } from '../../components/icons';
+import { ChevronRight } from '../../components/icons';
+import SearchBar from '../../components/search-bar';
+import NavBar from '../../components/nav-bar';
 
 function Test() {
     return (<View />);
 }
 
-function Header({ scene, previous, navigation }) {
-    const { options } = scene.descriptor;
-    const title =
-        options.headerTitle !== undefined
-            ? options.headerTitle
-            : options.title !== undefined
-                ? options.title
-                : scene.route.name;
-
+function Header({ navigation }) {
     return (
-        <View style={[options.headerStyle, styles.headerContainer]}>
-            <View style={styles.headerItem}>
-                <TouchableOpacity style={{ flex: 1 }} onPress={navigation.goBack} ><ChevronLeft /></TouchableOpacity>
-                <Text style={styles.headerTitle}>Aile</Text>
-            </View>
+        <View style={styles.headerContainer}>
+            <NavBar title='Aile' onPress={navigation.goBack} />
 
-            <TouchableOpacity style={styles.headerItem}>
+            <SearchBar style={styles.search} title='Ara' />
+
+            <TouchableOpacity style={styles.headerItem2}>
                 <Text style={styles.familyAdd}>Aile ekle</Text>
                 <ChevronRight style={styles.chevronRight} />
             </TouchableOpacity>
@@ -40,7 +33,7 @@ const Stack = createStackNavigator();
 function FamilyScreen() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Family" component={Test} options={({ route, navigation }) => {
+            <Stack.Screen name="Family" component={Test} options={({ navigation }) => {
                 return {
                     header: Header,
                 }
@@ -59,18 +52,14 @@ const styles = StyleSheet.create({
     },
     headerItem: {
         flexDirection: 'row',
-        marginTop: 30,
+        marginTop: 35,
         alignItems: 'center',
-        // backgroundColor: 'pink',
     },
 
-    headerTitle: {
-        flex: 5,
-        color: '#183148',
-        fontFamily: 'SFProText-Medium',
-        alignSelf: 'center',
-        fontSize: 14,
-        paddingLeft: '32%'
+    headerItem2: {
+        flexDirection: 'row',
+        marginTop: 15,
+        alignItems: 'center',
     },
 
     familyAdd: {
@@ -83,6 +72,11 @@ const styles = StyleSheet.create({
 
     chevronRight: {
         marginRight: 20
+    },
+
+    search: {
+        marginTop: 15,
+        backgroundColor: '#F8F8F8',
     }
 })
 

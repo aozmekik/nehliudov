@@ -3,12 +3,12 @@ import { View, TextInput, StyleSheet } from 'react-native';
 
 import { Search } from './icons';
 
-function SearchBar({ title, color, bgColor }) {
-
+function SearchBar({ title, style }) {
+    const col = style?.color ? style.color : styles.title.color;
     return (
-        <View style={[styles.container, { backgroundColor: bgColor ? bgColor : styles.container.backgroundColor }]} >
-            <Search fill={color ? color : styles.front.color} style={styles.test} />
-            <TextInput style={[styles.title, { color: color ? color : styles.front.color }]}>{title}</TextInput>
+        <View style={[styles.container, style]} >
+            <Search fill={col} style={styles.test} />
+            <TextInput placeholder={title} placeholderTextColor={col} style={[styles.title, { color: col }]} />
         </View>
     )
 }
@@ -21,15 +21,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: 'red',
         borderRadius: 10,
-        // shadowColor: "#000",
-        // shadowColor: "#000",
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 4,
-        // },
-        // shadowOpacity: 0.30,
-        // shadowRadius: 4.65,
-        // elevation: 3,
     },
 
     title: {
@@ -38,10 +29,6 @@ const styles = StyleSheet.create({
         color: '#48515B',
         fontFamily: 'SFProText-Regular',
         fontSize: 14,
-        // borderWidth: 1,
-    },
-    front: {
-        color: '#758291',
     },
     test: {
         marginTop: 5
