@@ -6,7 +6,7 @@ import { Search } from './icons';
 function SearchBar({ title, color, bgColor }) {
 
     return (
-        <View style={[styles.container, { color: bgColor ? bgColor : styles.container.backgroundColor }]} >
+        <View style={[styles.container, { backgroundColor: bgColor ? bgColor : styles.container.backgroundColor }]} >
             <Search fill={color ? color : styles.front.color} style={styles.test} />
             <TextInput style={[styles.title, { color: color ? color : styles.front.color }]}>{title}</TextInput>
         </View>
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 10,
         flexDirection: 'row',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'red',
         borderRadius: 10,
         // shadowColor: "#000",
         // shadowColor: "#000",
