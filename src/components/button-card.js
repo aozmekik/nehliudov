@@ -4,10 +4,11 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { ChevronRight } from './icons';
 
 
-function ButtonBar({ title, style }) {
+function ButtonCard({ title, desc, style }) {
 
     return (<TouchableOpacity style={[styles.container, style]}>
         <Text style={styles.title} >{title}</Text>
+        {desc && <Text style={styles.desc}>{desc}</Text>}
         <ChevronRight />
     </TouchableOpacity>);
 }
@@ -25,7 +26,13 @@ const styles = StyleSheet.create({
         color: '#0A151F',
         fontFamily: 'SFProText-Bold',
         fontSize: 14
+    },
+    desc: {
+        flex: 2,
+        color: '#758291',
+        fontFamily: 'SFProText-MediumItalic',
+        fontSize: 14
     }
 });
 
-export default ButtonBar;
+export default ButtonCard;

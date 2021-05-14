@@ -36,6 +36,7 @@ class App extends React.Component {
       'SFProText-Light': require('./src/assets/fonts/SFProText-Light.otf'),
       'SFProText-LightItalic': require('./src/assets/fonts/SFProText-LightItalic.otf'),
       'SFProText-Medium': require('./src/assets/fonts/SFProText-Medium.otf'),
+      'SFProText-MediumItalic': require('./src/assets/fonts/SFProText-MediumItalic.otf'),
       'SFProText-Regular': require('./src/assets/fonts/SFProText-Regular.otf'),
       'SFProText-RegularItalic': require('./src/assets/fonts/SFProText-RegularItalic.otf'),
       'SFProText-Semibold': require('./src/assets/fonts/SFProText-Semibold.otf'),

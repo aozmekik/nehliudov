@@ -17,7 +17,8 @@ function NavBar({ title, style, onPress }) {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginTop: 30
+        marginTop: 30,
+        paddingBottom: 10
     },
     icon: {
         flex: 1,

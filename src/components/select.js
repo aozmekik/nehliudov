@@ -27,7 +27,7 @@ const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontFamily: 'SFProText-Regular',
         fontSize: 14,
-        paddingVertical: 10,
+        paddingVertical: 12.5,
         color: '#48515B',
         paddingRight: 30, // to ensure the text is never behind the icon
     },
