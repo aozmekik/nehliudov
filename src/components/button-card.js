@@ -4,9 +4,9 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { ChevronRight } from './icons';
 
 
-function ButtonCard({ title, desc, style }) {
+function ButtonCard({ title, desc, style, ...props }) {
 
-    return (<TouchableOpacity style={[styles.container, style]}>
+    return (<TouchableOpacity {...props} style={[styles.container, style]}>
         <Text style={styles.title} >{title}</Text>
         {desc && <Text style={styles.desc}>{desc}</Text>}
         <ChevronRight />

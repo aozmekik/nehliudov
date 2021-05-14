@@ -86,24 +86,8 @@ const Stack = createStackNavigator();
 
 function FamilyScreen() {
     return (
-        <Stack.Navigator>
-            {/* <Stack.Screen name='Family' component={Test} options={({ navigation }) => {
-                return {
-                    header: Header,
-                }
-            }} /> */}
-
-            <Stack.Screen name='Family' component={FamilyAddScreen} options={({ navigation }) => {
-                return {
-                    header: HeaderMy,
-                }
-            }} />
-
-
-
-            {/* <Stack.Screen name='Notifications' component={Test} /> */}
-            {/* <Stack.Screen name='Profile' component={Test} />
-            <Stack.Screen name='Settings' component={Test} /> */}
+        <Stack.Navigator headerMode='none'>
+            <Stack.Screen name='Family' component={FamilyAddScreen} />
         </Stack.Navigator>
     );
 }

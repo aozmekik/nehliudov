@@ -4,11 +4,11 @@ import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { ChevronLeft } from './icons';
 
 
-function NavBar({ title, style, onPress }) {
+function NavBar({ title, style, ...props }) {
     const col = style?.color ? style.color : styles.title.color;
     return (
         <View style={[styles.container, style]}>
-            <TouchableOpacity style={styles.icon} onPress={onPress} ><ChevronLeft fill={col} /></TouchableOpacity>
+            <TouchableOpacity style={styles.icon} {...props}><ChevronLeft fill={col} /></TouchableOpacity>
             <Text style={[styles.title, { color: col }]} >{title}</Text>
         </View>
     )

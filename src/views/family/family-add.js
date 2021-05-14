@@ -2,21 +2,28 @@ import * as React from 'react';
 
 import { View, StyleSheet, Text, ScrollView, } from 'react-native';
 
+import { createStackNavigator } from '@react-navigation/stack';
+
 import Swiper from 'react-native-swiper';
 
+import NavBar from '../../components/nav-bar';
 import Input from '../../components/input';
 import Select from '../../components/select';
 import ButtonCard from '../../components/button-card';
 
+import Member from './member';
+import Budget from './budget';
+import Need from './need';
+import Note from './note';
+
 function PaginationItem({ title, active }) {
     return (
-        <View>
+        <View style={{ flexGrow: 1 }}>
             <Text style={{ ...styles.paginationText, color: active ? '#0A151F' : styles.paginationText.color }}>{title}</Text>
             <View style={{ ...styles.paginationLine, display: active ? 'flex' : 'none' }} />
         </View>
     )
 }
-
 
 function Pagination({ index }) {
     const scrollRef = React.useRef(null);
@@ -28,22 +35,28 @@ function Pagination({ index }) {
     });
 
     return (
-        <ScrollView ref={scrollRef} scrollEnabled={false} showsHorizontalScrollIndicator={false} horizontal={true} style={styles.pagination}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} ref={scrollRef} scrollEnabled={false} showsHorizontalScrollIndicator={false} horizontal={true} style={styles.pagination}>
             <PaginationItem active={index === 0} title="Genel" />
             <PaginationItem active={index === 1} title="Aile Üyeleri" />
             <PaginationItem active={index === 2} title="Bütçe" />
             <PaginationItem active={index === 3} title="İhtiyaç" />
             <PaginationItem active={index === 4} title="Not" />
             <PaginationItem active={index === 5} title="Resim" />
+            {/* padding for right end */}
+            <View style={{ width: 10 }} />
         </ScrollView>
     )
 }
 
-class FamilyAddScreen extends React.Component {
+
+const Stack = createStackNavigator();
+
+
+class Main extends React.Component {
     constructor() {
         super();
         this.state = {
-            index: 1
+            index: 0
         }
     }
 
@@ -51,15 +64,17 @@ class FamilyAddScreen extends React.Component {
         this.setState({
             index: i
         });
-    }
+    };
 
     render() {
+        const { navigation } = this.props;
         return (
             <>
+                <NavBar title='Aile Ekle' />
                 <Pagination index={this.state.index} />
 
-                <Swiper index={1} style={styles.wrapper} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
-                    <ScrollView showsVerticalScrollIndicator={false} style={styles.slide}>
+                <Swiper showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
+                    <ScrollView showsVerticalScrollIndicator={false} >
                         <Input style={styles.input} placeholder='İsim' />
                         <Input style={styles.input} placeholder='Kimlik Numarası' />
                         <Input style={styles.input} placeholder='Uyruk' />
@@ -74,20 +89,20 @@ class FamilyAddScreen extends React.Component {
                         <View style={styles.empty} />
 
                     </ScrollView>
-                    <View style={styles.slide}>
-                        <ButtonCard style={styles.input} title='Üye Ekleyin' />
+                    <View >
+                        <ButtonCard onPress={() => navigation.navigate('Member')} style={styles.input} title='Üye Ekleyin' />
                     </View>
-                    <View style={styles.slide}>
-                        <ButtonCard style={styles.input} title='Bütçe Ekleyin' />
+                    <View >
+                        <ButtonCard onPress={() => navigation.navigate('Budget')} style={styles.input} title='Bütçe Ekleyin' />
                     </View>
-                    <View style={styles.slide}>
-                        <ButtonCard style={styles.input} title='İhtiyaç Ekleyin' />
+                    <View >
+                        <ButtonCard onPress={() => navigation.navigate('Need')} style={styles.input} title='İhtiyaç Ekleyin' />
 
                     </View>
-                    <View style={styles.slide}>
-                        <ButtonCard style={styles.input} title='Not Ekleyin' />
+                    <View >
+                        <ButtonCard onPress={() => navigation.navigate('Note')} style={styles.input} title='Not Ekleyin' />
                     </View>
-                    <View style={styles.slide}>
+                    <View >
                         <ButtonCard style={styles.input} title='Resim Ekleyin' />
                     </View>
                 </Swiper>
@@ -96,33 +111,30 @@ class FamilyAddScreen extends React.Component {
     }
 }
 
+function FamilyAddScreen() {
+    return (
+        <>
+            <Stack.Navigator headerMode='none'>
+                <Stack.Screen name='Family' component={Main} />
+                <Stack.Screen name='Member' component={Member} />
+                <Stack.Screen name='Budget' component={Budget} />
+                <Stack.Screen name='Need' component={Need} />
+                <Stack.Screen name='Note' component={Note} />
+            </Stack.Navigator>
+        </>
+    )
+}
+
+
 
 const styles = StyleSheet.create({
-    wrapper: {
-        backgroundColor: '#F8F8F8',
-    },
-    slide: {
-        marginTop: 50,
-    },
     empty: {
         height: 25,
     },
-    text: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: 'bold',
-        color: 'black'
-
-    },
     pagination: {
         marginTop: 15,
-        position: 'absolute',
-        // borderWidth: 1,
-        width: '100%',
-        padding: 5,
-        paddingRight: 20,
+        maxHeight: 30,
         flexDirection: 'row',
-        zIndex: 1
     },
     paginationText: {
         marginHorizontal: 19,
@@ -137,7 +149,6 @@ const styles = StyleSheet.create({
         width: '45%',
         alignSelf: 'center',
     },
-
     input: {
         marginTop: 10,
         marginHorizontal: 15,

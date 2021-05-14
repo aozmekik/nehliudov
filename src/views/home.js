@@ -4,14 +4,13 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import FamilyScreen from './family/family';
 import Select from '../components/select';
 import FamilyAddScreen from './family/family-add';
-import FamilyAddMemberScreen from './family/family-add-member';
+import FamilyAddMemberScreen from './family/note';
 
 function HomeScreen() {
     return (
         <View style={styles.container} >
-            <FamilyAddMemberScreen />
             {/* <Select style={styles.input} placeholder='İsim' /> */}
-            {/* <FamilyScreen /> */}
+            <FamilyScreen />
         </View>
     );
 }
