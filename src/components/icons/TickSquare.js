@@ -1,31 +1,31 @@
 import * as React from "react";
 import Svg, { G, Path } from "react-native-svg";
 
-function SvgPlus(props) {
+function SvgTickSquare(props) {
   return (
     <Svg
-      width={16}
-      height={16}
-      viewBox="0 0 16 16"
+      width={26}
+      height={26}
+      viewBox="0 0 26 26"
       xmlns="http://www.w3.org/2000/svg"
       className=""
       {...props}
     >
       <G
-        stroke={props.stroke ? props.stroke: '#fff'}
+        stroke="#183148"
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <Path d="M8.025 5.642v4.765M10.41 8.025H5.64" />
+        <Path d="M9.144 13l2.571 2.57 5.142-5.14" />
         <Path
           fillRule="evenodd"
           clipRule="evenodd"
-          d="M1.533 8.025c0-4.869 1.623-6.492 6.492-6.492 4.868 0 6.49 1.623 6.49 6.492 0 4.868-1.622 6.49-6.49 6.49-4.869 0-6.492-1.622-6.492-6.49z"
+          d="M2.979 13c0 7.515 2.506 10.02 10.02 10.02 7.516 0 10.022-2.505 10.022-10.02S20.515 2.98 13 2.98C5.485 2.98 2.979 5.484 2.979 13z"
         />
       </G>
     </Svg>
   );
 }
 
-export default SvgPlus;
+export default SvgTickSquare;

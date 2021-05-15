@@ -10,7 +10,6 @@ import Button from '../../components/button';
 import styles from './style';
 
 function MemberScreen({ navigation }) {
-    console.log(navigation);
     return (
         <View style={styles.container}>
             <NavBar onPress={() => navigation.goBack()} title='Aile Üyesi Ekle' />

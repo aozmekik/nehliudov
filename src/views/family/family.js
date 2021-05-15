@@ -71,16 +71,6 @@ function Header({ navigation }) {
     );
 };
 
-function HeaderMy({ navigation }) {
-    return (
-        <View style={{ backgroundColor: '#F8F8F8' }}>
-            <NavBar title='Aile Ekle' onPress={navigation.goBack} />
-        </View >
-    );
-};
-
-
-
 
 const Stack = createStackNavigator();
 

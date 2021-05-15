@@ -115,7 +115,7 @@ function FamilyAddScreen() {
     return (
         <>
             <Stack.Navigator headerMode='none'>
-                <Stack.Screen name='Family' component={Main} />
+                <Stack.Screen name='Main' component={Main} />
                 <Stack.Screen name='Member' component={Member} />
                 <Stack.Screen name='Budget' component={Budget} />
                 <Stack.Screen name='Need' component={Need} />

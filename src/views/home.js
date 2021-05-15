@@ -5,13 +5,15 @@ import FamilyScreen from './family/family';
 import Select from '../components/select';
 import FamilyAddScreen from './family/family-add';
 import FamilyAddMemberScreen from './family/note';
+import TimelineScreen from './timeline/timeline';
 
 function HomeScreen() {
     return (
         <View style={styles.container} >
             {/* <Select style={styles.input} placeholder='İsim' /> */}
             <FamilyScreen />
-        </View>
+            {/* <TimelineScreen /> */}
+        </View >
     );
 }
 
