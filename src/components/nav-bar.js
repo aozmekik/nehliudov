@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         position: 'absolute',
         zIndex: 1,
-        width: '20%'
+        width: '20%',
     },
 
     title: {

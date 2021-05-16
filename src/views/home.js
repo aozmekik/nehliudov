@@ -11,8 +11,8 @@ function HomeScreen() {
     return (
         <View style={styles.container} >
             {/* <Select style={styles.input} placeholder='İsim' /> */}
-            <FamilyScreen />
-            {/* <TimelineScreen /> */}
+            {/* <FamilyScreen /> */}
+            <TimelineScreen />
         </View >
     );
 }
