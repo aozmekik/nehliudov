@@ -4,6 +4,7 @@ import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 
 import { Bookmark, Time, Chat } from '../../components/icons';
 
+// FIXME. bookmark button has huge width
 function Post({ style, navigation, ...props }) {
     return (
         <View style={{ ...styles.container, ...style }} {...props}>
@@ -66,7 +67,8 @@ const styles = StyleSheet.create({
     },
     name: {
         fontFamily: 'SFProText-Bold',
-        fontSize: 14, color: '#000000'
+        fontSize: 14,
+        color: '#0A151F'
     },
     district: {
         fontFamily: 'SFProText-Medium',

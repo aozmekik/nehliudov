@@ -3,6 +3,8 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable, Text 
 
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 import RBSheet from "react-native-raw-bottom-sheet";
 
 
@@ -13,7 +15,6 @@ import PostAddScreen from './post-add';
 import Detail from './detail';
 
 
-const Stack = createStackNavigator();
 
 // bottom-sheet
 function Main({ navigation }) {
@@ -26,8 +27,7 @@ function Main({ navigation }) {
         <RBSheet
             ref={refRBSheet}
             closeOnDragDown={true}
-            dragFromTopOnly={true}
-            height={350}
+            height={hp('60%')}
             customStyles={{
                 container: {
                     borderRadius: 10
@@ -51,6 +51,8 @@ function Main({ navigation }) {
     );
 }
 
+const Stack = createStackNavigator();
+
 function TimelineScreen() {
     return (
         <Stack.Navigator headerMode='none'>
@@ -64,7 +66,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 24,
         justifyContent: 'center',
-        backgroundColor: 'grey',
     },
     contentContainer: {
         flex: 1,

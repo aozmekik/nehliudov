@@ -7,7 +7,7 @@ import { ChevronRight } from './icons';
 function ButtonCard({ title, desc, style, ...props }) {
 
     return (<TouchableOpacity {...props} style={[styles.container, style]}>
-        <Text style={styles.title} >{title}</Text>
+        <Text style={[styles.title, style.text]} >{title}</Text>
         {desc && <Text style={styles.desc}>{desc}</Text>}
         <ChevronRight />
     </TouchableOpacity>);

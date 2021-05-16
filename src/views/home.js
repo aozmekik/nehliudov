@@ -1,18 +1,23 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Settings } from 'react-native';
 
 import FamilyScreen from './family/family';
 import Select from '../components/select';
 import FamilyAddScreen from './family/family-add';
 import FamilyAddMemberScreen from './family/note';
 import TimelineScreen from './timeline/timeline';
+import ProfileScreen from './profile/profile';
+import SettingsScreen from './profile/settings';
+import NotificationsScreen from './profile/notifications';
 
 function HomeScreen() {
     return (
         <View style={styles.container} >
             {/* <Select style={styles.input} placeholder='İsim' /> */}
             {/* <FamilyScreen /> */}
-            <TimelineScreen />
+            {/* <TimelineScreen /> */}
+            {/* <ProfileScreen /> */}
+            <NotificationsScreen />
         </View >
     );
 }

@@ -23,7 +23,7 @@ function Address({ title, desc }) {
 
 function Contact() {
     return (
-        <View style={{ ...styles.container, marginLeft: 15 }}>
+        <View style={{ ...styles.container, marginLeft: 15, paddingTop: 10}}>
             <View style={styles.phone}>
                 <Phone fill='#E11E3C' />
                 <Text style={styles.phoneNumber}>+90 412 457 52 00</Text>
@@ -44,7 +44,7 @@ function Detail() {
     return (
         <ScrollView>
             <About />
-            <Contact />
+            {/* <Contact /> */}
         </ScrollView>
     )
 }
