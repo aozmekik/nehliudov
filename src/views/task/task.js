@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet} from 'react-native';
 
-import TaskCard from '../components/task/task-card';
+import TaskCard from '../../components/task/task-card';
 
 function TaskScreen() {
     return (
@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
     container: {
         padding: 10,
         paddingTop: 50,
-        backgroundColor: '#F8F8F8',
         height: '100%',
     },
 
