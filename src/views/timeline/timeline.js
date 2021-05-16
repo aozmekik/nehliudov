@@ -3,6 +3,9 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable, Text 
 
 import { createStackNavigator } from '@react-navigation/stack';
 
+import RBSheet from "react-native-raw-bottom-sheet";
+
+
 import { Camera, More } from '../../components/icons';
 import Post from './post';
 import Comment from './comment';
@@ -14,23 +17,31 @@ const Stack = createStackNavigator();
 
 // bottom-sheet
 function Main({ navigation }) {
-    const [modalVisible, setModalVisible] = React.useState(false);
+    // ref
+    const refRBSheet = React.useRef();
+
+
+
     return (<>
-        <Modal
-            animationType="slide"
-            visible={modalVisible}
-            onRequestClose={() => {
-                setModalVisible(!modalVisible);
+        <RBSheet
+            ref={refRBSheet}
+            closeOnDragDown={true}
+            dragFromTopOnly={true}
+            height={350}
+            customStyles={{
+                container: {
+                    borderRadius: 10
+                },
+                draggableIcon: {
+                }
             }}
         >
-            <View style={styles.centeredView}>
-                <Text>Selam</Text>
-            </View>
+            <Detail />
+        </RBSheet>
 
-        </Modal>
         <View style={styles.header}>
             <TouchableOpacity><Camera style={styles.camera} stroke='black' /></TouchableOpacity>
-            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}><More style={styles.more} fill='black' /></TouchableOpacity>
+            <TouchableOpacity onPress={() => refRBSheet.current.open()}><More style={styles.more} fill='black' /></TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
             <Post style={styles.post} />
@@ -49,6 +60,16 @@ function TimelineScreen() {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 24,
+        justifyContent: 'center',
+        backgroundColor: 'grey',
+    },
+    contentContainer: {
+        flex: 1,
+        alignItems: 'center',
+    },
     header: {
         // position: ',
         top: 30,
