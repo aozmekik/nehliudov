@@ -4,10 +4,10 @@ import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { ChevronRight, History } from '../../components/icons';
-import SearchBar from '../../components/search-bar';
-import NavBar from '../../components/nav-bar';
-import FamilyAddScreen from '../family/family-add';
+import { ChevronRight, History } from '../../../components/icons';
+import SearchBar from '../../../components/search-bar';
+import NavBar from '../../../components/nav-bar';
+import FamilyAddScreen from './family-add';
 
 function SelectBox({ style, title }) {
     return (

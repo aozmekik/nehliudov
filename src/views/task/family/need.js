@@ -2,11 +2,10 @@ import * as React from 'react';
 
 import { View, ScrollView } from 'react-native';
 
-import NavBar from '../../components/nav-bar';
-import Input from '../../components/input';
-import { Plus } from '../../components/icons';
-import Select from '../../components/select';
-import Button from '../../components/button';
+import NavBar from '../../../components/nav-bar';
+import Input from '../../../components/input';
+import { Plus } from '../../../components/icons';
+import Button from '../../../components/button';
 import styles from './style';
 
 
