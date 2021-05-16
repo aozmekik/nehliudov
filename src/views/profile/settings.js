@@ -6,16 +6,16 @@ import ButtonCard from '../../components/button-card';
 import Button from '../../components/button';
 import Input from '../../components/input';
 
-function SettingsScreen() {
+function SettingsScreen({ navigation }) {
     return (
-        <>
-            <NavBar title='Profil Düzenle' />
+        <View>
+            <NavBar onPress={() => navigation.goBack()} title='Profil Düzenle' />
             <ButtonCard style={{ marginTop: 15, text: { color: '#48515B', fontFamily: 'SFProText-Regular', fontSize: 14 } }} title='Profil resmi değiştir' />
             <Input style={styles.input} placeholder='Eski Şifre' />
             <Input style={styles.input} placeholder='Yeni Şifre' />
             <Input style={styles.input} placeholder='Yeni Şifre' />
             <Button style={styles.input} title='Uygula' />
-        </>
+        </View>
     )
 }
 

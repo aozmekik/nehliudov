@@ -4,6 +4,9 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'rea
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { Notification, Settings } from '../../components/icons';
+import NotificationsScreen from './notifications';
+import SettingsScreen from './settings';
+
 
 const Stack = createStackNavigator();
 
@@ -15,7 +18,7 @@ function ImageBox({ style }) {
     )
 }
 
-function Main() {
+function Main({ navigation }) {
     return (
         <>
             <View style={{ marginTop: 50, marginLeft: 15, flexDirection: 'row' }} >
@@ -23,10 +26,10 @@ function Main() {
                 <View style={{ marginHorizontal: 15 }}>
                     <View style={{ flex: 1, flexDirection: 'row', }} >
                         <Text style={{ fontFamily: 'SFProText-Bold', fontSize: 24, color: '#0A151F', flexDirection: 'row' }}>Özge Yılmaz</Text>
-                        <TouchableOpacity style={{ marginTop: 5, marginLeft: 50, marginRight: 10 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Notifications')} style={{ marginTop: 5, marginLeft: 50, marginRight: 10 }}>
                             <Notification />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ marginTop: 5 }}><Settings /></TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={{ marginTop: 5 }}><Settings /></TouchableOpacity>
                     </View>
                     <Text style={{ fontFamily: 'SFProText-MediumItalic', fontSize: 12, color: '#0A151F' }}>Ümraniye Temsilcisi</Text>
                 </View>
@@ -63,6 +66,9 @@ function ProfileScreen() {
     return (
         <Stack.Navigator headerMode='none'>
             <Stack.Screen name='Main' component={Main} />
+            <Stack.Screen name='Notifications' component={NotificationsScreen} />
+            <Stack.Screen name='Settings' component={SettingsScreen} />
+
         </Stack.Navigator>
     )
 }

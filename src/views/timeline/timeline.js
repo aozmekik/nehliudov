@@ -16,14 +16,9 @@ import Detail from './detail';
 
 
 
-// bottom-sheet
 function Main({ navigation }) {
-    // ref
     const refRBSheet = React.useRef();
-
-
-
-    return (<>
+    return (<View>
         <RBSheet
             ref={refRBSheet}
             closeOnDragDown={true}
@@ -40,14 +35,14 @@ function Main({ navigation }) {
         </RBSheet>
 
         <View style={styles.header}>
-            <TouchableOpacity><Camera style={styles.camera} stroke='black' /></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('PostAdd')}><Camera style={styles.camera} stroke='black' /></TouchableOpacity>
             <TouchableOpacity onPress={() => refRBSheet.current.open()}><More style={styles.more} fill='black' /></TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
             <Post style={styles.post} />
             <Post style={styles.post} />
         </ScrollView >
-    </>
+    </View>
     );
 }
 
@@ -57,6 +52,7 @@ function TimelineScreen() {
     return (
         <Stack.Navigator headerMode='none'>
             <Stack.Screen name='Main' component={Main} />
+            <Stack.Screen name='PostAdd' component={PostAddScreen} />
         </Stack.Navigator>
     );
 }

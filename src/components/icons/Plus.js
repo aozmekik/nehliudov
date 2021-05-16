@@ -1,5 +1,5 @@
 import * as React from "react";
-import Svg, { G, Path } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 
 function SvgPlus(props) {
   return (
@@ -11,19 +11,12 @@ function SvgPlus(props) {
       className=""
       {...props}
     >
-      <G
-        stroke={props.stroke ? props.stroke: '#fff'}
-        strokeWidth={1.5}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <Path d="M8.025 5.642v4.765M10.41 8.025H5.64" />
-        <Path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M1.533 8.025c0-4.869 1.623-6.492 6.492-6.492 4.868 0 6.49 1.623 6.49 6.492 0 4.868-1.622 6.49-6.49 6.49-4.869 0-6.492-1.622-6.492-6.49z"
-        />
-      </G>
+      <Path d="M8.025 5.642v4.765M10.41 8.025H5.64" />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M1.533 8.025c0-4.869 1.623-6.492 6.492-6.492 4.868 0 6.49 1.623 6.49 6.492 0 4.868-1.622 6.49-6.49 6.49-4.869 0-6.492-1.622-6.492-6.49z"
+      />
     </Svg>
   );
 }

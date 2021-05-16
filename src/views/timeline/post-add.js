@@ -5,12 +5,11 @@ import NavBar from '../../components/nav-bar';
 import { TickSquare, Plus } from '../../components/icons';
 import Select from '../../components/select';
 
-
-function PostAddScreen() {
+function PostAddScreen({ navigation }) {
     return (
-        <>
-            <NavBar title='Gönderi Ekle' />
-            <TouchableOpacity style={styles.tickSquare}><TickSquare /></TouchableOpacity>
+        <View>
+            <NavBar onPress={() => navigation.goBack()} title='Gönderi Ekle' />
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.tickSquare}><TickSquare /></TouchableOpacity>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
                 <View style={styles.section1}>
                     <Image style={styles.profile} source={require('../../icons/woman.png')} />
@@ -21,12 +20,9 @@ function PostAddScreen() {
                     <Text style={styles.buttonText}>Resim Ekleyin</Text>
                     <Plus style={styles.icon} stroke='#183148' />
                 </TouchableOpacity>
-
-
             </ScrollView>
-
-        </>
-    )
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -70,7 +66,7 @@ const styles = StyleSheet.create({
         color: '#48515B'
     },
     icon: {
-        marginRight: 5
+        marginRight: 7
     }
 });
 

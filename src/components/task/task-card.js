@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-function TaskCard({ style, title, desc }) {
+function TaskCard({ style, title, desc, ...props }) {
     return (
-        <TouchableOpacity style={[style, styles.container]} >
+        <TouchableOpacity {...props} style={[style, styles.container]} >
             <View style={styles.leftItem} />
             <View style={styles.rightItem}>
                 <Text style={styles.h1}>{title}</Text>

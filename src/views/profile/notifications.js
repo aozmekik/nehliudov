@@ -15,10 +15,10 @@ function NotificationItem() {
     )
 }
 
-function NotificationsScreen() {
+function NotificationsScreen({ navigation }) {
     return (
         <>
-            <NavBar title='Bildirimler' />
+            <NavBar onPress={() => navigation.goBack()} title='Bildirimler' />
             <ScrollView>
                 <NotificationItem />
                 <NotificationItem />
