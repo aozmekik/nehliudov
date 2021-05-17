@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import NotificationsScreen from './profile/notifications';
 import FamilyScreen from './task/family/family';
 import ResultScreen from './task/family/family-list/result';
+import FamilyAddScreen from './task/family/family-add/family-add';
 
 function HomeScreen() {
     return (
@@ -12,7 +13,7 @@ function HomeScreen() {
             {/* <FamilyScreen /> */}
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
-            <FamilyScreen />
+            <FamilyAddScreen />
             {/* <ResultScreen /> */}
         </View >
     );

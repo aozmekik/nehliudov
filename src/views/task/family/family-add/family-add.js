@@ -10,11 +10,15 @@ import NavBar from '../../../../components/nav-bar';
 import Input from '../../../../components/input';
 import Select from '../../../../components/select';
 import ButtonCard from '../../../../components/button-card';
+import { TickSquare } from '../../../../components/icons';
 
 import Member from './member';
 import Budget from './budget';
 import Need from './need';
 import Note from './note';
+
+import * as FamilyModel from '../../../../models/family';
+import * as LocationServices from '../../../../services/location-services';
 
 function PaginationItem({ title, active, ...props }) {
     return (
@@ -33,6 +37,8 @@ function Pagination({ index, swiperRef }) {
         y: 0,
         animated: true,
     });
+
+    console.log('pagination');
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} ref={scrollRef} scrollEnabled={false} showsHorizontalScrollIndicator={false} horizontal={true} style={styles.pagination}>
@@ -56,38 +62,107 @@ class Main extends React.Component {
     constructor() {
         super();
         this.state = {
-            index: 0
+            index: 0,
+            family: new FamilyModel.Family(),
+            location: {
+                cities: LocationServices.getCities(),
+                towns: null,
+                districts: null,
+                streets: null,
+            }
         }
         this.swiperRef = React.createRef();
     }
 
     updateIndex(i) {
         this.setState({
+            ...this.state,
             index: i
         });
     };
 
+    isValid() {
+        return this.state.family.name;
+    }
+
+
+    handleChange = (event, name, type) => {
+        if (type === 'alpha')
+            event = event.replace(/[^A-Za-z'\s]/g, '');
+        else if (type === 'numeric')
+            event = event.replace(/[^0-9]/g, '');
+
+        this.setState({
+            ...this.state,
+            family: {
+                ...this.state.family,
+                [name]: event,
+            }
+        }
+        );
+
+        console.log('selam', event, name, type);
+
+
+        if (event && name === 'city')
+            this.getTowns(event);
+
+        else if (event && name === 'town')
+            this.getDistricts(event);
+
+        else if (event && name === 'district')
+            this.getStreets(event);
+
+
+    };
+
+    getTowns(city) {
+        LocationServices.getTowns(city)
+            .then(data => {
+                if (data)
+                    this.setState({ ...this.state, location: { ...this.state.location, towns: data, districts: null, streets: null } })
+            });
+    }
+
+    getDistricts(town) {
+        LocationServices.getDistricts(town)
+            .then(data => {
+                if (data)
+                    this.setState({ ...this.state, location: { ...this.state.location, districts: data, streets: null } })
+            });
+    }
+
+    getStreets(district) {
+        LocationServices.getStreets(district)
+            .then(data => {
+                this.setState({ ...this.state, location: { ...this.state.location, streets: data } })
+            });
+    }
+
+
     render() {
         const { navigation } = this.props;
+        let { family, location } = this.state;
         return (
             <>
                 <NavBar title='Aile Ekle' />
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.tickSquare}><TickSquare /></TouchableOpacity>
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
                 <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
                     <ScrollView showsVerticalScrollIndicator={false} >
-                        <Input style={styles.input} placeholder='İsim' />
-                        <Input style={styles.input} placeholder='Kimlik Numarası' />
-                        <Input style={styles.input} placeholder='Uyruk' />
-                        <Input style={styles.input} placeholder='Telefon' />
-                        <Select style={styles.input} placeholder="İl" />
-                        <Select style={styles.input} placeholder="İlçe" />
-                        <Select style={styles.input} placeholder="Mahalle" />
-                        <Input style={styles.input} placeholder='Adres' />
-                        <Input style={styles.input} placeholder='Kira' />
-                        <Select style={styles.input} placeholder='Isınma Tipi' />
-                        <Input style={styles.input} placeholder='Durum' />
-                        <View style={styles.empty} />
+                        <Input value={family.name} onChangeText={e => this.handleChange(e, 'name', 'alpha')} required={true} autoCapitalize='words' textContentType='name' style={styles.input} placeholder='İsim' />
+                        <Input value={family.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
+                        <Input value={family.nation} style={styles.input} placeholder='Uyruk' />
+                        <Input value={family.tel} onChangeText={e => this.handleChange(e, 'tel', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Telefon' />
+                        <Select value={family.city} onValueChange={e => this.handleChange(e, 'city')} items={location.cities} style={styles.input} placeholder="İl" />
+                        {location.towns && <Select value={family.town} onValueChange={e => this.handleChange(e, 'town')} items={location.towns} style={styles.input} placeholder="İlçe" />}
+                        {location.districts && <Select value={family.district} onValueChange={e => this.handleChange(e, 'district')} items={location.districts} style={styles.input} placeholder="Mahalle" />}
+                        {location.streets && <Select value={family.street} onValueChange={e => this.handleChange(e, 'street')} items={location.streets} style={styles.input} placeholder="Sokak" />}
 
+                        <Input value={family.address} style={styles.input} onChangeText={e => this.handleChange(e, 'address')} placeholder='Adres' />
+                        <Input value={family.rent} style={styles.input} keyboardType='number-pad' onChangeText={e => this.handleChange(e, 'address', 'numeric')} placeholder='Kira' />
+                        {/* <Select style={styles.input} placeholder='Isınma Tipi' /> */}
+                        <View style={styles.empty} />
                     </ScrollView>
                     <View >
                         <ButtonCard onPress={() => navigation.navigate('Member')} style={styles.input} title='Üye Ekleyin' />
@@ -152,7 +227,12 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 10,
         marginHorizontal: 15,
-    }
+    },
+    tickSquare: {
+        position: 'absolute',
+        top: 30,
+        right: 15
+    },
 });
 
 export default FamilyAddScreen;

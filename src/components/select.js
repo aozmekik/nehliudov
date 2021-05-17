@@ -6,18 +6,13 @@ import { ChevronDown } from './icons';
 
 
 
-function Select({ placeholder, style, chevronColor }) {
+function Select({ items, placeholder, style, chevronColor, ...props }) {
     return (
         <View style={[style, styles.container]}>
-            <RNPickerSelect placeholder={{ label: placeholder }}
+            <RNPickerSelect {...props} placeholder={{ label: placeholder }}
                 useNativeAndroidPickerStyle={false} Icon={() => (<ChevronDown fill={chevronColor ? chevronColor : "#E11E3C"} />)}
                 style={pickerSelectStyles}
-                onValueChange={(value) => console.log(value)}
-                items={[
-                    { label: 'Footballalsdkflaskdfllaskdflkasdlfq', value: 'football' },
-                    { label: 'Baseball', value: 'baseball' },
-                    { label: 'Hockey', value: 'hockey' },
-                ]}
+                items={items}
             />
         </View>
     );
