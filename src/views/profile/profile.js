@@ -31,7 +31,7 @@ function Main({ navigation }) {
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.settings} onPress={() => navigation.navigate('Settings')} ><Settings /></TouchableOpacity>
                     </View>
-                    <Text style={styles.name}>Ümraniye Temsilcisi</Text>
+                    <Text style={styles.title}>Ümraniye Temsilcisi</Text>
                 </View>
             </View>
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, StyleSheet, Text, ScrollView, } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -16,16 +16,16 @@ import Budget from './budget';
 import Need from './need';
 import Note from './note';
 
-function PaginationItem({ title, active }) {
+function PaginationItem({ title, active, ...props }) {
     return (
-        <View style={{ flexGrow: 1 }}>
+        <TouchableOpacity {...props} style={{ flexGrow: 1 }}>
             <Text style={{ ...styles.paginationText, color: active ? '#0A151F' : styles.paginationText.color }}>{title}</Text>
             <View style={{ ...styles.paginationLine, display: active ? 'flex' : 'none' }} />
-        </View>
+        </TouchableOpacity>
     )
 }
 
-function Pagination({ index }) {
+function Pagination({ index, swiperRef }) {
     const scrollRef = React.useRef(null);
 
     scrollRef.current?.scrollTo({
@@ -36,12 +36,12 @@ function Pagination({ index }) {
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} ref={scrollRef} scrollEnabled={false} showsHorizontalScrollIndicator={false} horizontal={true} style={styles.pagination}>
-            <PaginationItem active={index === 0} title="Genel" />
-            <PaginationItem active={index === 1} title="Aile Üyeleri" />
-            <PaginationItem active={index === 2} title="Bütçe" />
-            <PaginationItem active={index === 3} title="İhtiyaç" />
-            <PaginationItem active={index === 4} title="Not" />
-            <PaginationItem active={index === 5} title="Resim" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(0)} active={index === 0} title="Genel" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(1)} active={index === 1} title="Aile Üyeleri" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(2)} active={index === 2} title="Bütçe" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(3)} active={index === 3} title="İhtiyaç" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(4)} active={index === 4} title="Not" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(5)} active={index === 5} title="Resim" />
             {/* padding for right end */}
             <View style={{ width: 10 }} />
         </ScrollView>
@@ -58,6 +58,7 @@ class Main extends React.Component {
         this.state = {
             index: 0
         }
+        this.swiperRef = React.createRef();
     }
 
     updateIndex(i) {
@@ -71,9 +72,8 @@ class Main extends React.Component {
         return (
             <>
                 <NavBar title='Aile Ekle' />
-                <Pagination index={this.state.index} />
-
-                <Swiper showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
+                <Pagination swiperRef={this.swiperRef} index={this.state.index} />
+                <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
                     <ScrollView showsVerticalScrollIndicator={false} >
                         <Input style={styles.input} placeholder='İsim' />
                         <Input style={styles.input} placeholder='Kimlik Numarası' />
