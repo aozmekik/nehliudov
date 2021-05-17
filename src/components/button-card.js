@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { ChevronRight } from './icons';
 
@@ -7,8 +7,13 @@ import { ChevronRight } from './icons';
 function ButtonCard({ title, desc, style, ...props }) {
 
     return (<TouchableOpacity {...props} style={[styles.container, style]}>
-        <Text style={[styles.title, style.text]} >{title}</Text>
-        {desc && <Text style={styles.desc}>{desc}</Text>}
+        <View style={styles.textContainer}>
+            <Text style={[styles.title, style?.text]}>
+                {title}
+            </Text>
+            {desc && <Text style={styles.desc}>{desc}</Text>}
+        </View>
+
         <ChevronRight />
     </TouchableOpacity>);
 }
@@ -21,14 +26,17 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         flexDirection: 'row',
     },
-    title: {
+    textContainer: {
         flex: 1,
+        flexDirection: 'row'
+    },
+    title: {
         color: '#0A151F',
         fontFamily: 'SFProText-Bold',
         fontSize: 14
     },
     desc: {
-        flex: 2,
+        marginLeft: 5,
         color: '#758291',
         fontFamily: 'SFProText-MediumItalic',
         fontSize: 14

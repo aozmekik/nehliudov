@@ -7,67 +7,36 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ChevronRight, History } from '../../../components/icons';
 import SearchBar from '../../../components/search-bar';
 import NavBar from '../../../components/nav-bar';
-import FamilyAddScreen from './family-add';
+import FamilyAddScreen from './family-add/family-add';
+import FamilyListScreen from './family-list/family-list';
 
-function SelectBox({ style, title }) {
+
+function Main({ navigation }) {
     return (
-        <TouchableOpacity style={[selectBoxStyles.container, style]}>
-            <Text style={selectBoxStyles.text}>{title}</Text>
-        </TouchableOpacity>
-    )
-}
+        <>
+            <View style={styles.headerContainer}>
+                <NavBar title='Aile' onPress={navigation.goBack} />
 
-function Test() {
-    return (
-        <ScrollView style={styles.scrollView}>
-            <Text style={styles.searchText} >SON EKLEMELER</Text>
-            <History fill="#C6CBD2" style={{ alignSelf: 'center', marginTop: '20%' }} />
-            <Text style={{ color: '#48515B', fontFamily: 'SFProText-Semibold', fontSize: 12, alignSelf: 'center', marginTop: 5 }} >Henüz ekleme yok</Text>
+                <SearchBar style={styles.search} title='Aile Ara' />
 
+                <TouchableOpacity onPress={() => navigation.navigate('FamilyAdd')} style={styles.headerItem2}>
+                    <Text style={styles.familyAdd}>Aile ekle</Text>
+                    <ChevronRight style={styles.chevronRight} />
+                </TouchableOpacity>
 
+                <View style={{ alignSelf: 'center', width: '90%', borderBottomWidth: 0.4, borderBottomColor: '#EEF0F2' }} />
 
-            {/* <View style={{ flexDirection: 'row' }}>
-                <Select style={styles.select} placeholder='İl' />
-                <Select style={styles.select} placeholder='İlçe' />
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-                <Select style={styles.select} placeholder='Mahalle' />
-                <Select style={styles.select} placeholder='Durum' />
-            </View>
-
-            <View style={styles.boxContainer}>
-                <SelectBox style={styles.selectBox} title='Eğitim' />
-                <SelectBox style={styles.selectBox} title='Sağlık' />
-                <SelectBox style={styles.selectBox} title='İhtiyaç' />
-            </View>
-            <ButtonBar style={styles.select} title='Aile listele' /> */}
-
-        </ScrollView>
-
-    );
-}
-
-function Header({ navigation }) {
-    return (
-        <View style={styles.headerContainer}>
-            <NavBar title='Aile' onPress={navigation.goBack} />
-
-            <SearchBar style={styles.search} title='Aile Ara' />
-
-            <TouchableOpacity style={styles.headerItem2}>
-                <Text style={styles.familyAdd}>Aile ekle</Text>
-                <ChevronRight style={styles.chevronRight} />
-            </TouchableOpacity>
-
-            <View style={{ alignSelf: 'center', width: '90%', borderBottomWidth: 0.4, borderBottomColor: '#EEF0F2' }} />
-
-            <TouchableOpacity style={{ ...styles.headerItem2, marginTop: 0 }}>
-                <Text style={styles.familyAdd}>Aile listele</Text>
-                <ChevronRight style={styles.chevronRight} />
-            </TouchableOpacity>
-
-
-        </View >
+                <TouchableOpacity onPress={() => navigation.navigate('FamilyList')} style={{ ...styles.headerItem2, marginTop: 0 }}>
+                    <Text style={styles.familyAdd}>Aile listele</Text>
+                    <ChevronRight style={styles.chevronRight} />
+                </TouchableOpacity>
+            </View >
+            <ScrollView style={styles.scrollView}>
+                <Text style={styles.searchText} >SON ARAMALAR</Text>
+                <History fill="#C6CBD2" style={{ alignSelf: 'center', marginTop: '20%' }} />
+                <Text style={{ color: '#48515B', fontFamily: 'SFProText-Semibold', fontSize: 12, alignSelf: 'center', marginTop: 5 }} >Henüz arama yok</Text>
+            </ScrollView>
+        </>
     );
 };
 
@@ -77,15 +46,16 @@ const Stack = createStackNavigator();
 function FamilyScreen() {
     return (
         <Stack.Navigator headerMode='none'>
-            <Stack.Screen name='Family' component={FamilyAddScreen} />
+            <Stack.Screen name='Family' component={Main} />
+            <Stack.Screen name='FamilyAdd' component={FamilyAddScreen} />
+            <Stack.Screen name='FamilyList' component={FamilyListScreen} />
         </Stack.Navigator>
     );
 }
 
 const styles = StyleSheet.create({
     headerContainer: {
-        backgroundColor: 'white',
-
+        backgroundColor: '#FFFFFF',
     },
     headerItem: {
         flexDirection: 'row',
@@ -102,7 +72,7 @@ const styles = StyleSheet.create({
     familyAdd: {
         fontFamily: 'SFProText-Bold',
         color: '#0A151F',
-        fontSize: 24,
+        fontSize: 18,
         flex: 1,
         padding: 15
     },
@@ -116,27 +86,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F8F8',
     },
 
-    select: {
-        marginTop: 15,
-        flex: 1
-    },
-
-    selectFirst: {
-        marginTop: 30
-    },
-
-    selectBox: {
-        flex: 1,
-        marginTop: 10,
-        marginHorizontal: 15
-    },
-
     boxContainer: {
         flexDirection: 'row',
     },
 
     scrollView: {
-        paddingBottom: 100
     },
 
     searchText: {
@@ -149,20 +103,6 @@ const styles = StyleSheet.create({
 
 });
 
-const selectBoxStyles = StyleSheet.create({
-    container: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
-        padding: 10,
-        alignItems: 'center',
-
-    },
-    text: {
-        fontFamily: 'SFProText-Regular',
-        fontSize: 14,
-        color: '#48515B',
-    }
-})
 
 
 export default FamilyScreen;

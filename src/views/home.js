@@ -1,14 +1,9 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Settings } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-import FamilyScreen from './family/family';
-import Select from '../components/select';
-import FamilyAddScreen from './family/family-add';
-import FamilyAddMemberScreen from './family/note';
-import TimelineScreen from './timeline/timeline';
-import ProfileScreen from './profile/profile';
-import SettingsScreen from './profile/settings';
 import NotificationsScreen from './profile/notifications';
+import FamilyScreen from './task/family/family';
+import ResultScreen from './task/family/family-list/result';
 
 function HomeScreen() {
     return (
@@ -17,7 +12,8 @@ function HomeScreen() {
             {/* <FamilyScreen /> */}
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
-            <NotificationsScreen />
+            <FamilyScreen />
+            {/* <ResultScreen /> */}
         </View >
     );
 }

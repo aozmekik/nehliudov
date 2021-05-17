@@ -6,10 +6,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Swiper from 'react-native-swiper';
 
-import NavBar from '../../../components/nav-bar';
-import Input from '../../../components/input';
-import Select from '../../../components/select';
-import ButtonCard from '../../../components/button-card';
+import NavBar from '../../../../components/nav-bar';
+import Input from '../../../../components/input';
+import Select from '../../../../components/select';
+import ButtonCard from '../../../../components/button-card';
 
 import Member from './member';
 import Budget from './budget';

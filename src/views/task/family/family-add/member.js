@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import { View, StyleSheet, ScrollView } from 'react-native';
 
-import NavBar from '../../../components/nav-bar';
-import Input from '../../../components/input';
-import Select from '../../../components/select';
-import { Plus } from '../../../components/icons';
-import Button from '../../../components/button';
+import NavBar from '../../../../components/nav-bar';
+import Input from '../../../../components/input';
+import Select from '../../../../components/select';
+import { Plus } from '../../../../components/icons';
+import Button from '../../../../components/button';
 import styles from './style';
 
 function MemberScreen({ navigation }) {
