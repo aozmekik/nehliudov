@@ -1,14 +1,23 @@
 import * as React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Search } from './icons';
+import { Search, Delete } from './icons';
 
 function SearchBar({ title, style }) {
+    const [focus, setFocus] = React.useState(false);
+
+    const blurStyle = { borderWidth: 0 };
+    const focusStyle = { borderWidth: 0.4, borderColor: '#D1D1D1' };
+
     const col = style?.color ? style.color : styles.title.color;
     return (
-        <View style={[styles.container, style]} >
-            <Search fill={col} style={styles.test} />
-            <TextInput placeholder={title} placeholderTextColor={col} style={[styles.title, { color: col }]} />
+        <View style={[styles.container, style, focus ? focusStyle : blurStyle]} >
+            <Search fill={col} style={styles.icon} />
+            <TextInput
+                onBlur={() => setFocus(false)}
+                onFocus={() => setFocus(true)}
+                placeholder={title} placeholderTextColor={col} style={[styles.title, { color: col }]} />
+            {focus && <TouchableOpacity><Delete fill={col} style={styles.icon} /></TouchableOpacity>}
         </View>
     )
 }
@@ -30,7 +39,7 @@ const styles = StyleSheet.create({
         fontFamily: 'SFProText-Regular',
         fontSize: 14,
     },
-    test: {
+    icon: {
         marginTop: 5
     }
 
