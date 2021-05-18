@@ -13,7 +13,7 @@ function Button({ title, Icon, color, big, style, ...props }) {
     return (
         <TouchableOpacity {...props} style={[styles.container, style, !big ? size : null]} >
             {/* <Icon style={styles.icon} /> */}
-            {Icon && <Icon style={styles.icon} />}
+            {Icon && <Icon stroke={color} style={styles.icon} />}
 
             <Text style={{ ...styles.title, color: color }}>{title}</Text>
         </TouchableOpacity>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12.5,
     },
     icon: {
-        marginTop: 2
+        marginTop: 2.5
     },
     title: {
         fontFamily: 'SFProText-Bold',

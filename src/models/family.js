@@ -122,29 +122,28 @@ const warmingTypes = Object.freeze({
     [WarmingType.ELECTRIC_HEATER]: 'Elektrikli Isıtıcı',
 });
 
+const genders = Object.freeze({
+    [Gender.MAN]: 'Erkek',
+    [Gender.WOMAN]: 'Kadın',
+});
+
+const budgets = Object.freeze({
+    [BudgetType.BILL]: 'Fatura',
+    [BudgetType.INCOME]: 'Gelir',
+    [BudgetType.EXPENSE]: 'Gider',
+});
+
+
 export const statusList = toArray(statuses);
 export const warmingList = toArray(warmingTypes);
 export const commentList = toArray(comments);
+export const genderList = toArray(genders);
+export const budgetList = toArray(budgets);
 
 function toArray(dict) {
     var array = [];
-    for (var key in dict) {
-        array.push(dict[key]);
-    }
+    var key;
+    for (var key in dict)
+        array.push({ label: dict[key], value: key });
     return array;
 }
-
-// module.exports({
-//     Status,
-//     Comment,
-//     WarmingType,
-//     Gender,
-//     BudgetType,
-//     Budget,
-//     Note,
-//     Member,
-//     Family,
-//     statusList,
-//     warmingList,
-//     commentList
-// });

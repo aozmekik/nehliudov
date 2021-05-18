@@ -20,6 +20,8 @@ import Note from './note';
 import * as FamilyModel from '../../../../models/family';
 import * as LocationServices from '../../../../services/location-services';
 
+import * as Validator from '../../../../utils/validator';
+
 function PaginationItem({ title, active, ...props }) {
     return (
         <TouchableOpacity {...props} style={{ flexGrow: 1 }}>
@@ -37,8 +39,6 @@ function Pagination({ index, swiperRef }) {
         y: 0,
         animated: true,
     });
-
-    console.log('pagination');
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} ref={scrollRef} scrollEnabled={false} showsHorizontalScrollIndicator={false} horizontal={true} style={styles.pagination}>
@@ -87,10 +87,7 @@ class Main extends React.Component {
 
 
     handleChange = (event, name, type) => {
-        if (type === 'alpha')
-            event = event.replace(/[^A-Za-z'\s]/g, '');
-        else if (type === 'numeric')
-            event = event.replace(/[^0-9]/g, '');
+        event = Validator.validateText(event, type);
 
         this.setState({
             ...this.state,
@@ -100,9 +97,6 @@ class Main extends React.Component {
             }
         }
         );
-
-        console.log('selam', event, name, type);
-
 
         if (event && name === 'city')
             this.getTowns(event);
@@ -119,16 +113,14 @@ class Main extends React.Component {
     getTowns(city) {
         LocationServices.getTowns(city)
             .then(data => {
-                if (data)
-                    this.setState({ ...this.state, location: { ...this.state.location, towns: data, districts: null, streets: null } })
+                this.setState({ ...this.state, location: { ...this.state.location, towns: data, districts: null, streets: null } })
             });
     }
 
     getDistricts(town) {
         LocationServices.getDistricts(town)
             .then(data => {
-                if (data)
-                    this.setState({ ...this.state, location: { ...this.state.location, districts: data, streets: null } })
+                this.setState({ ...this.state, location: { ...this.state.location, districts: data, streets: null } })
             });
     }
 
@@ -158,10 +150,9 @@ class Main extends React.Component {
                         {location.towns && <Select value={family.town} onValueChange={e => this.handleChange(e, 'town')} items={location.towns} style={styles.input} placeholder="İlçe" />}
                         {location.districts && <Select value={family.district} onValueChange={e => this.handleChange(e, 'district')} items={location.districts} style={styles.input} placeholder="Mahalle" />}
                         {location.streets && <Select value={family.street} onValueChange={e => this.handleChange(e, 'street')} items={location.streets} style={styles.input} placeholder="Sokak" />}
-
                         <Input value={family.address} style={styles.input} onChangeText={e => this.handleChange(e, 'address')} placeholder='Adres' />
                         <Input value={family.rent} style={styles.input} keyboardType='number-pad' onChangeText={e => this.handleChange(e, 'address', 'numeric')} placeholder='Kira' />
-                        {/* <Select style={styles.input} placeholder='Isınma Tipi' /> */}
+                        <Select value={family.warmingType} onValueChange={e => this.handleChange(e, 'warmingType')} items={FamilyModel.warmingList} style={styles.input} placeholder='Isınma Tipi' />
                         <View style={styles.empty} />
                     </ScrollView>
                     <View >
