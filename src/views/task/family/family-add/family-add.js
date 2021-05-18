@@ -10,7 +10,6 @@ import NavBar from '../../../../components/nav-bar';
 import Input from '../../../../components/input';
 import Select from '../../../../components/select';
 import ButtonCard from '../../../../components/button-card';
-import { TickSquare } from '../../../../components/icons';
 
 import Member from './member';
 import Budget from './budget';
@@ -72,6 +71,10 @@ class Main extends React.Component {
             }
         }
         this.swiperRef = React.createRef();
+        this.memberViews = [];
+        this.budgetViews = [];
+        this.needViews = [];
+        this.noteViews = [];
     }
 
     updateIndex(i) {
@@ -87,16 +90,14 @@ class Main extends React.Component {
 
 
     handleChange = (event, name, type) => {
-        event = Validator.validateText(event, type);
-
-        this.setState({
+        Validator.setWithValidation(event, type, (text) => this.setState({
             ...this.state,
             family: {
                 ...this.state.family,
-                [name]: event,
+                [name]: text,
             }
         }
-        );
+        ));
 
         if (event && name === 'city')
             this.getTowns(event);
@@ -131,14 +132,47 @@ class Main extends React.Component {
             });
     }
 
+    updateKeys(key, stateName, screenName, views) {
+        const { route, navigation } = this.props;
+        if (route.params?.key === screenName) {
+            const { model, title, expl, index } = route.params;
+
+            const models = this.state.family[stateName];
+            const view = <ButtonCard key={`${key}${views.length}`} onPress={() => navigation.navigate(screenName, { model: model, index: models.length })} style={styles.input} title={title} desc={expl} />
+
+            if (index != null) { // update exists
+                models[index] = model;
+                this.setState({ ...this.state, family: { ...this.state.family, [stateName]: models } });
+                views[index] = view;
+            }
+
+            else { // push new
+                this.setState({ ...this.state, family: { ...this.state.family, [stateName]: [...this.state.family[stateName], model] } });
+                views.push(view);
+            }
+
+            delete route.params;
+        }
+
+    }
+
+
+    componentDidUpdate() {
+        this.updateKeys('member', 'members', 'Member', this.memberViews);
+        this.updateKeys('budget', 'budgets', 'Budget', this.budgetViews);
+        this.updateKeys('need', 'needs', 'Need', this.needViews);
+        this.updateKeys('note', 'notes', 'Note', this.noteViews);
+
+
+    }
+
 
     render() {
         const { navigation } = this.props;
         let { family, location } = this.state;
         return (
             <>
-                <NavBar title='Aile Ekle' />
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.tickSquare}><TickSquare /></TouchableOpacity>
+                <NavBar title='Aile Ekle' onPress={() => navigation.goBack()} onTick={() => navigation.goBack()} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
                 <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
                     <ScrollView showsVerticalScrollIndicator={false} >
@@ -157,16 +191,19 @@ class Main extends React.Component {
                     </ScrollView>
                     <View >
                         <ButtonCard onPress={() => navigation.navigate('Member')} style={styles.input} title='Üye Ekleyin' />
+                        <View>{this.memberViews}</View>
                     </View>
                     <View >
                         <ButtonCard onPress={() => navigation.navigate('Budget')} style={styles.input} title='Bütçe Ekleyin' />
+                        <View>{this.budgetViews}</View>
                     </View>
                     <View >
                         <ButtonCard onPress={() => navigation.navigate('Need')} style={styles.input} title='İhtiyaç Ekleyin' />
-
+                        <View>{this.needViews}</View>
                     </View>
                     <View >
                         <ButtonCard onPress={() => navigation.navigate('Note')} style={styles.input} title='Not Ekleyin' />
+                        <View>{this.noteViews}</View>
                     </View>
                     <View >
                         <ButtonCard style={styles.input} title='Resim Ekleyin' />
@@ -218,11 +255,6 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 10,
         marginHorizontal: 15,
-    },
-    tickSquare: {
-        position: 'absolute',
-        top: 30,
-        right: 15
     },
 });
 

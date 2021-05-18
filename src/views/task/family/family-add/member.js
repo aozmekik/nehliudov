@@ -14,17 +14,30 @@ import * as Validator from '../../../../utils/validator';
 
 
 
-function MemberScreen({ navigation, onAdd }) {
-    const [member, setMember] = React.useState(new FamilyModel.Member());
+function MemberScreen({ navigation, route }) {
+    const isEdit = () => { return route.params?.model }
+
+    const [member, setMember] = React.useState(isEdit() ? route.params.model : new FamilyModel.Member());
 
     const handleChange = (event, name, type) => {
-        event = Validator.validateText(event, type);
-        setMember({ ...member, [name]: event });
+        Validator.setWithValidation(event, type, (text) => setMember({ ...member, [name]: text }));
     };
+
+    const pushMember = () => navigation.navigate({
+        name: 'Main',
+        params: {
+            model: member,
+            title: member.name,
+            expl: member.birthyear ? new Date().getFullYear() - member.birthyear : null,
+            key: 'Member',
+            index: isEdit() ? route.params.index : null
+        },
+        merge: true
+    });
 
     return (
         <View style={styles.container}>
-            <NavBar onPress={() => navigation.goBack()} title='Aile Üyesi Ekle' />
+            <NavBar onPress={() => navigation.goBack()} onTick={pushMember} title={`Aile Üyesi ${isEdit()? 'Düzenle': 'Ekle'}`} />
             <ScrollView>
                 <Input value={member.name} onChangeText={e => handleChange(e, 'name', 'alpha')} style={styles.input} required={true} placeholder='İsim' />
                 <Input value={member.idNo} onChangeText={e => handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
@@ -38,7 +51,6 @@ function MemberScreen({ navigation, onAdd }) {
                 <Input value={member.school} onChangeText={e => handleChange(e, 'school')} style={styles.input} placeholder='Okul' />
                 <Input value={member.grade} onChangeText={e => handleChange(e, 'grade', 'numeric')} keyboardType='number-pad' style={styles.input} placeholder='Sınıf' />
                 <Input value={member.note} onChangeText={e => handleChange(e, 'note')} style={styles.input} placeholder='Not' />
-                <Button onPress={onAdd} title='Ekle' Icon={Plus} />
                 <View style={styles.empty} />
             </ScrollView>
         </View>

@@ -90,10 +90,10 @@ export class Family {
         this.status = null;
         this.health = null;
         this.education = null;
-        this.members = null;
-        this.budgets = null;
-        this.needs = null;
-        this.notes = null;
+        this.members = [];
+        this.budgets = [];
+        this.needs = [];
+        this.notes = [];
     }
 };
 
@@ -144,6 +144,6 @@ function toArray(dict) {
     var array = [];
     var key;
     for (var key in dict)
-        array.push({ label: dict[key], value: key });
+        array.push({ label: dict[key], value: parseInt(key) });
     return array;
 }

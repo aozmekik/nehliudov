@@ -7,6 +7,7 @@ import ResultScreen from './task/family/family-list/result';
 import FamilyAddScreen from './task/family/family-add/family-add';
 import Member from './task/family/family-add/member';
 import Budget from './task/family/family-add/budget';
+import Note from './task/family/family-add/note';
 
 function HomeScreen() {
     return (
@@ -15,10 +16,10 @@ function HomeScreen() {
             {/* <FamilyScreen /> */}
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
-            {/* <FamilyAddScreen /> */}
+            <FamilyAddScreen />
             {/* <ResultScreen /> */}
             {/* <Member /> */}
-            <Budget />
+            {/* <Budget /> */}
 
         </View >
     );
@@ -27,7 +28,6 @@ function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         // paddingTop: 50,
-        backgroundColor: '#F8F8F8',
         height: '100%',
     },
 
