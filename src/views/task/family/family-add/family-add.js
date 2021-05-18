@@ -78,6 +78,11 @@ class Main extends React.Component {
         });
     };
 
+    isValid()
+    {
+        return this.state.family.name;
+    }
+
     handleChange = (event, name, type) => {
         Validator.setWithValidation(event, type, (text) => this.setState({
             ...this.state,

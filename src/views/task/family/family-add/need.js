@@ -1,17 +1,17 @@
 import * as React from 'react';
 
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Modal } from 'react-native';
 
 import NavBar from '../../../../components/nav-bar';
 import Input from '../../../../components/input';
-import { Plus } from '../../../../components/icons';
-import Button from '../../../../components/button';
+import Dialog from '../../../../components/dialog';
 import styles from './style';
 
 
 function NeedScreen({ navigation, route }) {
     const isEdit = () => { return route.params?.model }
     const [need, setNeed] = React.useState(isEdit() ? route.params.model : null);
+    const [modalVisible, setModalVisible] = React.useState(false);
 
     const pushNeed = () => navigation.navigate({
         name: 'Main',
@@ -25,11 +25,35 @@ function NeedScreen({ navigation, route }) {
         merge: true
     });
 
+    const showModal = () => {
+        setModalVisible(true)
+        setTimeout(() => {
+            setModalVisible(false)
+        }, 2000);
+    }
+
+    const formIsValid = () => need != null;
+
+    const onTick = () => {
+        if (formIsValid())
+            pushNeed();
+        else
+            showModal();
+    }
+
     return (
         <View style={styles.container}>
-            <NavBar onPress={() => navigation.goBack()} onTick={pushNeed} title={`İhtiyaç ${isEdit()? 'Düzenle': 'Ekle'}`} />
+            <NavBar onPress={() => navigation.goBack()} onTick={onTick} title={`İhtiyaç ${isEdit() ? 'Düzenle' : 'Ekle'}`} />
             <ScrollView>
                 <Input multiline={true} value={need} onChangeText={e => setNeed(e)} style={{ ...styles.input, paddingVertical: 30 }} placeholder='İhtiyaç' />
+                <Modal
+                    animationType='fade'
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <Dialog title='İhtiyaç alanı zorunludur' />
+                </Modal>
             </ScrollView>
         </View>
     )

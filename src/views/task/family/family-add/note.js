@@ -1,52 +1,60 @@
 import * as React from 'react';
 
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Modal } from 'react-native';
 
 import NavBar from '../../../../components/nav-bar';
 import Input from '../../../../components/input';
-import { Plus } from '../../../../components/icons';
 import Select from '../../../../components/select';
-import Button from '../../../../components/button';
+import Dialog from '../../../../components/dialog';
 import styles from './style';
 
 
 import * as FamilyModel from '../../../../models/family';
-import * as Validator from '../../../../utils/validator';
+import FormScreen from './form';
 
 
 
-function NoteScreen({ navigation, route }) {
-    const isEdit = () => { return route.params?.model }
-    const [note, setNote] = React.useState(isEdit() ? route.params.model : new FamilyModel.Note());
+class NoteScreen extends FormScreen {
+    constructor(props) {
+        super(FamilyModel.Note, 'Note', props);
+    }
 
-    const handleChange = (event, name, type) => {
-        Validator.setWithValidation(event, type, (text) => setNote({ ...note, [name]: text }));
-    };
+    getTitle() {
+        const note = this.state.model;
+        return note.statement.substring(0, 20) + (note.statement?.length > 20 ? '...' : ' ');
+    }
 
+    getExpl() {
+        const note = this.state.model;
+        return `${note.rating}/5`;
+    }
 
-    const pushNeed = () => navigation.navigate({
-        name: 'Main',
-        params: {
-            model: note,
-            title: note.statement.substring(0, 20) + (note.statement?.length > 20 ? '...' : ' '),
-            expl: `${note.rating}/5`,
-            key: 'Note',
-            index: isEdit() ? route.params.index : null
-        },
-        merge: true
-    });
+    formIsValid() {
+        return this.state.model.statement != null && this.state.model.rating != null && this.state.model.members;
+    }
 
-
-    return (
-        <View style={styles.container}>
-            <NavBar onPress={() => navigation.goBack()} onTick={pushNeed} title={`Not ${isEdit()? 'Düzenle': 'Ekle'}`} />
-            <ScrollView>
-                <Select value={note.rating} onValueChange={e => handleChange(e, 'rating')} items={FamilyModel.commentList} style={styles.input} placeholder='İhtiyaç Derecesi' />
-                <Input value={note.statement} onChangeText={e => handleChange(e, 'statement')} style={styles.input} placeholder='Not' />
-                <Input editable={false} style={styles.input} placeholder='Tespit Edenler' />
-            </ScrollView>
-        </View>
-    )
+    render() {
+        const note = this.state.model;
+        const { navigation } = this.props;
+        return (
+            <View style={styles.container}>
+                <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Not ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
+                <ScrollView>
+                    <Select value={note.rating} onValueChange={e => this.handleChange(e, 'rating')} items={FamilyModel.commentList} style={styles.input} placeholder='İhtiyaç Derecesi' />
+                    <Input value={note.statement} onChangeText={e => this.handleChange(e, 'statement')} style={styles.input} placeholder='Not' />
+                    <Input editable={false} style={styles.input} placeholder='Tespit Edenler' />
+                    <Modal
+                        animationType='fade'
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => this.setModalInvisible()}
+                    >
+                        <Dialog title='Tüm alanlar zorunludur' />
+                    </Modal>
+                </ScrollView>
+            </View>
+        )
+    }
 }
 
 

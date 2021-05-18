@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 import NotificationsScreen from './profile/notifications';
 import FamilyScreen from './task/family/family';
@@ -8,8 +8,16 @@ import FamilyAddScreen from './task/family/family-add/family-add';
 import Member from './task/family/family-add/member';
 import Budget from './task/family/family-add/budget';
 import Note from './task/family/family-add/note';
+import Location from '../components/task/location';
+import Dialog from '../components/dialog';
+
+import Button from '../components/button';
 
 function HomeScreen() {
+    const [visible, setVisible] = React.useState(false);
+
+    const toggleVisible = () => setVisible(prevValue => !prevValue);
+
     return (
         <View style={styles.container} >
             {/* <Select style={styles.input} placeholder='İsim' /> */}
@@ -17,6 +25,9 @@ function HomeScreen() {
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
             <FamilyAddScreen />
+            {/* <Dialog title='selamlarsana ey '/> */}
+
+            {/* <Location /> */}
             {/* <ResultScreen /> */}
             {/* <Member /> */}
             {/* <Budget /> */}

@@ -1,28 +1,28 @@
 import * as React from 'react';
 
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Modal } from 'react-native';
 
 import NavBar from '../../../../components/nav-bar';
 import Input from '../../../../components/input';
-import { Plus } from '../../../../components/icons';
 import Select from '../../../../components/select';
-import Button from '../../../../components/button';
+import Dialog from '../../../../components/dialog';
 import styles from './style';
 
 import * as FamilyModel from '../../../../models/family';
-import * as Validator from '../../../../utils/validator';
+import FormScreen from './form';
 
+class BudgetScreen extends FormScreen {
+    constructor(props) {
+        super(FamilyModel.Budget, 'Budget', props);
+    }
 
-function BudgetScreen({ navigation, route }) {
-    const isEdit = () => { return route.params?.model }
-    const [budget, setBudget] = React.useState(isEdit() ? route.params.model : new FamilyModel.Budget());
+    getTitle() {
+        return this.state.model.name;
+    }
 
-    const handleChange = (event, name, type) => {
-        Validator.setWithValidation(event, type, (text) => setBudget({ ...budget, [name]: text }));
-    };
-
-    const getExpl = () => {
+    getExpl() {
         let text;
+        const budget = this.state.model;
         switch (budget.type) {
             case FamilyModel.BudgetType.EXPENSE:
                 text = `-${budget.amount}₺`;
@@ -40,29 +40,35 @@ function BudgetScreen({ navigation, route }) {
         return text;
     }
 
-    const pushBudget = () => navigation.navigate({
-        name: 'Main',
-        params: {
-            model: budget,
-            title: budget.name,
-            expl: getExpl(),
-            key: 'Budget',
-            index: isEdit() ? route.params.index : null
-        },
-        merge: true
-    });
 
+    formIsValid() {
+        const budget = this.state.model;
+        return budget.name != null && budget.type != null && budget.amount != null;
+    }
 
-    return (
-        <View style={styles.container}>
-            <NavBar onPress={() => navigation.goBack()} onTick={pushBudget} title={`Bütçe ${isEdit()? 'Düzenle': 'Ekle'}`} />
-            <ScrollView>
-                <Select value={budget.type} onValueChange={e => handleChange(e, 'type')} items={FamilyModel.budgetList} style={styles.input} placeholder='Tip' />
-                <Input required={true} value={budget.name} onChangeText={e => handleChange(e, 'name')} style={styles.input} placeholder='Bütçe Adı' />
-                <Input required={true} value={budget.amount} onChangeText={e => handleChange(e, 'amount', 'numeric')} keyboardType='number-pad' style={styles.input} placeholder='Tutar' />
-            </ScrollView>
-        </View>
-    )
+    render() {
+        const budget = this.state.model;
+        const { navigation } = this.props;
+        return (
+            <View style={styles.container}>
+                <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Bütçe ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
+                <ScrollView>
+                    <Select value={budget.type} onValueChange={e => this.handleChange(e, 'type')} items={FamilyModel.budgetList} style={styles.input} placeholder='Tip' />
+                    <Input required={true} value={budget.name} onChangeText={e => this.handleChange(e, 'name')} style={styles.input} placeholder='Bütçe Adı' />
+                    <Input required={true} value={budget.amount} onChangeText={e => this.handleChange(e, 'amount', 'numeric')} keyboardType='number-pad' style={styles.input} placeholder='Tutar' />
+                    <Modal
+                        animationType='fade'
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => this.setModalInvisible()}
+                    >
+                        <Dialog title='Tüm alanlar zorunludur' />
+                    </Modal>
+                </ScrollView>
+            </View>
+        )
+    }
+
 }
 
 
