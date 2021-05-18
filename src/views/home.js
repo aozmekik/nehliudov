@@ -10,8 +10,10 @@ import Budget from './task/family/family-add/budget';
 import Note from './task/family/family-add/note';
 import Location from '../components/task/location';
 import Dialog from '../components/dialog';
+import ButtonCard from '../components/button-card';
 
-import Button from '../components/button';
+
+
 
 function HomeScreen() {
     const [visible, setVisible] = React.useState(false);
@@ -25,6 +27,8 @@ function HomeScreen() {
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
             <FamilyAddScreen />
+            {/* <ButtonCard title='Buzdolabı' selected={true} style={{marginTop: 50}} /> */}
+            {/* <DeleteSelected /> */}
             {/* <Dialog title='selamlarsana ey '/> */}
 
             {/* <Location /> */}

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { ChevronRight } from './icons';
+import { ChevronRight, Check } from './icons';
 
 
-function ButtonCard({ title, desc, style, ...props }) {
+function ButtonCard({ title, desc, style, selected, ...props }) {
+    const selectedStyle = { borderWidth: 1, borderColor: '#E11E3C' };
 
-    return (<TouchableOpacity {...props} style={[styles.container, style]}>
+    return (<TouchableOpacity {...props} style={[styles.container, style, selected ? selectedStyle : null]}>
         <View style={styles.textContainer}>
             <Text style={[styles.title, style?.text]}>
                 {title}
@@ -14,7 +15,7 @@ function ButtonCard({ title, desc, style, ...props }) {
             {desc && <Text style={styles.desc}>{desc}</Text>}
         </View>
 
-        <ChevronRight />
+        {selected ? <Check fill="#E11E3C" /> : <ChevronRight />}
     </TouchableOpacity>);
 }
 
