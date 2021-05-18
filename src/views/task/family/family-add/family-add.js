@@ -10,6 +10,7 @@ import NavBar from '../../../../components/nav-bar';
 import Input from '../../../../components/input';
 import Select from '../../../../components/select';
 import ButtonCard from '../../../../components/button-card';
+import Location from '../../../../components/task/location';
 
 import Member from './member';
 import Budget from './budget';
@@ -17,7 +18,6 @@ import Need from './need';
 import Note from './note';
 
 import * as FamilyModel from '../../../../models/family';
-import * as LocationServices from '../../../../services/location-services';
 
 import * as Validator from '../../../../utils/validator';
 
@@ -63,12 +63,6 @@ class Main extends React.Component {
         this.state = {
             index: 0,
             family: new FamilyModel.Family(),
-            location: {
-                cities: LocationServices.getCities(),
-                towns: null,
-                districts: null,
-                streets: null,
-            }
         }
         this.swiperRef = React.createRef();
         this.memberViews = [];
@@ -84,11 +78,6 @@ class Main extends React.Component {
         });
     };
 
-    isValid() {
-        return this.state.family.name;
-    }
-
-
     handleChange = (event, name, type) => {
         Validator.setWithValidation(event, type, (text) => this.setState({
             ...this.state,
@@ -99,37 +88,19 @@ class Main extends React.Component {
         }
         ));
 
-        if (event && name === 'city')
-            this.getTowns(event);
-
-        else if (event && name === 'town')
-            this.getDistricts(event);
-
-        else if (event && name === 'district')
-            this.getStreets(event);
-
-
     };
 
-    getTowns(city) {
-        LocationServices.getTowns(city)
-            .then(data => {
-                this.setState({ ...this.state, location: { ...this.state.location, towns: data, districts: null, streets: null } })
-            });
-    }
-
-    getDistricts(town) {
-        LocationServices.getDistricts(town)
-            .then(data => {
-                this.setState({ ...this.state, location: { ...this.state.location, districts: data, streets: null } })
-            });
-    }
-
-    getStreets(district) {
-        LocationServices.getStreets(district)
-            .then(data => {
-                this.setState({ ...this.state, location: { ...this.state.location, streets: data } })
-            });
+    handleLocation = (loc) => {
+        this.setState({
+            ...this.state,
+            family: {
+                ...this.state.family,
+                city: loc?.city,
+                town: loc?.town,
+                district: loc?.district,
+                street: loc?.street
+            }
+        });
     }
 
     updateKeys(key, stateName, screenName, views) {
@@ -162,14 +133,14 @@ class Main extends React.Component {
         this.updateKeys('budget', 'budgets', 'Budget', this.budgetViews);
         this.updateKeys('need', 'needs', 'Need', this.needViews);
         this.updateKeys('note', 'notes', 'Note', this.noteViews);
-
-
     }
+
 
 
     render() {
         const { navigation } = this.props;
-        let { family, location } = this.state;
+        let { family } = this.state;
+        let loc = { city: family.city, town: family.town, district: family.district, street: family.street }
         return (
             <>
                 <NavBar title='Aile Ekle' onPress={() => navigation.goBack()} onTick={() => navigation.goBack()} />
@@ -180,10 +151,7 @@ class Main extends React.Component {
                         <Input value={family.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
                         <Input value={family.nation} style={styles.input} placeholder='Uyruk' />
                         <Input value={family.tel} onChangeText={e => this.handleChange(e, 'tel', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Telefon' />
-                        <Select value={family.city} onValueChange={e => this.handleChange(e, 'city')} items={location.cities} style={styles.input} placeholder="İl" />
-                        {location.towns && <Select value={family.town} onValueChange={e => this.handleChange(e, 'town')} items={location.towns} style={styles.input} placeholder="İlçe" />}
-                        {location.districts && <Select value={family.district} onValueChange={e => this.handleChange(e, 'district')} items={location.districts} style={styles.input} placeholder="Mahalle" />}
-                        {location.streets && <Select value={family.street} onValueChange={e => this.handleChange(e, 'street')} items={location.streets} style={styles.input} placeholder="Sokak" />}
+                        <Location loc={loc} onValueChange={e => this.handleLocation(e)} />
                         <Input value={family.address} style={styles.input} onChangeText={e => this.handleChange(e, 'address')} placeholder='Adres' />
                         <Input value={family.rent} style={styles.input} keyboardType='number-pad' onChangeText={e => this.handleChange(e, 'address', 'numeric')} placeholder='Kira' />
                         <Select value={family.warmingType} onValueChange={e => this.handleChange(e, 'warmingType')} items={FamilyModel.warmingList} style={styles.input} placeholder='Isınma Tipi' />

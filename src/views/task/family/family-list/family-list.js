@@ -7,6 +7,7 @@ import Select from '../../../../components/select';
 import ButtonCard from '../../../../components/button-card';
 import NavBar from '../../../../components/nav-bar';
 import ResultScreen from './result';
+import Location from '../../../../components/task/location';
 
 function SelectBox({ style, title }) {
     return (
@@ -22,16 +23,7 @@ function Main({ navigation }) {
         <>
             <NavBar title='Aile Listele' />
             <ScrollView style={styles.scrollView}>
-                <Select style={styles.select} placeholder='İl' />
-                <Select style={styles.select} placeholder='İlçe' />
-                <Select style={styles.select} placeholder='Mahalle' />
-                <Select style={styles.select} placeholder='Durum' />
-
-                {/* <View style={styles.boxContainer}>
-            <SelectBox style={styles.selectBox} title='Eğitim' />
-            <SelectBox style={styles.selectBox} title='Sağlık' />
-            <SelectBox style={styles.selectBox} title='İhtiyaç' />
-        </View> */}
+                <Location/>
                 <ButtonCard onPress={() => navigation.navigate('Result')} style={styles.select} title='Aile listele' />
             </ScrollView>
         </>
