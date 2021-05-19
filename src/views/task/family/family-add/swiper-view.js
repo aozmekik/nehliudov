@@ -140,16 +140,24 @@ class SwiperView extends React.Component {
             }
             else { // push new
                 const newIndex = models.length;
-                let newModels;
-                if (this.screenName === 'Image')
-                    newModels = models.concat(model);
-                else
-                    newModels = [...models, model];
 
-                this.setState(prevState => ({ ...prevState, models: newModels }));
-                this.onChange(newModels);
-                const view = this.getCardView(newIndex, newModels[newIndex]);
-                this.pushButtonCard(view);
+                // push multiple model instance in the image case
+                if (this.screenName === 'FamilyImage') {
+                    const newModels = models.concat(model);
+                    const views = this.modelToView(newModels);
+                    this.setState(prevState => ({ views: views, models: newModels }));
+                    this.onChange(newModels);
+                }
+
+                // push one only
+                else {
+                    const newModels = [...models, model];
+                    this.setState(prevState => ({ ...prevState, models: newModels }));
+                    this.onChange(newModels);
+                    const view = this.getCardView(newIndex, newModels[newIndex]);
+                    this.pushButtonCard(view);
+                }
+
             }
 
             delete route.params;

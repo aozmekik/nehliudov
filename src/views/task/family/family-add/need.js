@@ -11,7 +11,7 @@ import styles from './style';
 
 class NeedScreen extends FormScreen {
     constructor(props) {
-        super(null, 'Need', props);
+        super(null, 'FamilyNeed', props);
     }
 
     static title(model) {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, Modal } from 'react-native';
+import { Text, View, Modal } from 'react-native';
 
 import { ImageBrowser } from 'expo-image-picker-multiple';
 import { Camera } from 'expo-camera';
@@ -7,19 +7,14 @@ import * as FileSystem from 'expo-file-system';
 
 
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
-
-import { LogBox } from 'react-native';
-
-// LogBox.ignoreLogs['Warning: Non-serializable values were found in the navigation state']
-// LogBox.ignoreWarnings([
-//     'Non-serializable values were found in the navigation state',
-// ]);
 
 import NavBar from '../../../../components/nav-bar';
 import Dialog from '../../../../components/dialog';
 import Button from '../../../../components/button';
+import ButtonCard from '../../../../components/button-card';
 import { Camera as CameraIcon, Check } from '../../../../components/icons';
 import styles from './style';
 
@@ -143,6 +138,52 @@ function SnapImage({ onSubmit }) {
     );
 }
 
+function TestMain({ navigation }) {
+    return (
+        <>
+            <NavBar title='Resim Ekle' />
+            <ButtonCard onPress={() => navigation.navigate('PickImage')} style={styles.input} title='Galeriden seç' />
+            <ButtonCard onPress={() => navigation.navigate('SnapImage')} style={styles.input} title='Yeni resim' />
+        </>
+    );
+}
 
 
-export { SnapImage, PickImage };
+const Stack = createStackNavigator();
+
+function ImageScreen({ navName }) {
+    const pushImages = (images, navigation) => {
+        console.log(images.length);
+        navigation.navigate({
+            name: navName,
+            params: {
+                model: images,
+                key: 'FamilyImage',
+            },
+            merge: true
+        });
+    }
+
+    const PickImageScreen = ({ navigation }) => {
+        return (<PickImage onSubmit={(images) => pushImages(images, navigation)} />
+        )
+    }
+
+    const SnapImageScreen = ({ navigation }) => {
+        return (<SnapImage onSubmit={(images) => pushImages(images, navigation)} />
+        )
+    }
+
+    return (
+        <Stack.Navigator initialRouteName='TestMain' headerMode='none'>
+            <Stack.Screen name='TestMain' component={TestMain} />
+            <Stack.Screen name='PickImage' component={PickImageScreen} />
+            <Stack.Screen name='SnapImage' component={SnapImageScreen} />
+        </Stack.Navigator>
+    );
+}
+
+
+
+// export { SnapImage, PickImage };
+export default ImageScreen;

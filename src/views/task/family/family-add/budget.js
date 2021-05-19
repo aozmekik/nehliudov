@@ -13,7 +13,7 @@ import FormScreen from './form';
 
 class BudgetScreen extends FormScreen {
     constructor(props) {
-        super(FamilyModel.Budget, 'Budget', props);
+        super(FamilyModel.Budget, 'FamilyBudget', props);
     }
 
     static title(model) {

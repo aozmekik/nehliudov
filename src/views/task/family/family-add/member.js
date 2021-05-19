@@ -14,7 +14,7 @@ import FormScreen from './form';
 
 class MemberScreen extends FormScreen {
     constructor(props) {
-        super(FamilyModel.Member, 'Member', props);
+        super(FamilyModel.Member, 'FamilyMember', props);
     }
 
     static title(model) {

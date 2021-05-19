@@ -9,22 +9,20 @@ import Swiper from 'react-native-swiper';
 import NavBar from '../../../../components/nav-bar';
 import Input from '../../../../components/input';
 import Select from '../../../../components/select';
-import ButtonCard from '../../../../components/button-card';
 import Location from '../../../../components/task/location';
 import Dialog from '../../../../components/dialog';
 
 
 
-import Member from './member';
-import Budget from './budget';
-import Need from './need';
-import Note from './note';
+import MemberScreen from './member';
+import BudgetScreen from './budget';
+import NeedScreen from './need';
+import NoteScreen from './note';
+import ImageScreen from './image';
 import SwiperView from './swiper-view';
-import Image from './image';
 
 import * as FamilyModel from '../../../../models/family';
 import * as Validator from '../../../../utils/validator';
-import TestScreen from './test';
 
 
 function PaginationItem({ title, active, ...props }) {
@@ -168,15 +166,19 @@ class FamilyAddMainScreen extends React.Component {
                         <Select value={family.warmingType} onValueChange={e => this.handleChange(e, 'warmingType')} items={FamilyModel.warmingList} style={styles.input} placeholder='Isınma Tipi' />
                         <View style={styles.empty} />
                     </ScrollView>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} models={family.members} modelClass={Member} screenName='Member' title='Üye ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} models={family.budgets} modelClass={Budget} screenName='Budget' title='Bütçe ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={Need} screenName='Need' title='İhtiyaç ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={Note} screenName='Note' title='Not ekleyin' {...this.props} /></View>
-                    <View ><SwiperView onChange={(e) => this.handleSwiperChange('images', e)} image={true} models={family.images} modelClass={null} screenName='Image' title='Resim ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} models={family.members} modelClass={MemberScreen} screenName='FamilyMember' title='Üye ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} models={family.budgets} modelClass={BudgetScreen} screenName='FamilyBudget' title='Bütçe ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={NeedScreen} screenName='FamilyNeed' title='İhtiyaç ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={NoteScreen} screenName='FamilyNote' title='Not ekleyin' {...this.props} /></View>
+                    <View ><SwiperView onChange={(e) => this.handleSwiperChange('images', e)} image={true} models={family.images} modelClass={null} screenName='FamilyImage' title='Resim ekleyin' {...this.props} /></View>
                 </Swiper>
             </>
         )
     }
+}
+
+function ImageScreenWrapper() {
+    return (<ImageScreen navName='FamilyAddMain' />);
 }
 
 function FamilyAddScreen({ family }) {
@@ -184,11 +186,11 @@ function FamilyAddScreen({ family }) {
         <>
             <Stack.Navigator headerMode='none'>
                 <Stack.Screen name='FamilyAddMain' component={FamilyAddMainScreen} initialParams={{ family: family }} />
-                <Stack.Screen name='Member' component={Member} />
-                <Stack.Screen name='Budget' component={Budget} />
-                <Stack.Screen name='Need' component={Need} />
-                <Stack.Screen name='Note' component={Note} />
-                <Stack.Screen name='Image' component={TestScreen} />
+                <Stack.Screen name='FamilyMember' component={MemberScreen} />
+                <Stack.Screen name='FamilyBudget' component={BudgetScreen} />
+                <Stack.Screen name='FamilyNeed' component={NeedScreen} />
+                <Stack.Screen name='FamilyNote' component={NoteScreen} />
+                <Stack.Screen name='FamilyImage' component={ImageScreenWrapper} />
             </Stack.Navigator>
         </>
     )

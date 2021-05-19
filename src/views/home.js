@@ -14,7 +14,6 @@ import ButtonCard from '../components/button-card';
 import TimelineScreen from '../views/timeline/timeline';
 import * as FamilyModel from '../models/family';
 import ImageScreen from './task/family/family-add/image';
-import TestScreen from './task/family/family-add/test';
 
 
 
@@ -31,7 +30,7 @@ function HomeScreen() {
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
             {/* <ImageScreen /> */}
-            <FamilyAddScreen family={FamilyModel.exampleFamily} />
+            <FamilyAddScreen />
             {/* <TestScreen /> */}
 
 

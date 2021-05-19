@@ -16,7 +16,7 @@ import FormScreen from './form';
 
 class NoteScreen extends FormScreen {
     constructor(props) {
-        super(FamilyModel.Note, 'Note', props);
+        super(FamilyModel.Note, 'FamilyNote', props);
     }
 
     static title(model) {
