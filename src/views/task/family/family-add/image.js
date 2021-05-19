@@ -153,7 +153,6 @@ const Stack = createStackNavigator();
 
 function ImageScreen({ navName }) {
     const pushImages = (images, navigation) => {
-        console.log(images.length);
         navigation.navigate({
             name: navName,
             params: {

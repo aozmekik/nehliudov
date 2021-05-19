@@ -38,7 +38,6 @@ class NoteScreen extends FormScreen {
             <View style={styles.container}>
                 <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Not ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
                 <ScrollView>
-                    <Select value={note.rating} onValueChange={e => this.handleChange(e, 'rating')} items={FamilyModel.commentList} style={styles.input} placeholder='İhtiyaç Derecesi' />
                     <Input value={note.statement} onChangeText={e => this.handleChange(e, 'statement')} style={styles.input} placeholder='Not' />
                     <Input editable={false} style={styles.input} placeholder='Tespit Edenler' />
                     <Modal

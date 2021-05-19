@@ -4,9 +4,8 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { ChevronRight, Check } from './icons';
 
 
-function ButtonCard({ title, desc, style, selected, image, ...props }) {
+function ButtonCard({ title, desc, style, selected, image, noChevron, ...props }) {
     const selectedStyle = { borderWidth: 1, borderColor: '#E11E3C' };
-
     return (
         <>
             {!image ?
@@ -17,7 +16,7 @@ function ButtonCard({ title, desc, style, selected, image, ...props }) {
                         </Text>
                         {desc && <Text style={styles.desc}>{desc}</Text>}
                     </View>
-                    {selected ? <Check fill="#E11E3C" /> : <ChevronRight />}
+                    {selected ? <Check fill="#E11E3C" /> : (noChevron ? null : <ChevronRight />)}
                 </TouchableOpacity>
                 :
                 <TouchableOpacity delayPressIn={50} style={[styles.imageContainer, style]} {...props}>

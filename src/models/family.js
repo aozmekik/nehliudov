@@ -6,7 +6,7 @@ export const Status = Object.freeze({
     CONFLICTING: 4
 });
 
-export const Comment = Object.freeze({
+export const Rating = Object.freeze({
     VERY_LOW: 0,
     LOW: 1,
     NORMAL: 2,
@@ -45,8 +45,7 @@ export class Note {
     constructor() {
         this._id = null;
         this.statement = null;
-        this.members = null;
-        this.rating = null;
+        this.members = [];
     }
 }
 
@@ -74,7 +73,7 @@ export class Member {
 export class Family {
     constructor() {
         this._id = null;
-        this.clerk = null;
+        this.clerks = [];
         this.name = null;
         this.idNo = null;
         this.tel = null;
@@ -88,8 +87,9 @@ export class Family {
         this.street = null;
         this.nation = null;
         this.status = null;
-        this.health = null;
-        this.education = null;
+        this.rating = null;
+        this.health = false;
+        this.education = false;
         this.members = [];
         this.budgets = [];
         this.needs = [];
@@ -108,12 +108,12 @@ const statuses = Object.freeze({
 
 });
 
-const comments = Object.freeze({
-    [Comment.VERY_LOW]: 'Çok Zayıf',
-    [Comment.LOW]: 'Zayıf',
-    [Comment.NORMAL]: 'Normal',
-    [Comment.GOOD]: 'İyi',
-    [Comment.VERY_GOOD]: 'Çok İyi'
+const ratings = Object.freeze({
+    [Rating.VERY_LOW]: 'Çok Zayıf',
+    [Rating.LOW]: 'Zayıf',
+    [Rating.NORMAL]: 'Normal',
+    [Rating.GOOD]: 'İyi',
+    [Rating.VERY_GOOD]: 'Çok İyi'
 })
 
 
@@ -137,7 +137,7 @@ const budgets = Object.freeze({
 
 export const statusList = toArray(statuses);
 export const warmingList = toArray(warmingTypes);
-export const commentList = toArray(comments);
+export const ratingList = toArray(ratings);
 export const genderList = toArray(genders);
 export const budgetList = toArray(budgets);
 

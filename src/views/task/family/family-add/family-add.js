@@ -23,6 +23,9 @@ import SwiperView from './swiper-view';
 
 import * as FamilyModel from '../../../../models/family';
 import * as Validator from '../../../../utils/validator';
+import ButtonCard from '../../../../components/button-card';
+
+import * as FamilyServices from '../../../../services/family-services';
 
 
 function PaginationItem({ title, active, ...props }) {
@@ -38,7 +41,7 @@ function Pagination({ index, swiperRef }) {
     const scrollRef = React.useRef(null);
 
     scrollRef.current?.scrollTo({
-        x: index * 30,
+        x: index * 35,
         y: 0,
         animated: true,
     });
@@ -49,10 +52,11 @@ function Pagination({ index, swiperRef }) {
             <PaginationItem onPress={() => swiperRef.current.scrollTo(1)} active={index === 1} title="Aile Üyeleri" />
             <PaginationItem onPress={() => swiperRef.current.scrollTo(2)} active={index === 2} title="Bütçe" />
             <PaginationItem onPress={() => swiperRef.current.scrollTo(3)} active={index === 3} title="İhtiyaç" />
-            <PaginationItem onPress={() => swiperRef.current.scrollTo(4)} active={index === 4} title="Not" />
-            <PaginationItem onPress={() => swiperRef.current.scrollTo(5)} active={index === 5} title="Resim" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(4)} active={index === 4} title="Resim" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(5)} active={index === 5} title="Not" />
+            <PaginationItem onPress={() => swiperRef.current.scrollTo(6)} active={index === 6} title="Yorum" />
+
             {/* padding for right end */}
-            <View style={{ width: 10 }} />
         </ScrollView>
     )
 }
@@ -64,7 +68,7 @@ const Stack = createStackNavigator();
 class FamilyAddMainScreen extends React.Component {
     constructor(props) {
         super(props);
-        const { family } = this.props.route.params;
+        const { family } = this.props?.route?.params;
         this.state = {
             index: 0,
             family: family ? family : new FamilyModel.Family(),
@@ -79,10 +83,6 @@ class FamilyAddMainScreen extends React.Component {
             index: i
         });
     };
-
-    isValid() {
-        return this.state.family.name;
-    }
 
     handleChange = (event, name, type) => {
         Validator.setWithValidation(event, type, (text) => this.setState({
@@ -121,13 +121,18 @@ class FamilyAddMainScreen extends React.Component {
     }
 
     formIsValid() {
-        return this.state.family.name != null;
+        return this.state.family.name != null && this.state.family.status != null;
     }
 
-    onTick() {
+    async createFamily(family) {
+        const fam = await FamilyServices.createFamily(family);
+        return fam;
+    }
+
+    async onTick() {
         if (this.formIsValid()) {
-            console.log('send');
-            this.props.navigation.goBack();
+            this.createFamily(this.state.family);
+            // this.props.navigation.goBack();
         }
         else
             this.showModal();
@@ -152,7 +157,7 @@ class FamilyAddMainScreen extends React.Component {
                     visible={this.state.modalVisible}
                     onRequestClose={() => this.setModalVisible(false)}
                 >
-                    <Dialog title='Ailenin ismi girilmesi zorunludur' />
+                    <Dialog title='Ailenin ismi ve durum bilgisi zorunludur' />
                 </Modal>
                 <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
                     <ScrollView showsVerticalScrollIndicator={false} >
@@ -169,8 +174,15 @@ class FamilyAddMainScreen extends React.Component {
                     <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} models={family.members} modelClass={MemberScreen} screenName='FamilyMember' title='Üye ekleyin' {...this.props} /></View>
                     <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} models={family.budgets} modelClass={BudgetScreen} screenName='FamilyBudget' title='Bütçe ekleyin' {...this.props} /></View>
                     <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={NeedScreen} screenName='FamilyNeed' title='İhtiyaç ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={NoteScreen} screenName='FamilyNote' title='Not ekleyin' {...this.props} /></View>
                     <View ><SwiperView onChange={(e) => this.handleSwiperChange('images', e)} image={true} models={family.images} modelClass={null} screenName='FamilyImage' title='Resim ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={NoteScreen} screenName='FamilyNote' title='Not ekleyin' {...this.props} /></View>
+                    <View>
+                        <Select value={family.status} onValueChange={e => this.handleChange(e, 'status')} items={FamilyModel.statusList} style={styles.input} placeholder='Durum' />
+                        <Select value={family.rating} onValueChange={e => this.handleChange(e, 'rating')} items={FamilyModel.ratingList} style={styles.input} placeholder='Derece' />
+                        <ButtonCard style={{ ...styles.input, text: styles.commentButtonCard }} selected={family.education} onPress={() => this.handleChange(!family.education, 'education')} noChevron={true} title='Eğitim Takip' />
+                        <ButtonCard style={{ ...styles.input, text: styles.commentButtonCard }} selected={family.health} onPress={() => this.handleChange(!family.health, 'health')} noChevron={true} title='Sağlık Takip' />
+
+                    </View>
                 </Swiper>
             </>
         )
@@ -224,6 +236,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginHorizontal: 15,
     },
+    commentButtonCard: {
+        fontFamily: 'SFProText-Regular',
+        fontSize: 14,
+        color: '#48515B'
+    }
 });
 
 export default FamilyAddScreen;
