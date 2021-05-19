@@ -147,3 +147,15 @@ function toArray(dict) {
         array.push({ label: dict[key], value: parseInt(key) });
     return array;
 }
+
+
+const exampleFamily = new Family();
+const member = new Member();
+member.name = 'abc';
+for (var i = 0; i < 10; i++)
+{
+    exampleFamily.members.push(member);
+    exampleFamily.needs.push('selam')
+}
+
+export {exampleFamily};

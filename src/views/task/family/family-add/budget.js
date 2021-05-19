@@ -16,13 +16,13 @@ class BudgetScreen extends FormScreen {
         super(FamilyModel.Budget, 'Budget', props);
     }
 
-    getTitle() {
-        return this.state.model.name;
+    static title(model) {
+        return model.name;
     }
 
-    getExpl() {
+    static expl(model) {
         let text;
-        const budget = this.state.model;
+        const budget = model;
         switch (budget.type) {
             case FamilyModel.BudgetType.EXPENSE:
                 text = `-${budget.amount}₺`;

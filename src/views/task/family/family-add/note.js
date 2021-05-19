@@ -19,14 +19,12 @@ class NoteScreen extends FormScreen {
         super(FamilyModel.Note, 'Note', props);
     }
 
-    getTitle() {
-        const note = this.state.model;
-        return note.statement.substring(0, 20) + (note.statement?.length > 20 ? '...' : ' ');
+    static title(model) {
+        return model.statement.substring(0, 20) + (model.statement?.length > 20 ? '...' : ' ');
     }
 
-    getExpl() {
-        const note = this.state.model;
-        return `${note.rating}/5`;
+    static expl(model) {
+        return `${model.rating}/5`;
     }
 
     formIsValid() {

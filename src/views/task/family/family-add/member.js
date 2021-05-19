@@ -17,13 +17,12 @@ class MemberScreen extends FormScreen {
         super(FamilyModel.Member, 'Member', props);
     }
 
-    getTitle() {
-        return this.state.model.name;
+    static title(model) {
+        return model.name;
     }
 
-    getExpl() {
-        const member = this.state.model;
-        return member.birthyear ? new Date().getFullYear() - member.birthyear : null;
+    static expl(model) {
+        return model.birthyear ? new Date().getFullYear() - model.birthyear : null;
     }
 
     formIsValid() {

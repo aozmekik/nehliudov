@@ -62,14 +62,15 @@ const Stack = createStackNavigator();
 
 
 class Main extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             index: 0,
-            family: new FamilyModel.Family(),
+            family: props.family ? props.family : new FamilyModel.Family(),
             modalVisible: false
         }
         this.swiperRef = React.createRef();
+        console.log(this.state.family);
     }
 
     updateIndex(i) {
@@ -157,10 +158,10 @@ class Main extends React.Component {
                         <Select value={family.warmingType} onValueChange={e => this.handleChange(e, 'warmingType')} items={FamilyModel.warmingList} style={styles.input} placeholder='Isınma Tipi' />
                         <View style={styles.empty} />
                     </ScrollView>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} screenName='Member' title='Üye Ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} screenName='Budget' title='Bütçe Ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} screenName='Need' title='İhtiyaç Ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} screenName='Note' title='Not Ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} models={family.members} modelClass={Member} screenName='Member' title='Üye Ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} models={family.budgets} modelClass={Budget} screenName='Budget' title='Bütçe Ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={Need} screenName='Need' title='İhtiyaç Ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={Note} screenName='Note' title='Not Ekleyin' {...this.props} /></View>
                     <View >
                         <ButtonCard style={styles.input} title='Resim Ekleyin' />
                     </View>

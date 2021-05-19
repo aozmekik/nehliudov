@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -9,6 +9,8 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import Button from '../../../../components/button';
 import ButtonCard from '../../../../components/button-card';
 import { Trash } from '../../../../components/icons';
+import styles from './style';
+
 
 
 
@@ -30,9 +32,12 @@ class SwiperView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            models: [],
+            models: props.models,
             views: [],
         };
+
+        for (let i = 0; i < props.models.length; ++i)
+            this.state.views.push(this.getCardView(i, props.models[i]));
 
         this.selected = null;
         this.deleted = false;
@@ -103,17 +108,22 @@ class SwiperView extends React.Component {
         this.update();
     }
 
+    getCardView(index, model) {
+        const { navigation, modelClass } = this.props;
+        return <ButtonCard key={`${this.screenName}${index}`} onLongPress={() => this.select(index)} onPress={() => navigation.navigate(this.screenName, { model: model, index: index })} style={styles.input} title={modelClass.title(model)} desc={modelClass.expl(model)} />
+    }
+
     update() {
-        const { route, navigation } = this.props;
+        const { route } = this.props;
         if (route.params?.key === this.screenName) {
-            const { model, title, expl, index } = route.params;
+            const { model, index } = route.params;
             const models = this.state.models;
 
             if (index != null) { // update exists
                 models[index] = model;
                 this.setState(prevState => ({ ...prevState, models: models }));
                 this.onChange(models);
-                const view = <ButtonCard key={`${this.screenName}${index}`} onLongPress={() => this.select(index)} onPress={() => navigation.navigate(this.screenName, { model: model, index: index })} style={styles.input} title={title} desc={expl} />
+                const view = this.getCardView(index, models[index]);
                 this.updateButtonCard(index, view);
             }
 
@@ -122,7 +132,7 @@ class SwiperView extends React.Component {
                 const newModels = [...models, model]
                 this.setState(prevState => ({ ...prevState, models: newModels }));
                 this.onChange(newModels);
-                const view = <ButtonCard key={`${this.screenName}${newIndex}`} onLongPress={() => this.select(newIndex)} onPress={() => navigation.navigate(this.screenName, { model: model, index: newIndex })} style={styles.input} title={title} desc={expl} />
+                const view = this.getCardView(newIndex, newModels[newIndex]);
                 this.pushButtonCard(view);
             }
 
@@ -154,18 +164,16 @@ class SwiperView extends React.Component {
                 >
                     <SelectedModal onDelete={() => this.deleteSelected()} onClose={() => this.dismissSelect()} />
                 </RBSheet>
-                <ButtonCard onPress={() => navigation.navigate(this.screenName)} style={styles.input} title={this.title} />
-                <View>{this.state.views}</View>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <ButtonCard onPress={() => navigation.navigate(this.screenName)} style={styles.input} title={this.title} />
+                    <View>{this.state.views}</View>
+                    <View style={styles.empty} />
+
+                </ScrollView>
             </>
         );
     }
 }
 
-const styles = StyleSheet.create({
-    input: {
-        marginTop: 10,
-        marginHorizontal: 15,
-    },
-});
 
 export default SwiperView;

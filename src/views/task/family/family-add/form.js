@@ -9,7 +9,7 @@ class FormScreen extends React.Component {
             throw new Error('Form is abstract class');
         }
         this.state = {
-            model: this.isEdit() ? props.route.params.model : new Model(),
+            model: this.isEdit() ? props.route.params.model : (Model ? new Model(): null),
             modalVisible: false
         }
         this.key = key;
@@ -37,8 +37,6 @@ class FormScreen extends React.Component {
             name: 'Main',
             params: {
                 model: this.state.model,
-                title: this.getTitle(),
-                expl: this.getExpl(),
                 key: this.key,
                 index: this.isEdit() ? route.params.index : null
             },
@@ -46,11 +44,11 @@ class FormScreen extends React.Component {
         });
     }
 
-    getTitle() {
+    static title() {
         throw new Error('Not Implemented');
     }
 
-    getExpl() {
+    static expl() {
         throw new Error('Not Implemented');
     }
 
