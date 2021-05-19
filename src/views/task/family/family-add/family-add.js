@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Modal, } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Modal } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -11,17 +11,19 @@ import Input from '../../../../components/input';
 import Select from '../../../../components/select';
 import ButtonCard from '../../../../components/button-card';
 import Location from '../../../../components/task/location';
+import Dialog from '../../../../components/dialog';
+
 
 
 import Member from './member';
 import Budget from './budget';
 import Need from './need';
 import Note from './note';
+import SwiperView from './swiper-view';
 
 import * as FamilyModel from '../../../../models/family';
-
 import * as Validator from '../../../../utils/validator';
-import SwiperView from './swiper-view';
+
 
 function PaginationItem({ title, active, ...props }) {
     return (
@@ -65,6 +67,7 @@ class Main extends React.Component {
         this.state = {
             index: 0,
             family: new FamilyModel.Family(),
+            modalVisible: false
         }
         this.swiperRef = React.createRef();
     }
@@ -105,9 +108,33 @@ class Main extends React.Component {
         });
     }
 
-    handleSwiperChange(key, model)
-    {
-        this.setState(prevState => ({...prevState, family: {...prevState.family, [key]: model}}))
+    handleSwiperChange(key, model) {
+        this.setState(prevState => ({ ...prevState, family: { ...prevState.family, [key]: model } }));
+    }
+
+    showModal() {
+        this.setModalVisible(true)
+        setTimeout(() => {
+            this.setModalVisible(false)
+        }, 2000);
+    }
+
+    formIsValid() {
+        return this.state.family.name != null;
+    }
+
+    onTick() {
+        if (this.formIsValid()) {
+            console.log('send');
+            this.props.navigation.goBack();
+        }
+        else
+            this.showModal();
+    }
+
+
+    setModalVisible(value) {
+        this.setState(prevState => ({ ...prevState, modalVisible: value }));
     }
 
     render() {
@@ -116,7 +143,7 @@ class Main extends React.Component {
         let loc = { city: family.city, town: family.town, district: family.district, street: family.street }
         return (
             <>
-                <NavBar title='Aile Ekle' onPress={() => navigation.goBack()} onTick={() => navigation.goBack()} />
+                <NavBar title='Aile Ekle' onPress={() => navigation.goBack()} onTick={() => this.onTick()} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
                 <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
                     <ScrollView showsVerticalScrollIndicator={false} >
@@ -137,6 +164,14 @@ class Main extends React.Component {
                     <View >
                         <ButtonCard style={styles.input} title='Resim Ekleyin' />
                     </View>
+                    <Modal
+                        animationType='fade'
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => this.setModalVisible(false)}
+                    >
+                        <Dialog title='Ailenin ismi girilmesi zorunludur' />
+                    </Modal>
                 </Swiper>
             </>
         )
