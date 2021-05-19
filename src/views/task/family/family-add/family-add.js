@@ -4,10 +4,6 @@ import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Modal, } from 're
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
-import RBSheet from "react-native-raw-bottom-sheet";
-
 import Swiper from 'react-native-swiper';
 
 import NavBar from '../../../../components/nav-bar';
@@ -15,9 +11,6 @@ import Input from '../../../../components/input';
 import Select from '../../../../components/select';
 import ButtonCard from '../../../../components/button-card';
 import Location from '../../../../components/task/location';
-import Button from '../../../../components/button';
-import { Trash } from '../../../../components/icons';
-
 
 
 import Member from './member';
@@ -28,6 +21,7 @@ import Note from './note';
 import * as FamilyModel from '../../../../models/family';
 
 import * as Validator from '../../../../utils/validator';
+import SwiperView from './swiper-view';
 
 function PaginationItem({ title, active, ...props }) {
     return (
@@ -61,19 +55,6 @@ function Pagination({ index, swiperRef }) {
     )
 }
 
-function SelectedModal({ onDelete, onClose, style }) {
-    return (
-        <View style={{ backgroundColor: '#FFFFFF', paddingVertical: 15, ...style }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }} >
-                <Button onPress={onDelete} style={{ marginHorizontal: 5 }} Icon={Trash} title='Sil' />
-                <Button onPress={onClose} color='#48515B' style={{ backgroundColor: '#E8EAED', marginHorizontal: 5 }} title='Vazgeç' />
-            </View>
-        </View >
-    );
-}
-
-
-
 
 const Stack = createStackNavigator();
 
@@ -84,14 +65,8 @@ class Main extends React.Component {
         this.state = {
             index: 0,
             family: new FamilyModel.Family(),
-            views: { members: [], budgets: [], needs: [], notes: [] },
         }
         this.swiperRef = React.createRef();
-        this.refRBSheet = React.createRef();
-        this.keys = { 1: 'members', 2: 'budgets', 3: 'needs', 4: 'notes' };
-        this.selected = null;
-        this.deleted = false;
-
     }
 
     updateIndex(i) {
@@ -130,106 +105,10 @@ class Main extends React.Component {
         });
     }
 
-    deselect() {
-        if (!this.deleted) {
-            const key = this.keys[this.state.index];
-            const index = this.selected;
-            const { selected, ...props } = this.state.views[key][index].props;
-            const view = <ButtonCard selected={false} key={`${key}${index}`} {...props} />
-            this.updateButtonCard(key, index, view);
-        }
+    handleSwiperChange(key, model)
+    {
+        this.setState(prevState => ({...prevState, family: {...prevState.family, [key]: model}}))
     }
-
-    select(key, index) {
-        const { selected, ...props } = this.state.views[key][index].props;
-        const view = <ButtonCard selected={true} key={`${key}${index}`} {...props} />
-        this.updateButtonCard(key, index, view);
-        this.selected = index;
-        this.deleted = false;
-        this.refRBSheet.current.open();
-    }
-
-    deleteSelected() {
-        const key = this.keys[this.state.index];
-        const index = this.selected;
-
-        // delete from view
-        const views = this.state.views[key];
-        views.splice(index, 1);
-
-        // delete from model
-        const models = this.state.family[key];
-        models.splice(index, 1);
-
-
-        this.setState(prevState => (
-            {
-                ...prevState,
-                family: {
-                    ...prevState.family,
-                    [key]: models
-                },
-                views: {
-                    ...prevState.views,
-                    [key]: views
-                }
-            }
-        ));
-
-        this.deleted = true;
-        this.refRBSheet.current.close();
-    }
-
-    updateButtonCard(key, index, view) {
-        const views = this.state.views[key];
-        views[index] = view;
-        this.setState(prevState => ({ ...prevState, views: { ...prevState.views, [key]: views } }));
-    }
-
-    pushButtonCard(key, index, view) {
-        const views = this.state.views[key];
-        views.push(view);
-        this.setState(prevState => ({ ...prevState, views: { ...prevState.views, [key]: views } }));
-    }
-
-    updateKeys(key, screenName) {
-        const { route, navigation } = this.props;
-        if (route.params?.key === screenName) {
-            const { model, title, expl, index } = route.params;
-
-            const models = this.state.family[key];
-
-            if (index != null) { // update exists
-                models[index] = model;
-                this.setState({ ...this.state, family: { ...this.state.family, [key]: models } });
-                const view = <ButtonCard key={`${key}${index}`} onLongPress={() => this.select(key, index)} onPress={() => navigation.navigate(screenName, { model: model, index: index })} style={styles.input} title={title} desc={expl} />
-                this.updateButtonCard(key, index, view);
-            }
-
-            else { // push new
-                const newIndex = models.length;
-                this.setState({ ...this.state, family: { ...this.state.family, [key]: [...this.state.family[key], model] } });
-                const view = <ButtonCard key={`${key}${newIndex}`} onLongPress={() => this.select(key, newIndex)} onPress={() => navigation.navigate(screenName, { model: model, index: newIndex })} style={styles.input} title={title} desc={expl} />
-                this.pushButtonCard(key, index, view);
-            }
-
-            delete route.params;
-        }
-
-    }
-
-
-    componentDidUpdate() {
-        this.updateKeys('members', 'Member');
-        this.updateKeys('budgets', 'Budget');
-        this.updateKeys('needs', 'Need');
-        this.updateKeys('notes', 'Note');
-    }
-
-    dismissSelect() {
-        this.refRBSheet.current.close();
-    }
-
 
     render() {
         const { navigation } = this.props;
@@ -237,22 +116,6 @@ class Main extends React.Component {
         let loc = { city: family.city, town: family.town, district: family.district, street: family.street }
         return (
             <>
-                <RBSheet
-                    ref={this.refRBSheet}
-                    closeOnDragDown={true}
-                    height={hp('27%')}
-                    onClose={() => this.deselect()}
-                    customStyles={{
-                        wrapper: {
-                            backgroundColor: 'transparent'
-                        },
-                        container: {
-                            borderRadius: 10
-                        },
-                    }}
-                >
-                    <SelectedModal onDelete={() => this.deleteSelected()} onClose={() => this.dismissSelect()} />
-                </RBSheet>
                 <NavBar title='Aile Ekle' onPress={() => navigation.goBack()} onTick={() => navigation.goBack()} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
                 <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
@@ -267,22 +130,10 @@ class Main extends React.Component {
                         <Select value={family.warmingType} onValueChange={e => this.handleChange(e, 'warmingType')} items={FamilyModel.warmingList} style={styles.input} placeholder='Isınma Tipi' />
                         <View style={styles.empty} />
                     </ScrollView>
-                    <View >
-                        <ButtonCard onPress={() => navigation.navigate('Member')} style={styles.input} title='Üye Ekleyin' />
-                        <View>{this.state.views.members}</View>
-                    </View>
-                    <View >
-                        <ButtonCard onPress={() => navigation.navigate('Budget')} style={styles.input} title='Bütçe Ekleyin' />
-                        <View>{this.state.views.budgets}</View>
-                    </View>
-                    <View >
-                        <ButtonCard onPress={() => navigation.navigate('Need')} style={styles.input} title='İhtiyaç Ekleyin' />
-                        <View>{this.state.views.needs}</View>
-                    </View>
-                    <View >
-                        <ButtonCard onPress={() => navigation.navigate('Note')} style={styles.input} title='Not Ekleyin' />
-                        <View>{this.state.views.notes}</View>
-                    </View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} screenName='Member' title='Üye Ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} screenName='Budget' title='Bütçe Ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} screenName='Need' title='İhtiyaç Ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} screenName='Note' title='Not Ekleyin' {...this.props} /></View>
                     <View >
                         <ButtonCard style={styles.input} title='Resim Ekleyin' />
                     </View>
