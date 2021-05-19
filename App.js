@@ -56,7 +56,7 @@ class App extends React.Component {
           <NavigationContainer>
             <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props} />}>
               <Tab.Screen name="Task" component={TaskScreen} />
-              <Tab.Screen name="Home" component={TimelineScreen} />
+              <Tab.Screen name="Home" component={HomeScreen} />
               <Tab.Screen name="Profile" component={ProfileScreen} />
             </Tab.Navigator>
           </NavigationContainer>

@@ -61,14 +61,13 @@ function Pagination({ index, swiperRef }) {
     )
 }
 
-function DeleteSelected({ onClose, style }) {
+function SelectedModal({ onDelete, onClose, style }) {
     return (
         <View style={{ backgroundColor: '#FFFFFF', paddingVertical: 15, ...style }}>
             <View style={{ flexDirection: 'row', justifyContent: 'center' }} >
-                <Button style={{ marginHorizontal: 5 }} Icon={Trash} title='Sil' />
-                <Button color='#48515B' style={{ backgroundColor: '#E8EAED', marginHorizontal: 5 }} title='Tümünü Seç' />
+                <Button onPress={onDelete} style={{ marginHorizontal: 5 }} Icon={Trash} title='Sil' />
+                <Button onPress={onClose} color='#48515B' style={{ backgroundColor: '#E8EAED', marginHorizontal: 5 }} title='Vazgeç' />
             </View>
-            <TouchableOpacity onPress={onClose} style={{ marginTop: 15, }}><Text style={{ fontFamily: 'SFProText-Bold', fontSize: 14, color: '#758291', alignSelf: 'center' }}>Vazgeç</Text></TouchableOpacity>
         </View >
     );
 }
@@ -89,7 +88,10 @@ class Main extends React.Component {
         }
         this.swiperRef = React.createRef();
         this.refRBSheet = React.createRef();
-        this.selecteds = [];
+        this.keys = { 1: 'members', 2: 'budgets', 3: 'needs', 4: 'notes' };
+        this.selected = null;
+        this.deleted = false;
+
     }
 
     updateIndex(i) {
@@ -128,26 +130,54 @@ class Main extends React.Component {
         });
     }
 
-    // deselect(key, index) {
-    //     const lastDeselect = this.selecteds.length == 1;
-    //     const onPress = lastDeselect ? () => this.firstSelected : () => this.select();
-    //     const props = this.state.views[key][index].props;
-    //     const view = <ButtonCard key={`${key}${index}`} onPress={onPress} {...props} />
-    //     this.updateButtonCard(key, index, view);
-
-    //     const i = this.selecteds.indexOf(index);
-    //     if (i > -1) {
-    //         this.selecteds.splice(i, 1);
-    //     }
-    // }
-
+    deselect() {
+        if (!this.deleted) {
+            const key = this.keys[this.state.index];
+            const index = this.selected;
+            const { selected, ...props } = this.state.views[key][index].props;
+            const view = <ButtonCard selected={false} key={`${key}${index}`} {...props} />
+            this.updateButtonCard(key, index, view);
+        }
+    }
 
     select(key, index) {
-        const props = this.state.views[key][index].props;
-        const view = <ButtonCard selected={true} key={`${key}${index}`} onPress={() => this.deselect()} {...props} />
+        const { selected, ...props } = this.state.views[key][index].props;
+        const view = <ButtonCard selected={true} key={`${key}${index}`} {...props} />
         this.updateButtonCard(key, index, view);
-        this.selecteds.push(index);
+        this.selected = index;
+        this.deleted = false;
         this.refRBSheet.current.open();
+    }
+
+    deleteSelected() {
+        const key = this.keys[this.state.index];
+        const index = this.selected;
+
+        // delete from view
+        const views = this.state.views[key];
+        views.splice(index, 1);
+
+        // delete from model
+        const models = this.state.family[key];
+        models.splice(index, 1);
+
+
+        this.setState(prevState => (
+            {
+                ...prevState,
+                family: {
+                    ...prevState.family,
+                    [key]: models
+                },
+                views: {
+                    ...prevState.views,
+                    [key]: views
+                }
+            }
+        ));
+
+        this.deleted = true;
+        this.refRBSheet.current.close();
     }
 
     updateButtonCard(key, index, view) {
@@ -197,7 +227,7 @@ class Main extends React.Component {
     }
 
     dismissSelect() {
-        this.refRBSheet.current.close()
+        this.refRBSheet.current.close();
     }
 
 
@@ -209,9 +239,9 @@ class Main extends React.Component {
             <>
                 <RBSheet
                     ref={this.refRBSheet}
-                    closeOnDragDown={false}
-                    closeOnPressMask={false}
+                    closeOnDragDown={true}
                     height={hp('27%')}
+                    onClose={() => this.deselect()}
                     customStyles={{
                         wrapper: {
                             backgroundColor: 'transparent'
@@ -221,7 +251,7 @@ class Main extends React.Component {
                         },
                     }}
                 >
-                    <DeleteSelected onClose={() => this.dismissSelect()} />
+                    <SelectedModal onDelete={() => this.deleteSelected()} onClose={() => this.dismissSelect()} />
                 </RBSheet>
                 <NavBar title='Aile Ekle' onPress={() => navigation.goBack()} onTick={() => navigation.goBack()} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />

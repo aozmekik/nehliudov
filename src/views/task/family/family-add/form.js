@@ -66,7 +66,6 @@ class FormScreen extends React.Component {
     }
 
     onTick() {
-        console.log(this.formIsValid());
         if (this.formIsValid())
             this.pushModel();
         else
