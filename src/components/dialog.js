@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 
 
 import { Text, StyleSheet, View } from 'react-native';
 import { Info } from '../components/icons';
 
-function Dialog({ title }) {
+function Dialog({ title, style }) {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
             <Info style={styles.icon} fill='#FFFFFF' />
             <Text style={styles.text}>{title}</Text>
         </View>

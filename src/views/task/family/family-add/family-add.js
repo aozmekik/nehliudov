@@ -20,9 +20,11 @@ import Budget from './budget';
 import Need from './need';
 import Note from './note';
 import SwiperView from './swiper-view';
+import Image from './image';
 
 import * as FamilyModel from '../../../../models/family';
 import * as Validator from '../../../../utils/validator';
+import TestScreen from './test';
 
 
 function PaginationItem({ title, active, ...props }) {
@@ -61,16 +63,16 @@ function Pagination({ index, swiperRef }) {
 const Stack = createStackNavigator();
 
 
-class Main extends React.Component {
+class FamilyAddMainScreen extends React.Component {
     constructor(props) {
         super(props);
+        const { family } = this.props.route.params;
         this.state = {
             index: 0,
-            family: props.family ? props.family : new FamilyModel.Family(),
+            family: family ? family : new FamilyModel.Family(),
             modalVisible: false
         }
         this.swiperRef = React.createRef();
-        console.log(this.state.family);
     }
 
     updateIndex(i) {
@@ -146,6 +148,14 @@ class Main extends React.Component {
             <>
                 <NavBar title='Aile Ekle' onPress={() => navigation.goBack()} onTick={() => this.onTick()} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
+                <Modal
+                    animationType='fade'
+                    transparent={true}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => this.setModalVisible(false)}
+                >
+                    <Dialog title='Ailenin ismi girilmesi zorunludur' />
+                </Modal>
                 <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
                     <ScrollView showsVerticalScrollIndicator={false} >
                         <Input value={family.name} onChangeText={e => this.handleChange(e, 'name', 'alpha')} required={true} autoCapitalize='words' textContentType='name' style={styles.input} placeholder='İsim' />
@@ -158,36 +168,27 @@ class Main extends React.Component {
                         <Select value={family.warmingType} onValueChange={e => this.handleChange(e, 'warmingType')} items={FamilyModel.warmingList} style={styles.input} placeholder='Isınma Tipi' />
                         <View style={styles.empty} />
                     </ScrollView>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} models={family.members} modelClass={Member} screenName='Member' title='Üye Ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} models={family.budgets} modelClass={Budget} screenName='Budget' title='Bütçe Ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={Need} screenName='Need' title='İhtiyaç Ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={Note} screenName='Note' title='Not Ekleyin' {...this.props} /></View>
-                    <View >
-                        <ButtonCard style={styles.input} title='Resim Ekleyin' />
-                    </View>
-                    <Modal
-                        animationType='fade'
-                        transparent={true}
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => this.setModalVisible(false)}
-                    >
-                        <Dialog title='Ailenin ismi girilmesi zorunludur' />
-                    </Modal>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} models={family.members} modelClass={Member} screenName='Member' title='Üye ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} models={family.budgets} modelClass={Budget} screenName='Budget' title='Bütçe ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={Need} screenName='Need' title='İhtiyaç ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={Note} screenName='Note' title='Not ekleyin' {...this.props} /></View>
+                    <View ><SwiperView onChange={(e) => this.handleSwiperChange('images', e)} image={true} models={family.images} modelClass={null} screenName='Image' title='Resim ekleyin' {...this.props} /></View>
                 </Swiper>
             </>
         )
     }
 }
 
-function FamilyAddScreen() {
+function FamilyAddScreen({ family }) {
     return (
         <>
             <Stack.Navigator headerMode='none'>
-                <Stack.Screen name='Main' component={Main} />
+                <Stack.Screen name='FamilyAddMain' component={FamilyAddMainScreen} initialParams={{ family: family }} />
                 <Stack.Screen name='Member' component={Member} />
                 <Stack.Screen name='Budget' component={Budget} />
                 <Stack.Screen name='Need' component={Need} />
                 <Stack.Screen name='Note' component={Note} />
+                <Stack.Screen name='Image' component={TestScreen} />
             </Stack.Navigator>
         </>
     )

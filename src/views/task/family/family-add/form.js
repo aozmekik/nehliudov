@@ -34,7 +34,7 @@ class FormScreen extends React.Component {
     pushModel() {
         const { navigation, route } = this.props;
         navigation.navigate({
-            name: 'Main',
+            name: 'FamilyAddMain',
             params: {
                 model: this.state.model,
                 key: this.key,

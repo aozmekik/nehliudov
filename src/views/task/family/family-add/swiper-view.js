@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -36,16 +36,25 @@ class SwiperView extends React.Component {
             views: [],
         };
 
-        for (let i = 0; i < props.models.length; ++i)
-            this.state.views.push(this.getCardView(i, props.models[i]));
-
         this.selected = null;
         this.deleted = false;
-        this.screenName = this.props.screenName;
-        this.title = this.props.title;
+        this.screenName = props.screenName;
+        this.title = props.title;
         this.refRBSheet = React.createRef();
-        this.onChange = this.props.onChange;
+        this.onChange = props.onChange;
+        this.image = props.image;
+
+        this.state.views = this.modelToView(props.models);
+
     }
+
+    modelToView(models) {
+        let views = []
+        for (let i = 0; i < models.length; ++i)
+            views.push(this.getCardView(i, models[i]));
+        return views;
+    }
+
 
     dismissSelect() {
         this.refRBSheet.current.close();
@@ -71,13 +80,11 @@ class SwiperView extends React.Component {
     }
 
     deleteSelected() {
-        // delete from view
-        const views = this.state.views;
-        views.splice(this.selected, 1);
-
         // delete from model
         const models = this.state.models;
         models.splice(this.selected, 1);
+
+        const views = this.modelToView(models);
 
 
         this.setState({
@@ -110,7 +117,12 @@ class SwiperView extends React.Component {
 
     getCardView(index, model) {
         const { navigation, modelClass } = this.props;
-        return <ButtonCard key={`${this.screenName}${index}`} onLongPress={() => this.select(index)} onPress={() => navigation.navigate(this.screenName, { model: model, index: index })} style={styles.input} title={modelClass.title(model)} desc={modelClass.expl(model)} />
+        let view;
+        if (!this.image)
+            view = <ButtonCard key={`${this.screenName}${index}`} onLongPress={() => this.select(index)} onPress={() => navigation.navigate(this.screenName, { model: model, index: index })} style={styles.input} title={modelClass.title(model)} desc={modelClass.expl(model)} />
+        else
+            view = <ButtonCard key={`${this.screenName}${index}`} onLongPress={() => this.select(index)} style={styles.input} image={model} />
+        return view;
     }
 
     update() {
@@ -126,10 +138,14 @@ class SwiperView extends React.Component {
                 const view = this.getCardView(index, models[index]);
                 this.updateButtonCard(index, view);
             }
-
             else { // push new
                 const newIndex = models.length;
-                const newModels = [...models, model]
+                let newModels;
+                if (this.screenName === 'Image')
+                    newModels = models.concat(model);
+                else
+                    newModels = [...models, model];
+
                 this.setState(prevState => ({ ...prevState, models: newModels }));
                 this.onChange(newModels);
                 const view = this.getCardView(newIndex, newModels[newIndex]);
@@ -146,6 +162,8 @@ class SwiperView extends React.Component {
 
     render() {
         const { navigation } = this.props;
+        // const params = this.image ? { onSubmit: images => ({ models: images }) } : null;
+        // console.log(this.screenName, params);
         return (
             <>
                 <RBSheet

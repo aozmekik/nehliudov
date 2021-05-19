@@ -11,7 +11,7 @@ import FamilyAddScreen from './family-add/family-add';
 import FamilyListScreen from './family-list/family-list';
 
 
-function Main({ navigation }) {
+function FamilyMain({ navigation }) {
     return (
         <>
             <View style={styles.headerContainer}>
@@ -46,7 +46,7 @@ const Stack = createStackNavigator();
 function FamilyScreen() {
     return (
         <Stack.Navigator headerMode='none'>
-            <Stack.Screen name='Family' component={Main} />
+            <Stack.Screen name='FamilyMain' component={FamilyMain} />
             <Stack.Screen name='FamilyAdd' component={FamilyAddScreen} />
             <Stack.Screen name='FamilyList' component={FamilyListScreen} />
         </Stack.Navigator>

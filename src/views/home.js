@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
 
 import NotificationsScreen from './profile/notifications';
 import FamilyScreen from './task/family/family';
@@ -11,6 +11,10 @@ import Note from './task/family/family-add/note';
 import Location from '../components/task/location';
 import Dialog from '../components/dialog';
 import ButtonCard from '../components/button-card';
+import TimelineScreen from '../views/timeline/timeline';
+import * as FamilyModel from '../models/family';
+import ImageScreen from './task/family/family-add/image';
+import TestScreen from './task/family/family-add/test';
 
 
 
@@ -26,8 +30,11 @@ function HomeScreen() {
             {/* <FamilyScreen /> */}
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
-            <FamilyAddScreen />
-            {/* <ButtonCard title='Buzdolabı' selected={true} style={{marginTop: 50}} /> */}
+            {/* <ImageScreen /> */}
+            <FamilyAddScreen family={FamilyModel.exampleFamily} />
+            {/* <TestScreen /> */}
+
+
             {/* <DeleteSelected /> */}
             {/* <Dialog title='selamlarsana ey '/> */}
 
