@@ -22,11 +22,20 @@ class MemberScreen extends FormScreen {
     }
 
     static expl(model) {
-        return model.birthyear ? new Date().getFullYear() - model.birthyear : null;
+        return model.birthyear ? (new Date().getFullYear() - model.birthyear).toString() : null;
     }
 
     formIsValid() {
-        return this.state.model.name != null;
+        let valid = true;
+
+        valid = this.validateModel('name', 'Üye ismi');
+        if (valid) // FIXME. phone time might be off
+            valid = this.validateModel('birthyear', 'Doğum yılı', { length: 4, max: new Date().getFullYear(), min: 1900 });
+        if (valid)
+            valid = this.validateModel('idNo', 'Kimlik Numarası', { length: 11 });
+
+
+        return valid;
     }
 
 
@@ -41,8 +50,8 @@ class MemberScreen extends FormScreen {
                     <Input value={member.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
                     <Select value={member.gender} onValueChange={e => this.handleChange(e, 'gender')} items={FamilyModel.genderList} style={styles.input} placeholder='Cinsiyet' />
                     <Input value={member.kinship} onChangeText={e => this.handleChange(e, 'kinship', 'alpha')} style={styles.input} placeholder='Akrabalık Derecesi' />
-                    <Input value={member.birthyear} onChangeText={e => this.handleChange(e, 'birthyear')} keyboardType='number-pad' maxLength={4} style={styles.input} placeholder='Doğum Yılı' />
-                    <Input value={member.income} onChangeText={e => this.handleChange(e, 'income')} keyboardType='number-pad' style={styles.input} placeholder='Gelir' />
+                    <Input value={member.birthyear} onChangeText={e => this.handleChange(e, 'birthyear', 'numeric')} keyboardType='number-pad' maxLength={4} style={styles.input} placeholder='Doğum Yılı' />
+                    <Input value={member.income} onChangeText={e => this.handleChange(e, 'income', 'numeric')} keyboardType='number-pad' style={styles.input} placeholder='Gelir' />
                     <Input value={member.job} onChangeText={e => this.handleChange(e, 'job', 'alpha')} style={styles.input} placeholder='Meslek' />
                     <Input value={member.size} onChangeText={e => this.handleChange(e, 'size')} style={styles.input} placeholder='Beden' />
                     <Input value={member.disease} onChangeText={e => this.handleChange(e, 'disease')} style={styles.input} placeholder='Hastalık / Engel' />
@@ -56,7 +65,7 @@ class MemberScreen extends FormScreen {
                         visible={this.state.modalVisible}
                         onRequestClose={() => this.setModalInvisible()}
                     >
-                        <Dialog title='İsim Alanı Zorunludur' />
+                        <Dialog title={this.state.dialogText} />
                     </Modal>
                 </ScrollView >
             </View >

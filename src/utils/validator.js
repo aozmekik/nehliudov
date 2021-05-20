@@ -15,3 +15,19 @@ export function setWithValidation(text, type, setState) {
 
     setState(text);
 }
+
+export function validateAndDialog(model, key, options) {
+    if (!options?.length) {
+        if (model == null)
+            return `${key} girilmesi zorunludur`;
+    }
+    else if (model) {
+        if (model.toString().length != options?.length)
+            return `${key} ${options.length} haneli olmalıdır`;
+        if (options?.max && model > options?.max)
+            return `${key} en fazla ${options.max} olabilir`;
+        if (options?.min && model < options?.min)
+            return `${key} en az ${options.min} olabilir`;
+    }
+    return null;
+}

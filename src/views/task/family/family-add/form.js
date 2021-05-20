@@ -9,14 +9,27 @@ class FormScreen extends React.Component {
             throw new Error('Form is abstract class');
         }
         this.state = {
-            model: this.isEdit() ? props.route.params.model : (Model ? new Model(): null),
-            modalVisible: false
+            model: this.isEdit() ? props.route.params.model : (Model ? new Model() : null),
+            modalVisible: false,
+            dialogText: ' '
         }
         this.key = key;
     }
 
     isEdit() {
         return this.props?.route?.params?.model;
+    }
+
+    setDialog(dialog) {
+        this.setState(prevState => ({ ...prevState, dialogText: dialog }));
+    }
+
+    validateModel(key, text, options) {
+        const { model } = this.state;
+        const dialog = Validator.validateAndDialog(model[key], text, options);
+        if (dialog)
+            this.setDialog(dialog);
+        return dialog == null;
     }
 
     handleChange(event, name, type) {

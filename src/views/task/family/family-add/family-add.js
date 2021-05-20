@@ -72,7 +72,8 @@ class FamilyAddMainScreen extends React.Component {
         this.state = {
             index: 0,
             family: family ? family : new FamilyModel.Family(),
-            modalVisible: false
+            modalVisible: false,
+            dialogText: ' '
         }
         this.swiperRef = React.createRef();
     }
@@ -120,8 +121,30 @@ class FamilyAddMainScreen extends React.Component {
         }, 2000);
     }
 
+    setDialog(dialog) {
+        this.setState(prevState => ({ ...prevState, dialogText: dialog }));
+    }
+
+    validateModel(key, text, options) {
+        const { family } = this.state;
+        const dialog = Validator.validateAndDialog(family[key], text, options);
+        if (dialog)
+            this.setDialog(dialog);
+        return dialog == null;
+    }
+
     formIsValid() {
-        return this.state.family.name != null && this.state.family.status != null;
+        let valid = true;
+
+        valid = this.validateModel('name', 'Aile ismi');
+        if (valid)
+            valid = this.validateModel('status', 'Aile durumu');
+        if (valid)
+            valid = this.validateModel('idNo', 'Kimlik Numarası', {length: 11});
+        if (valid)
+            valid = this.validateModel('tel', 'Telefon Numarası', {length: 11});
+
+        return valid;
     }
 
     async createFamily(family) {
@@ -157,7 +180,7 @@ class FamilyAddMainScreen extends React.Component {
                     visible={this.state.modalVisible}
                     onRequestClose={() => this.setModalVisible(false)}
                 >
-                    <Dialog title='Ailenin ismi ve durum bilgisi zorunludur' />
+                    <Dialog title={this.state.dialogText} />
                 </Modal>
                 <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
                     <ScrollView showsVerticalScrollIndicator={false} >
