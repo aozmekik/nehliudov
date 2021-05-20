@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import NavBar from '../../components/nav-bar';
-import ButtonCard from '../../components/button-card';
-import Button from '../../components/button';
-import Input from '../../components/input';
+import { NavBar, ButtonCard, Button, Input } from '../../components';
 
 function SettingsScreen({ navigation }) {
     return (

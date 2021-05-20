@@ -160,5 +160,6 @@ for (var i = 0; i < 10; i++) {
     exampleFamily.needs.push('selam')
 }
 exampleFamily.images.push(base64Icon);
+exampleFamily.clerks= ['selam', 'naber'];
 
 export { exampleFamily };

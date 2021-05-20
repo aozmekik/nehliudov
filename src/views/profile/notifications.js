@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ScrollView, Image, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-import NavBar from '../../components/nav-bar';
+import {NavBar} from '../../components';
 
 function NotificationItem() {
     return (

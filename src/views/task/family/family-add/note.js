@@ -2,12 +2,10 @@ import * as React from 'react';
 
 import { View, ScrollView, Modal } from 'react-native';
 
-import NavBar from '../../../../components/nav-bar';
-import Input from '../../../../components/input';
-import Select from '../../../../components/select';
-import Dialog from '../../../../components/dialog';
-import styles from './style';
 
+import { NavBar, Input, Dialog } from '../../../../components/';
+
+import styles from './style';
 
 import * as FamilyModel from '../../../../models/family';
 import FormScreen from './form';

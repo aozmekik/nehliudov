@@ -9,15 +9,10 @@ import * as FileSystem from 'expo-file-system';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { NavBar, Dialog, Button, ButtonCard } from '../../../../components/';
 
-
-import NavBar from '../../../../components/nav-bar';
-import Dialog from '../../../../components/dialog';
-import Button from '../../../../components/button';
-import ButtonCard from '../../../../components/button-card';
 import { Camera as CameraIcon, Check } from '../../../../components/icons';
 import styles from './style';
-
 
 
 function PickImage({ onSubmit }) {

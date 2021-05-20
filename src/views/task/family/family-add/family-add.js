@@ -6,11 +6,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Swiper from 'react-native-swiper';
 
-import NavBar from '../../../../components/nav-bar';
-import Input from '../../../../components/input';
-import Select from '../../../../components/select';
+import { NavBar, Input, Select, Dialog, ButtonCard } from '../../../../components/';
 import Location from '../../../../components/task/location';
-import Dialog from '../../../../components/dialog';
+
 
 
 
@@ -23,7 +21,6 @@ import SwiperView from './swiper-view';
 
 import * as FamilyModel from '../../../../models/family';
 import * as Validator from '../../../../utils/validator';
-import ButtonCard from '../../../../components/button-card';
 
 import * as FamilyServices from '../../../../services/family-services';
 
@@ -140,9 +137,9 @@ class FamilyAddMainScreen extends React.Component {
         if (valid)
             valid = this.validateModel('status', 'Aile durumu');
         if (valid)
-            valid = this.validateModel('idNo', 'Kimlik Numarası', {length: 11});
+            valid = this.validateModel('idNo', 'Kimlik Numarası', { length: 11 });
         if (valid)
-            valid = this.validateModel('tel', 'Telefon Numarası', {length: 11});
+            valid = this.validateModel('tel', 'Telefon Numarası', { length: 11 });
 
         return valid;
     }
@@ -199,13 +196,13 @@ class FamilyAddMainScreen extends React.Component {
                     <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={NeedScreen} screenName='FamilyNeed' title='İhtiyaç ekleyin' {...this.props} /></View>
                     <View ><SwiperView onChange={(e) => this.handleSwiperChange('images', e)} image={true} models={family.images} modelClass={null} screenName='FamilyImage' title='Resim ekleyin' {...this.props} /></View>
                     <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={NoteScreen} screenName='FamilyNote' title='Not ekleyin' {...this.props} /></View>
-                    <View>
+                    <ScrollView>
                         <Select value={family.status} onValueChange={e => this.handleChange(e, 'status')} items={FamilyModel.statusList} style={styles.input} placeholder='Durum' />
                         <Select value={family.rating} onValueChange={e => this.handleChange(e, 'rating')} items={FamilyModel.ratingList} style={styles.input} placeholder='Derece' />
                         <ButtonCard style={{ ...styles.input, text: styles.commentButtonCard }} selected={family.education} onPress={() => this.handleChange(!family.education, 'education')} noChevron={true} title='Eğitim Takip' />
                         <ButtonCard style={{ ...styles.input, text: styles.commentButtonCard }} selected={family.health} onPress={() => this.handleChange(!family.health, 'health')} noChevron={true} title='Sağlık Takip' />
 
-                    </View>
+                    </ScrollView>
                 </Swiper>
             </>
         )

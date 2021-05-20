@@ -2,9 +2,7 @@ import * as React from 'react';
 
 import { View, ScrollView, Modal } from 'react-native';
 
-import NavBar from '../../../../components/nav-bar';
-import Input from '../../../../components/input';
-import Dialog from '../../../../components/dialog';
+import { NavBar, Input, Dialog } from '../../../../components/';
 
 import FormScreen from './form';
 import styles from './style';

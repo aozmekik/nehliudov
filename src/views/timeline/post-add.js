@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { TouchableOpacity, StyleSheet, Image, View, ScrollView, TextInput, Text } from 'react-native';
 
-import NavBar from '../../components/nav-bar';
 import { TickSquare, Plus } from '../../components/icons';
-import Select from '../../components/select';
+import { NavBar, Select } from '../../components';
+
 
 function PostAddScreen({ navigation }) {
     return (

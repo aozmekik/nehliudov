@@ -2,14 +2,12 @@ import * as React from 'react';
 
 import { View, ScrollView, Modal } from 'react-native';
 
-import NavBar from '../../../../components/nav-bar';
-import Input from '../../../../components/input';
-import Select from '../../../../components/select';
-import Dialog from '../../../../components/dialog';
+import { NavBar, Input, Select, Dialog } from '../../../../components/';
+
 import styles from './style';
+import FormScreen from './form';
 
 import * as FamilyModel from '../../../../models/family';
-import FormScreen from './form';
 
 class BudgetScreen extends FormScreen {
     constructor(props) {
