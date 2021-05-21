@@ -43,7 +43,7 @@ class MemberScreen extends FormScreen {
         return (
             <View style={styles.container}>
                 <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Aile Üyesi ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <Input value={member.name} onChangeText={e => this.handleChange(e, 'name', 'alpha')} style={styles.input} required={true} placeholder='İsim' />
                     <Input value={member.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
                     <Select value={member.gender} onValueChange={e => this.handleChange(e, 'gender')} items={FamilyModel.genderList} style={styles.input} placeholder='Cinsiyet' />

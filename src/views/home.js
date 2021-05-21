@@ -14,6 +14,7 @@ import ButtonCard from '../components/button-card';
 import TimelineScreen from '../views/timeline/timeline';
 import * as FamilyModel from '../models/family';
 import ImageScreen from './task/family/family-add/image';
+import AuthScreen from './auth/auth';
 
 
 
@@ -30,8 +31,9 @@ function HomeScreen() {
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
             {/* <ImageScreen /> */}
-            <FamilyAddScreen />
+            {/* <FamilyAddScreen /> */}
             {/* <TestScreen /> */}
+            <AuthScreen />
 
 
             {/* <DeleteSelected /> */}
