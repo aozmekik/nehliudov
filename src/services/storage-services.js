@@ -2,9 +2,12 @@ import * as SecureStore from 'expo-secure-store';
 
 
 async function save(key, value) {
-    let result = await SecureStore.setItemAsync(key, value);
-    if (!result)
-        alert('Could not save the key.');
+    try {
+        await SecureStore.setItemAsync(key, value);
+    }
+    catch (e) {
+        console.error(e);
+    }
 }
 
 async function load(key) {
@@ -13,9 +16,12 @@ async function load(key) {
 }
 
 async function remove(key) {
-    let result = await SecureStore.delete(key);
-    if (!result)
-        alert('No values stored under that key.');
+    try {
+        await SecureStore.deleteItemAsync(key);
+    }
+    catch (e) {
+        console.error(e);
+    }
 }
 
 

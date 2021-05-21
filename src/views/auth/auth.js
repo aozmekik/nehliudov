@@ -2,32 +2,57 @@ import * as React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, Text, Modal } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
+import { connect } from 'react-redux'
+
 import { Input, Button, Dialog } from '../../components';
 import { User } from '../../models/user';
+
+import { login } from '../../services/auth-services';
+
 
 function isEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
 
-function AuthScreen() {
-    const [user, setUser] = React.useState({ ...new User(), email2: null, password2: null });
+import { login as actionLogin } from '../../reducers/actions';
+
+
+function AuthScreen({ dispatchLogIn }) {
+    // const [userForm, setUserForm] = React.useState({ ...new User(), email2: null, password2: null });
+    const [userForm, setUserForm] = React.useState({ email: 'ahmed-semih@outlook.com', password: 'semih123' });
+
     const [loginScreen, setLoginScreen] = React.useState(true);
     const [modalVisible, setModalVisible] = React.useState(false);
     const [dialogText, setDialogText] = React.useState(' ');
 
     const handleChange = (key, e) => {
-        setUser(prevState => ({ ...prevState, [key]: e }));
+        setUserForm(prevState => ({ ...prevState, [key]: e }));
     }
 
+    const userJSON = () => {
+        return { email: userForm.email, password: userForm.password };
+    }
 
-    const onLogin = () => {
+    const onLogin = async () => {
         if (checkNull('email', 'E-posta') || checkNull('password', 'Şifre'))
             return;
-        if (checkCond(!isEmail(user.email), 'Geçerli bir e-posta giriniz'))
+        if (checkCond(!isEmail(userForm.email), 'Geçerli bir e-posta giriniz'))
             return;
 
-        console.log('do login');
+        try {
+            const res = await login(userForm);
+            if (res.errorCode) {
+                setDialogText('Hatalı bir e-posta ya da şifre girdiniz');
+                showModal();
+            }
+            else
+                dispatchLogIn({...userJSON(), token: res.token })
+
+        }
+        catch (e) {
+            console.error(e);
+        }
     };
 
     const checkCond = (cond, text) => {
@@ -40,7 +65,7 @@ function AuthScreen() {
     }
 
     const checkNull = (key, text) => {
-        if (!user[key]) {
+        if (!userForm[key]) {
             setDialogText(`${text} alanı zorunludur`);
             showModal();
             return true;
@@ -50,13 +75,13 @@ function AuthScreen() {
 
 
     const onRegister = () => {
-        if (checkNull('email', 'E-posta') && checkNull('password', 'Şifre'))
+        if (checkNull('name', 'Ad Soyad') || checkNull('email', 'E-posta') || checkNull('password', 'Şifre'))
             return;
-        if (checkCond(!isEmail(user.email), 'Geçerli bir e-posta giriniz'))
+        if (checkCond(!isEmail(userForm.email), 'Geçerli bir e-posta giriniz'))
             return;
-        if (checkCond(user.email != user.email2, 'E-Postalar uyuşmuyor'))
+        if (checkCond(userForm.email != userForm.email2, 'E-Postalar uyuşmuyor'))
             return;
-        if (checkCond(user.password2 != user.password2, 'Şifreler uyuşmuyor'))
+        if (checkCond(userForm.password != userForm.password2, 'Şifreler uyuşmuyor'))
             return;
 
         console.log('do register');
@@ -70,7 +95,7 @@ function AuthScreen() {
     }
 
     const changeScreen = () => {
-        setUser({ name: null, password: null, email: null, email2: null, password2: null });
+        setUserForm({ name: null, password: null, email: null, email2: null, password2: null });
         setLoginScreen(!loginScreen);
     }
 
@@ -82,23 +107,23 @@ function AuthScreen() {
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(false)}
             >
-                <Dialog title={dialogText} />
+                <Dialog style={styles.dialog} title={dialogText} />
             </Modal>
             {loginScreen ?
                 <View style={styles.container}>
                     <Image style={styles.image} source={require('../../assets/logo/small-logo.png')} />
-                    <Input value={user.email} style={styles.input} onChangeText={(e) => handleChange('email', e)} placeholder='E-Posta' />
-                    <Input value={user.password} style={styles.input} onChangeText={(e) => handleChange('password', e)} secureTextEntry={true} placeholder='Şifre' />
+                    <Input value={userForm.email} style={styles.input} onChangeText={(e) => handleChange('email', e)} placeholder='E-Posta' />
+                    <Input value={userForm.password} style={styles.input} onChangeText={(e) => handleChange('password', e)} secureTextEntry={true} placeholder='Şifre' />
                     <Button color='#0A151F' onPress={onLogin} big={true} style={[styles.input, styles.button]} title='Giriş Yap' />
                     <TouchableOpacity onPress={changeScreen} ><Text style={styles.text}>Üye Ol</Text></TouchableOpacity>
                 </View>
                 :
                 <View style={styles.container}>
-                    <Input value={user.name} style={styles.input} onChangeText={(e) => handleChange('name', e)} placeholder='Ad Soyad' />
-                    <Input value={user.email} style={styles.input} onChangeText={(e) => handleChange('email', e)} placeholder='E-Posta' />
-                    <Input value={user.email2} style={styles.input} onChangeText={(e) => handleChange('email2', e)} placeholder='E-Posta Tekrar' />
-                    <Input value={user.password} style={styles.input} onChangeText={(e) => handleChange('password', e)} secureTextEntry={true} placeholder='Şifre' />
-                    <Input value={user.password2} style={styles.input} onChangeText={(e) => handleChange('password2', e)} secureTextEntry={true} placeholder='Şifre Tekrar' />
+                    <Input value={userForm.name} style={styles.input} onChangeText={(e) => handleChange('name', e)} placeholder='Ad Soyad' />
+                    <Input value={userForm.email} style={styles.input} onChangeText={(e) => handleChange('email', e)} placeholder='E-Posta' />
+                    <Input value={userForm.email2} style={styles.input} onChangeText={(e) => handleChange('email2', e)} placeholder='E-Posta Tekrar' />
+                    <Input value={userForm.password} style={styles.input} onChangeText={(e) => handleChange('password', e)} secureTextEntry={true} placeholder='Şifre' />
+                    <Input value={userForm.password2} style={styles.input} onChangeText={(e) => handleChange('password2', e)} secureTextEntry={true} placeholder='Şifre Tekrar' />
                     <Button color='#0A151F' onPress={onRegister} big={true} style={[styles.button, styles.input]} title='Üye Ol' />
                     <TouchableOpacity onPress={changeScreen}><Text style={styles.text}>Giriş Yap</Text></TouchableOpacity>
                 </View>
@@ -134,7 +159,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
         alignSelf: 'center',
         marginTop: 20
+    },
+    dialog: {
+        marginTop: hp('82%')
     }
 });
 
-export default AuthScreen;
+const mapStateToProps = (state) => ({
+    user: state.userReducer
+});
+
+mapDispatchToProps = {
+    dispatchLogIn: (user) => actionLogin(user)
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthScreen);

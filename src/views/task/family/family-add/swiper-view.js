@@ -12,9 +12,6 @@ import { Trash } from '../../../../components/icons';
 import styles from './style';
 
 
-
-
-
 function SelectedModal({ onDelete, onClose, style }) {
     return (
         <View style={{ backgroundColor: '#FFFFFF', paddingVertical: 15, ...style }}>
@@ -170,8 +167,6 @@ class SwiperView extends React.Component {
 
     render() {
         const { navigation } = this.props;
-        // const params = this.image ? { onSubmit: images => ({ models: images }) } : null;
-        // console.log(this.screenName, params);
         return (
             <>
                 <RBSheet

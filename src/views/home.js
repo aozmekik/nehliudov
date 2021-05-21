@@ -16,13 +16,33 @@ import * as FamilyModel from '../models/family';
 import ImageScreen from './task/family/family-add/image';
 import AuthScreen from './auth/auth';
 
+function Test({ text }) {
+    console.log('TestComponent');
+    return (
+        <Text>
+            {text}
+        </Text>
+    )
+}
+
 
 
 
 function HomeScreen() {
-    const [visible, setVisible] = React.useState(false);
+    const [count, setCount] = React.useState(0)
+    // const [visible, setVisible] = React.useState(false);
+    console.log('HomeScreen');
 
-    const toggleVisible = () => setVisible(prevValue => !prevValue);
+    
+    const increase = React.useCallback(() => {
+        setCount(count => count + 1);
+    }, []);
+
+    const test = () => {
+        console.log('callback');
+    };
+
+    // const toggleVisible = () => setVisible(prevValue => !prevValue);
 
     return (
         <View style={styles.container} >
@@ -34,8 +54,7 @@ function HomeScreen() {
             {/* <FamilyAddScreen /> */}
             {/* <TestScreen /> */}
             <AuthScreen />
-
-
+           
             {/* <DeleteSelected /> */}
             {/* <Dialog title='selamlarsana ey '/> */}
 
@@ -50,7 +69,7 @@ function HomeScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        // paddingTop: 50,
+        paddingTop: 50,
         height: '100%',
     },
 

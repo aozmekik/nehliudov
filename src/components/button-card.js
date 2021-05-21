@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ButtonCard;
+export default React.memo(ButtonCard);
