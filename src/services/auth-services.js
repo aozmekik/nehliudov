@@ -28,22 +28,21 @@ async function makeAuthApiCall(urlPath, user) {
     const url = `${URL}/${urlPath}`;
     data.body = JSON.stringify(user);
     const res = await fetch(url, data)
-        .then(response => response.json())
         .catch((e) => console.error(e));
     return res;
 }
 
 async function login(user) {
     const res = await makeAuthApiCall('login', user);
-    if (res.errorCode == null)
-        saveToken(res.token);
-    return res;
+    const json = await res.json();
+    if (json.errorCode == null)
+        saveToken(json.token);
+    return {res, json};
 
 }
 
 async function register(user) {
-    return makeAuthApiCall('register', user)
-        .then((res) => saveToken(res.token));
+    return await makeAuthApiCall('register', user);
 }
 
 async function logout() {

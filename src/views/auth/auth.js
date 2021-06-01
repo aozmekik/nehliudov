@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { Input, Button, Dialog } from '../../components';
 import { User } from '../../models/user';
 
-import { login } from '../../services/auth-services';
+import { login, register } from '../../services/auth-services';
 
 
 function isEmail(email) {
@@ -41,13 +41,15 @@ function AuthScreen({ dispatchLogIn }) {
             return;
 
         try {
-            const res = await login(userForm);
-            if (res.errorCode) {
-                setDialogText('Hatalı bir e-posta ya da şifre girdiniz');
-                showModal();
-            }
+            const { res, json } = await login(userForm);
+            if (json.errorCode === 1)
+                showModal('Hatalı bir e-posta ya da şifre girdiniz');
+            else if (json.errorCode === 2)
+                showModal('E-Posta doğrulanmamış. Mailinizi kontrol edin.');
+            else if (json.errorCode === 3)
+                showModal('Hesabınız henüz doğrulanmamış.');
             else
-                dispatchLogIn({...userJSON(), token: res.token })
+                dispatchLogIn({ ...userJSON(), token: res.token })
 
         }
         catch (e) {
@@ -57,8 +59,7 @@ function AuthScreen({ dispatchLogIn }) {
 
     const checkCond = (cond, text) => {
         if (cond) {
-            setDialogText(text);
-            showModal();
+            showModal(text);
             return true;
         }
         return false;
@@ -66,15 +67,14 @@ function AuthScreen({ dispatchLogIn }) {
 
     const checkNull = (key, text) => {
         if (!userForm[key]) {
-            setDialogText(`${text} alanı zorunludur`);
-            showModal();
+            showModal(`${text} alanı zorunludur`);
             return true;
         }
         return false;
     }
 
 
-    const onRegister = () => {
+    const onRegister = async () => {
         if (checkNull('name', 'Ad Soyad') || checkNull('email', 'E-posta') || checkNull('password', 'Şifre'))
             return;
         if (checkCond(!isEmail(userForm.email), 'Geçerli bir e-posta giriniz'))
@@ -84,10 +84,23 @@ function AuthScreen({ dispatchLogIn }) {
         if (checkCond(userForm.password != userForm.password2, 'Şifreler uyuşmuyor'))
             return;
 
+        try {
+            const res = await register(userForm);
+            if (res.status === 500)
+                showModal('E-Posta sistemde zaten kayıtlıdır');
+            else if (res.status === 200) {
+                showModal('E-Mail adresinize doğrulama kodu gönderilmiştir.');
+                changeScreen();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+
         console.log('do register');
     };
 
-    const showModal = () => {
+    const showModal = (text) => {
+        setDialogText(text);
         setModalVisible(true)
         setTimeout(() => {
             setModalVisible(false)
