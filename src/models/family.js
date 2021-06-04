@@ -76,7 +76,7 @@ export class Member {
 export class Family {
     constructor() {
         this._id = null;
-        this.clerks = [store.getState().userReducer.user._id];
+        this.registrant = store.getState().userReducer.user?._id;
         this.name = null;
         this.idNo = null;
         this.tel = null;

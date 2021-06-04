@@ -1,4 +1,6 @@
 import { getHeaders, URL } from './headers';
+import store from '../reducers/store';
+
 
 
 async function createFamily(fam) {
@@ -8,7 +10,6 @@ async function createFamily(fam) {
     data.body = JSON.stringify(fam);
 
     const res = await fetch(url, data)
-        .then(response => response.json())
         .catch((e) => console.error(e));
     return res;
 }

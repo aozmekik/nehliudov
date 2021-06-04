@@ -151,7 +151,12 @@ class FamilyAddMainScreen extends React.Component {
 
     async onTick() {
         if (this.formIsValid()) {
-            this.createFamily(this.state.family);
+            const res = await this.createFamily(this.state.family);
+            if (res.status === 400){
+                this.setDialog('Bir hata oluştu');
+                this.showModal();
+            }
+                
             // this.props.navigation.goBack();
         }
         else
