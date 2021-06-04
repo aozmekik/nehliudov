@@ -25,15 +25,17 @@ function Post({ style, navigation, ...props }) {
                 <TouchableOpacity style={styles.bookmark}><Bookmark /></TouchableOpacity>
                 < Time style={styles.time} />
             </View>
-            <View style={styles.section3}>
-                <Text style={styles.name}>Özge Yılmaz</Text>
-                <Text style={styles.desc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas egestas justo ex, efficitur elementum eros pretium at. Donec id bibendum libero, et facilisis est.
-            <Text style={styles.elapsed}> 1 saat</Text>
-                </Text>
+            <View style={{marginHorizontal: 5}}>
+                <View style={styles.section3}>
+                    <Text style={styles.name}>Özge Yılmaz</Text>
+                    <Text style={styles.desc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas egestas justo ex, efficitur elementum eros pretium at. Donec id bibendum libero, et facilisis est.
+                <Text style={styles.elapsed}> 1 saat</Text>
+                    </Text>
+                </View>
+                <TouchableOpacity>
+                    <Text style={styles.comment}>4 yorumu gör</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity>
-                <Text style={styles.comment}>4 yorumu gör</Text>
-            </TouchableOpacity>
         </View>
     );
 }

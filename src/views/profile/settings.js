@@ -13,7 +13,7 @@ import { logout as actionLogout } from '../../reducers/actions';
 
 
 
-function ProfileSettingsScreen({ navigation }) {
+function DetailsScreen({ navigation }) {
     return (
         <>
             <NavBar onPress={() => navigation.goBack()} title='Profil Ayarları' />
@@ -26,7 +26,7 @@ function ProfileSettingsScreen({ navigation }) {
     )
 }
 
-function SettingsMainScreen({ navigation, user, dispatchLogOut }) {
+function MainScreen({ navigation, user, dispatchLogOut }) {
 
     const onLogout = async () => {
         try {
@@ -41,7 +41,7 @@ function SettingsMainScreen({ navigation, user, dispatchLogOut }) {
     return (
         <>
             <NavBar onPress={() => navigation.goBack()} title='Ayarlar' />
-            <ButtonCard onPress={() => navigation.navigate('ProfileSettings')} style={styles.buttonCard} title='Profil ayarları' />
+            <ButtonCard onPress={() => navigation.navigate('SettingsDetail')} style={styles.buttonCard} title='Profil ayarları' />
             <ButtonCard onPress={onLogout} style={styles.buttonCard} title='Çıkış yap' />
         </>
     );
@@ -55,7 +55,7 @@ mapDispatchToProps = {
     dispatchLogOut: () => actionLogout()
 };
 
-SettingsMainScreen = connect(mapStateToProps, mapDispatchToProps)(SettingsMainScreen);
+MainScreen = connect(mapStateToProps, mapDispatchToProps)(MainScreen);
 
 
 
@@ -63,8 +63,8 @@ const Stack = createStackNavigator();
 function SettingsScreen({ }) {
     return (
         <Stack.Navigator headerMode='none'>
-            <Stack.Screen name='SettingsMain' component={SettingsMainScreen} />
-            <Stack.Screen name='ProfileSettings' component={ProfileSettingsScreen} />
+            <Stack.Screen name='SettingsMain' component={MainScreen} />
+            <Stack.Screen name='SettingsDetail' component={DetailsScreen} />
         </Stack.Navigator>
     )
 }

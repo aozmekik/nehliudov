@@ -27,6 +27,7 @@ import { isLoggedIn, getCurrentUser } from '../services/auth-services';
 const Tab = createBottomTabNavigator();
 
 function MainScreen({ userReducer, dispatchRestoreUser }) {
+    // console.log(userReducer);
 
     React.useEffect(() => {
         async function getUser() {
@@ -55,8 +56,8 @@ function MainScreen({ userReducer, dispatchRestoreUser }) {
                 <NavigationContainer>
                     <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props} />}>
                         <Tab.Screen name="Task" component={TaskScreen} />
-                        <Tab.Screen name="Home" component={HomeScreen} />
-                        <Tab.Screen name="Profile" component={ProfileScreen} />
+                        <Tab.Screen name="Home" component={TimelineScreen} />
+                        <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{ self: true, user: userReducer.user }} />
                     </Tab.Navigator>
                 </NavigationContainer>
             </SafeAreaView>

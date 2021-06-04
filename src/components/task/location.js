@@ -6,7 +6,7 @@ import * as LocationServices from '../../services/location-services';
 
 import { connect } from 'react-redux';
 
-function Location({ userReducer, loc, onValueChange }) {
+function Location({ userReducer, loc, onlyTown, onValueChange }) {
     const [model, setModel] = React.useState({
         city: loc?.city,
         town: loc?.town,
@@ -58,6 +58,8 @@ function Location({ userReducer, loc, onValueChange }) {
     }
 
     const handleChange = (event, name) => {
+        if (!event)
+            event = null;
         const newModel = { ...model, [name]: event }
         setModel(newModel);
         if (onValueChange)
@@ -66,11 +68,15 @@ function Location({ userReducer, loc, onValueChange }) {
         // if (event && name === 'city')
         //     getTowns(event);
 
-        if (event && name === 'town')
-            getDistricts(event);
+        if (!onlyTown) {
+            if (event && name === 'town')
+                getDistricts(event);
 
-        else if (event && name === 'district')
-            getStreets(event);
+            else if (event && name === 'district')
+                getStreets(event);
+        }
+
+
 
     };
 

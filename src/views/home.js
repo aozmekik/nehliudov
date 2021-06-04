@@ -26,6 +26,9 @@ function Test({ text }) {
 }
 
 import { getHeaders } from '../services/headers';
+import SearchUserScreen from './timeline/search-user';
+import ProfileScreen from './profile/profile';
+import PrivilegeScreen from './profile/privilege';
 
 
 function HomeScreen() {
@@ -50,7 +53,9 @@ function HomeScreen() {
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
             {/* <ImageScreen /> */}
-            <FamilyAddScreen />
+            {/* <SearchUserScreen /> */}
+            <PrivilegeScreen />
+            {/* <ProfileScreen route={{ params: { user: { name: 'semih', role: 1 } } }} /> */}
             {/* <TestScreen /> */}
             {/* <AuthScreen /> */}
 

@@ -3,10 +3,12 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'rea
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { Notification, Settings } from '../../components/icons';
+import { Notification, Settings, TwoUser } from '../../components/icons';
 import NotificationsScreen from './notifications';
 import SettingsScreen from './settings';
 
+import { roles } from '../../models/user';
+import PrivilegeScreen from './privilege';
 
 const Stack = createStackNavigator();
 
@@ -18,20 +20,36 @@ function ImageBox({ style }) {
     )
 }
 
-function Main({ navigation }) {
+
+function MainScreen({ navigation, route }) {
+    const user = route?.params?.user;
+    const self = route?.params?.self;
+
+    console.log(route);
+
     return (
         <>
             <View style={styles.header} >
                 <Image style={styles.profile} source={require('../../icons/woman.png')} />
                 <View style={styles.rightSection}>
                     <View style={styles.firstRow} >
-                        <Text style={styles.name}>Özge Yılmaz</Text>
-                        <TouchableOpacity style={styles.notification} onPress={() => navigation.navigate('Notifications')} >
-                            <Notification />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.settings} onPress={() => navigation.navigate('Settings')} ><Settings /></TouchableOpacity>
+                        <Text style={styles.name}>{user.name}</Text>
+                        <View style={{flexDirection: 'row', paddingTop: 5, width: '20%'}}>
+                            {
+                                self ?
+                                    <>
+                                        <TouchableOpacity style={styles.notification} onPress={() => navigation.navigate('ProfileNotifications')} >
+                                            <Notification />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.settings} onPress={() => navigation.navigate('ProfileSettings')} ><Settings /></TouchableOpacity>
+                                    </>
+                                    :
+                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => navigation.navigate('ProfilePrivilege')} ><TwoUser /></TouchableOpacity>
+                            }
+                        </View>
+
                     </View>
-                    <Text style={styles.title}>Ümraniye Temsilcisi</Text>
+                    <Text style={styles.title}>{roles[user.role]}</Text>
                 </View>
             </View>
 
@@ -62,12 +80,14 @@ function Main({ navigation }) {
     )
 }
 
-function ProfileScreen() {
+function ProfileScreen({ route }) {
     return (
         <Stack.Navigator headerMode='none'>
-            <Stack.Screen name='Main' component={Main} />
-            <Stack.Screen name='Notifications' component={NotificationsScreen} />
-            <Stack.Screen name='Settings' component={SettingsScreen} />
+            <Stack.Screen name='ProfileMain' component={MainScreen} initialParams={route.params} />
+            <Stack.Screen name='ProfileNotifications' component={NotificationsScreen} />
+            <Stack.Screen name='ProfileSettings' component={SettingsScreen} />
+            <Stack.Screen name='ProfilePrivilege' component={PrivilegeScreen} />
+
         </Stack.Navigator>
     )
 }
@@ -101,15 +121,17 @@ const styles = StyleSheet.create({
         fontFamily: 'SFProText-Bold',
         fontSize: 24,
         color: '#0A151F',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        width: '75%',
     },
     notification: {
-        marginTop: 5,
-        marginLeft: 50,
-        marginRight: 10
+        marginLeft: -15,
+        marginRight: 10,
+        alignSelf: 'center'
     },
     settings: {
-        marginTop: 5
+        marginRight: 10,
+        alignSelf: 'center'
     },
     title: {
         fontFamily: 'SFProText-MediumItalic',

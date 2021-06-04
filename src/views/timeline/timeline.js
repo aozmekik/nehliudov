@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable, Text, Keyboard } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -8,15 +8,16 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import RBSheet from "react-native-raw-bottom-sheet";
 
 
-import { Camera, More } from '../../components/icons';
+import { Camera, More, Search } from '../../components/icons';
 import Post from './post';
-import Comment from './comment';
 import PostAddScreen from './post-add';
 import Detail from './detail';
+import SearchUserScreen from './search-user';
 
 
 
 function Main({ navigation }) {
+
     const refRBSheet = React.useRef();
     return (<View>
         <RBSheet
@@ -35,12 +36,16 @@ function Main({ navigation }) {
         </RBSheet>
 
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.navigate('PostAdd')}><Camera style={styles.camera} stroke='black' /></TouchableOpacity>
-            <TouchableOpacity onPress={() => refRBSheet.current.open()}><More style={styles.more} fill='black' /></TouchableOpacity>
+            <TouchableOpacity style={styles.search} onPress={() => navigation.navigate('TimelineSearchUser')}><Search fill='black' /></TouchableOpacity>
+            <TouchableOpacity style={styles.camera} onPress={() => navigation.navigate('TimelinePostAdd')}><Camera stroke='black' /></TouchableOpacity>
+            <TouchableOpacity style={styles.more} onPress={() => refRBSheet.current.open()}><More fill='black' /></TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-            <Post style={styles.post} />
-            <Post style={styles.post} />
+            <>
+                <Post />
+                <Post style={styles.post} />
+            </>
+
         </ScrollView >
     </View>
     );
@@ -51,8 +56,9 @@ const Stack = createStackNavigator();
 function TimelineScreen() {
     return (
         <Stack.Navigator headerMode='none'>
-            <Stack.Screen name='Main' component={Main} />
-            <Stack.Screen name='PostAdd' component={PostAddScreen} />
+            <Stack.Screen name='TimelineMain' component={Main} />
+            <Stack.Screen name='TimelinePostAdd' component={PostAddScreen} />
+            <Stack.Screen name='TimelineSearchUser' component={SearchUserScreen} />
         </Stack.Navigator>
     );
 }
@@ -69,16 +75,26 @@ const styles = StyleSheet.create({
     },
     header: {
         // position: ',
-        top: 30,
+        paddingTop: 25,
+        paddingBottom: 10,
         zIndex: 1,
-        marginHorizontal: 10,
-        // borderBottomWidth: 0.2,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        backgroundColor: '#F2F2F2',
+    },
+    search: {
+        marginTop: 15,
+        marginHorizontal: 15,
+    },
+    more: {
+        marginTop: 10,
+        marginHorizontal: 15,
+    },
+    camera: {
+        marginLeft: '65%',
+        marginTop: 10,
     },
     post: {
         marginTop: 50,
-        marginHorizontal: 10,
     },
     centeredView: {
         flex: 1,

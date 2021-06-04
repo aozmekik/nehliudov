@@ -3,19 +3,33 @@ import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Search, Delete } from './icons';
 
-function SearchBar({ title, style }) {
+function SearchBar({ title, noBlurStyle, style, onFocus, onEmpty }) {
     const [focus, setFocus] = React.useState(false);
 
     const blurStyle = { borderWidth: 0 };
-    const focusStyle = { borderWidth: 0.4, borderColor: '#D1D1D1' };
+    const focusStyle = noBlurStyle ? blurStyle : { borderWidth: 0.4, borderColor: '#D1D1D1' };
+
+    const onChange = (e) => {
+        if (!e && onEmpty)
+            onEmpty();
+
+        if (e && onFocus)
+            onFocus();
+    }
 
     const col = style?.color ? style.color : styles.title.color;
     return (
         <View style={[styles.container, style, focus ? focusStyle : blurStyle]} >
             <Search fill={col} style={styles.icon} />
             <TextInput
-                onBlur={() => setFocus(false)}
-                onFocus={() => setFocus(true)}
+                onChangeText={onChange}
+                onBlur={() => {
+                    setFocus(false);
+                }
+                }
+                onFocus={() => {
+                    setFocus(true);
+                }}
                 placeholder={title} placeholderTextColor={col} style={[styles.title, { color: col }]} />
             {focus && <TouchableOpacity><Delete fill={col} style={styles.icon} /></TouchableOpacity>}
         </View>

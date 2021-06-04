@@ -4,6 +4,8 @@ const Role = Object.freeze({
     MANAGER: 2,
 });
 
+const roles = ['Ziyaretçi', 'İlçe Görevlisi', 'İlçe Sorumlusu'];
+
 
 class User {
     // FIXME. add default image.
@@ -18,5 +20,6 @@ class User {
 
 module.exports = {
     Role,
-    User
+    User,
+    roles
 };

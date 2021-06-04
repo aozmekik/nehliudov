@@ -15,7 +15,7 @@ function PostAddScreen({ navigation }) {
                     <Image style={styles.profile} source={require('../../icons/woman.png')} />
                     <TextInput multiline={true} style={styles.input} placeholderTextColor='#48515B' placeholder='Açıklama yaz' />
                 </View>
-                <Select chevronColor='#183148' style={styles.select} placeholder='İlçe' />
+                {/* <Select chevronColor='#183148' style={styles.select} placeholder='İlçe' /> */}
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText}>Resim Ekleyin</Text>
                     <Plus style={styles.icon} stroke='#183148' />
