@@ -1,20 +1,10 @@
 import { decode as atob } from 'base-64'
-const URL = 'http://192.168.0.11:8080/api';
+import { URL, getHeaders } from './headers';
 
 
 import * as StorageServices from './storage-services';
 // import { connect } from 'react-redux'
 
-const data = {
-    method: 'POST',
-    credentials: 'same-origin',
-    mode: 'same-origin',
-    body: null,
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-};
 
 async function getToken() {
     return StorageServices.load('token');
@@ -26,7 +16,10 @@ async function saveToken(token) {
 
 async function makeAuthApiCall(urlPath, user) {
     const url = `${URL}/${urlPath}`;
+    const data = getHeaders(false);
+    data.method = 'POST';
     data.body = JSON.stringify(user);
+
     const res = await fetch(url, data)
         .catch((e) => console.error(e));
     return res;
@@ -37,7 +30,7 @@ async function login(user) {
     const json = await res.json();
     if (json.errorCode == null)
         saveToken(json.token);
-    return {res, json};
+    return { res, json };
 
 }
 
@@ -59,12 +52,31 @@ async function isLoggedIn() {
     }
 }
 
+async function restoreUser(token) {
+    const url = `${URL}/restore/${token}`;
+    const data = getHeaders(false);
+    data.method = 'GET';
+
+    try {
+        const res = await fetch(url, data);
+        const json = await res.json();
+        return json;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 async function getCurrentUser() {
     const loggedIn = await isLoggedIn();
     if (loggedIn) {
         const token = await getToken();
-        const { exp, ...user } = JSON.parse(atob(token.split('.')[1]));
-        return { user, token };
+        // // TODO. if there is no connection, do this.
+        // const { exp, ...user } = JSON.parse(atob(token.split('.')[1]));
+
+        // else do this.
+        const user = await restoreUser(token);
+
+        return { ...user, token: token };
     }
     return null;
 }

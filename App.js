@@ -7,12 +7,7 @@ import AppLoading from 'expo-app-loading';
 import { Provider } from 'react-redux'
 import MainScreen from './src/views/main';
 
-import rootReducer from './src/reducers';
-
-
-import { createStore } from 'redux';
-const store = createStore(rootReducer);
-
+import store from './src/reducers/store';
 
 class App extends React.Component {
   state = {

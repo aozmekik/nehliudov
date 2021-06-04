@@ -1,3 +1,4 @@
+import { getHeaders, URL } from './headers';
 
 const cities =
     [
@@ -331,9 +332,13 @@ function getCities() {
 }
 
 async function getTowns(city) {
+    const url = `${URL}/locations/towns/${city}`;
+    const data = getHeaders();
+    data.method = 'GET';
 
-    const res = await fetch(`http://192.168.0.11:8080/api/locations/towns/${city}`);
-    const towns = res.json();
+    const res = await fetch(url, data);
+    const towns = await res.json();
+
 
     let townList = [];
     if (towns) {
@@ -349,8 +354,14 @@ async function getTowns(city) {
 // save localy used stuff from api.
 
 async function getDistricts(town) {
-    const res = await fetch(`http://192.168.0.11:8080/api/locations/districts/${town}`)
+    const url = `${URL}/locations/districts/${town}`;
+    const data = getHeaders();
+    data.method = 'GET';
+
+
+    const res = await fetch(url, data)
     const districts = await res.json();
+
 
     let districtList = [];
     if (districts) {
@@ -363,7 +374,12 @@ async function getDistricts(town) {
 }
 
 async function getStreets(district) {
-    const res = await fetch(`http://192.168.0.11:8080/api/locations/streets/${district}`);
+    const url = `${URL}/locations/streets/${district}`;
+    const data = getHeaders();
+    data.method = 'GET';
+
+
+    const res = await fetch(url, data);
     const streets = await res.json();
 
     let streetList = [];

@@ -10,7 +10,7 @@ import { StyleSheet, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 
 import TabBar from '../components/tab-bar';
@@ -21,12 +21,12 @@ import HomeScreen from './home';
 import AuthScreen from './auth/auth';
 
 
-import { login, restoreUser, RESTORE_USER } from '../reducers/actions';
-import { getToken, isLoggedIn, getCurrentUser } from '../services/auth-services';
+import { restoreUser } from '../reducers/actions';
+import { isLoggedIn, getCurrentUser } from '../services/auth-services';
 
 const Tab = createBottomTabNavigator();
 
-function MainScreen({ auth, dispatchRestoreUser }) {
+function MainScreen({ userReducer, dispatchRestoreUser }) {
 
     React.useEffect(() => {
         async function getUser() {
@@ -47,7 +47,7 @@ function MainScreen({ auth, dispatchRestoreUser }) {
         getUser();
     }, []);
 
-    if (auth.user == null)
+    if (userReducer.user == null)
         return (<AuthScreen />);
     else {
         return (
@@ -55,7 +55,7 @@ function MainScreen({ auth, dispatchRestoreUser }) {
                 <NavigationContainer>
                     <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props} />}>
                         <Tab.Screen name="Task" component={TaskScreen} />
-                        <Tab.Screen name="Home" component={TimelineScreen} />
+                        <Tab.Screen name="Home" component={HomeScreen} />
                         <Tab.Screen name="Profile" component={ProfileScreen} />
                     </Tab.Navigator>
                 </NavigationContainer>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-    auth: state.userReducer
+    userReducer: state.userReducer
 });
 
 mapDispatchToProps = {

@@ -49,7 +49,7 @@ function AuthScreen({ dispatchLogIn }) {
             else if (json.errorCode === 3)
                 showModal('Hesabınız henüz doğrulanmamış.');
             else
-                dispatchLogIn({ ...userJSON(), token: res.token })
+                dispatchLogIn({ ...json.user, token: json.token })
 
         }
         catch (e) {

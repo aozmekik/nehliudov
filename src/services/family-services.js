@@ -1,19 +1,13 @@
-const URL = 'http://192.168.0.11:8080/api/families/';
+import { getHeaders, URL } from './headers';
 
-const data = {
-    method: 'POST',
-    credentials: 'same-origin',
-    mode: 'same-origin',
-    body: null,
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-};
 
 async function createFamily(fam) {
+    const url = URL + '/families/';
+    const data = getHeaders();
+    data.method = 'POST';
     data.body = JSON.stringify(fam);
-    const res = await fetch(URL, data)
+
+    const res = await fetch(url, data)
         .then(response => response.json())
         .catch((e) => console.error(e));
     return res;

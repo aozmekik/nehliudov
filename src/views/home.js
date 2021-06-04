@@ -25,15 +25,13 @@ function Test({ text }) {
     )
 }
 
-
+import { getHeaders } from '../services/headers';
 
 
 function HomeScreen() {
     const [count, setCount] = React.useState(0)
     // const [visible, setVisible] = React.useState(false);
-    console.log('HomeScreen');
 
-    
     const increase = React.useCallback(() => {
         setCount(count => count + 1);
     }, []);
@@ -41,6 +39,7 @@ function HomeScreen() {
     const test = () => {
         console.log('callback');
     };
+
 
     // const toggleVisible = () => setVisible(prevValue => !prevValue);
 
@@ -51,10 +50,10 @@ function HomeScreen() {
             {/* <TimelineScreen /> */}
             {/* <ProfileScreen /> */}
             {/* <ImageScreen /> */}
-            {/* <FamilyAddScreen /> */}
+            <FamilyAddScreen />
             {/* <TestScreen /> */}
-            <AuthScreen />
-           
+            {/* <AuthScreen /> */}
+
             {/* <DeleteSelected /> */}
             {/* <Dialog title='selamlarsana ey '/> */}
 
@@ -69,7 +68,6 @@ function HomeScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 50,
         height: '100%',
     },
 

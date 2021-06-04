@@ -1,3 +1,6 @@
+import store from '../reducers/store';
+
+
 export const Status = Object.freeze({
     SUITABLE_TRACE: 0,
     SUITABLE_ONE_TIME: 1,
@@ -73,7 +76,7 @@ export class Member {
 export class Family {
     constructor() {
         this._id = null;
-        this.clerks = [];
+        this.clerks = [store.getState().userReducer.user._id];
         this.name = null;
         this.idNo = null;
         this.tel = null;
@@ -81,7 +84,7 @@ export class Family {
         this.regDate = null;
         this.warmingType = null;
         this.address = null;
-        this.city = null;
+        this.city = 34;
         this.district = null;
         this.town = null;
         this.street = null;
@@ -160,6 +163,6 @@ for (var i = 0; i < 10; i++) {
     exampleFamily.needs.push('selam')
 }
 exampleFamily.images.push(base64Icon);
-exampleFamily.clerks= ['selam', 'naber'];
+exampleFamily.clerks = ['selam', 'naber'];
 
 export { exampleFamily };
