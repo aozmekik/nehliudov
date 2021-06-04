@@ -7,8 +7,11 @@ import { Notification, Settings, TwoUser } from '../../components/icons';
 import NotificationsScreen from './notifications';
 import SettingsScreen from './settings';
 
-import { roles } from '../../models/user';
+import { roles, isManager } from '../../models/user';
 import PrivilegeScreen from './privilege';
+
+import { connect } from 'react-redux';
+
 
 const Stack = createStackNavigator();
 
@@ -21,11 +24,9 @@ function ImageBox({ style }) {
 }
 
 
-function MainScreen({ navigation, route }) {
+function MainScreen({ navigation, route, userReducer }) {
     const user = route?.params?.user;
     const self = route?.params?.self;
-
-    console.log(route);
 
     return (
         <>
@@ -34,17 +35,19 @@ function MainScreen({ navigation, route }) {
                 <View style={styles.rightSection}>
                     <View style={styles.firstRow} >
                         <Text style={styles.name}>{user.name}</Text>
-                        <View style={{flexDirection: 'row', paddingTop: 5, width: '20%'}}>
+                        <View style={{ flexDirection: 'row', paddingTop: 5, width: '20%' }}>
                             {
-                                self ?
-                                    <>
-                                        <TouchableOpacity style={styles.notification} onPress={() => navigation.navigate('ProfileNotifications')} >
-                                            <Notification />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.settings} onPress={() => navigation.navigate('ProfileSettings')} ><Settings /></TouchableOpacity>
-                                    </>
-                                    :
-                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => navigation.navigate('ProfilePrivilege')} ><TwoUser /></TouchableOpacity>
+                                self &&
+                                <>
+                                    <TouchableOpacity style={styles.notification} onPress={() => navigation.navigate('ProfileNotifications')} >
+                                        <Notification />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.settings} onPress={() => navigation.navigate('ProfileSettings')} ><Settings /></TouchableOpacity>
+                                </>
+                            }
+                            {
+                                isManager(userReducer.user) &&
+                                <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => navigation.navigate('ProfilePrivilege', { user: user })} ><TwoUser /></TouchableOpacity>
                             }
                         </View>
 
@@ -79,6 +82,13 @@ function MainScreen({ navigation, route }) {
         </>
     )
 }
+
+const mapStateToProps = (state) => ({
+    userReducer: state.userReducer
+});
+
+MainScreen = connect(mapStateToProps)(MainScreen);
+
 
 function ProfileScreen({ route }) {
     return (

@@ -18,8 +18,13 @@ class User {
     }
 }
 
+const isManager = (user) => {
+    return user.role === 2;
+}
+
 module.exports = {
     Role,
     User,
-    roles
+    roles,
+    isManager
 };

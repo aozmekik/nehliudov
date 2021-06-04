@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Search, Delete } from './icons';
 
-function SearchBar({ title, noBlurStyle, style, onFocus, onEmpty }) {
+function SearchBar({ title, noBlurStyle, style, onFocus, onEmpty, onChangeText }) {
     const [focus, setFocus] = React.useState(false);
 
     const blurStyle = { borderWidth: 0 };
@@ -15,6 +15,9 @@ function SearchBar({ title, noBlurStyle, style, onFocus, onEmpty }) {
 
         if (e && onFocus)
             onFocus();
+
+        if (onChangeText)
+            onChangeText(e);
     }
 
     const col = style?.color ? style.color : styles.title.color;

@@ -8,7 +8,7 @@ const getHeaders = (withToken = true) => {
         mode: 'same-origin',
         body: null,
         headers: {
-            'Accept': 'application/json',
+            'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
         }
     };

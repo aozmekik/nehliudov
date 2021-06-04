@@ -10,6 +10,8 @@ import ProfileScreen from '../profile/profile';
 
 import { roles } from '../../models/user';
 
+import { getUsers } from '../../services/user-services';
+
 function SearchResult({ navigation, style, user }) {
     return (
         <TouchableOpacity onPress={() => navigation.navigate('SearchUserProfile', { user: user })} style={[styles.section1, style]}>
@@ -32,15 +34,32 @@ function SearchHistory() {
     );
 }
 
+
 function Main({ navigation }) {
     const [historyScreen, setHistoryScreen] = React.useState(true);
-    const user = { name: 'özge', role: 1 }
+    const [users, setUsers] = React.useState([]);
+
+    const onChangeText = async (name) => {
+        try {
+            if (name) {
+                const res = await getUsers(name);
+                if (res.status === 200) {
+                    const data = await res.json();
+                    setUsers(data);
+
+                }
+            }
+        } catch (e) {
+            console.error(e);
+        }
+
+    };
 
     return (
         <>
             <View style={styles.header}>
                 <NavBar onPress={navigation?.goBack} />
-                <SearchBar noBlurStyle={true} onEmpty={() => setHistoryScreen(true)} onFocus={() => setHistoryScreen(false)} title='Gönüllü ara' style={{
+                <SearchBar onChangeText={onChangeText} noBlurStyle={true} onEmpty={() => setHistoryScreen(true)} onFocus={() => setHistoryScreen(false)} title='Gönüllü ara' style={{
                     backgroundColor: 'transparent',
                 }} />
             </View>
@@ -49,9 +68,11 @@ function Main({ navigation }) {
                 <SearchHistory />
                 :
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <SearchResult user={user} navigation={navigation} style={{ marginTop: 15 }} />
-                    <SearchResult user={user} navigation={navigation} style={{ marginTop: 15 }} />
-                    <SearchResult user={user} navigation={navigation} style={{ marginTop: 15 }} />
+                    {
+                        users.length > 0 && users.map(user =>
+                            <SearchResult key={user.name} user={user} navigation={navigation} style={{ marginTop: 15 }} />
+                        )
+                    }
                 </ScrollView>
             }
         </>
