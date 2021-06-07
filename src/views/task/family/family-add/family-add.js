@@ -24,6 +24,8 @@ import * as Validator from '../../../../utils/validator';
 
 import * as FamilyServices from '../../../../services/family-services';
 
+import { selfIsManager, selfIsMember, selfUserID } from '../../../../services/user-services'
+
 
 function PaginationItem({ title, active, ...props }) {
     return (
@@ -111,7 +113,9 @@ class FamilyAddMainScreen extends React.Component {
         this.setState(prevState => ({ ...prevState, family: { ...prevState.family, [key]: model } }));
     }
 
-    showModal() {
+    showModal(dialog) {
+        if (dialog)
+            this.setDialog(dialog);
         this.setModalVisible(true)
         setTimeout(() => {
             this.setModalVisible(false)
@@ -134,29 +138,65 @@ class FamilyAddMainScreen extends React.Component {
         let valid = true;
 
         valid = this.validateModel('name', 'Aile ismi');
-        if (valid)
-            valid = this.validateModel('status', 'Aile durumu');
-        if (valid)
-            valid = this.validateModel('idNo', 'Kimlik Numarası', { length: 11 });
-        if (valid)
-            valid = this.validateModel('tel', 'Telefon Numarası', { length: 11 });
+        // if (valid)
+        //     valid = this.validateModel('idNo', 'Kimlik Numarası', { length: 11 });
+        // if (valid)
+        //     valid = this.validateModel('tel', 'Telefon Numarası', { length: 11 });
 
         return valid;
     }
 
-    async createFamily(family) {
-        const fam = await FamilyServices.createFamily(family);
-        return fam;
+    isUpdate() {
+        return this.state.family._id != null;
+    }
+
+    isRegistrant() {
+        return this.state.family._registrant === selfUserID();
+    }
+
+    canDo() {
+        let authorized = false;
+        if (this.isUpdate()) {
+            if (selfIsManager())
+                authorized = true;
+            else if (selfIsMember() && this.isRegistrant())
+                authorized = true;
+        }
+        else
+            authorized = true;
+        return authorized;
     }
 
     async onTick() {
         if (this.formIsValid()) {
-            const res = await this.createFamily(this.state.family);
-            if (res.status === 400){
-                this.setDialog('Bir hata oluştu');
-                this.showModal();
+            if (this.isUpdate()) { // update family
+                if (this.canDo()) {
+                    const res = await FamilyServices.updateFamily(this.state.family);
+                    if (res.status === 200) {
+
+                        console.log('selam');
+                        // update the family list in stack screen
+                        this.props.navigation.navigate({
+                            name: 'FamilyListResultMain',
+                            params: {
+                                family: this.state.family
+                            },
+                            merge: true
+                        });
+
+                    }
+                    if (res.status === 400)
+                        this.showModal('Bir hata oluştu');
+                }
+                else
+                    this.showModal('İşlemi yapmaya yetkiniz yok!');
             }
-                
+            else { // create family
+                const res = await FamilyServices.createFamily(this.state.family);
+                if (res.status === 400)
+                    this.showModal('Bir hata oluştu');
+            }
+
             // this.props.navigation.goBack();
         }
         else
@@ -174,7 +214,7 @@ class FamilyAddMainScreen extends React.Component {
         let loc = { city: family.city, town: family.town, district: family.district, street: family.street }
         return (
             <>
-                <NavBar title='Aile Ekle' onPress={() => navigation.goBack()} onTick={() => this.onTick()} />
+                <NavBar title={`Aile ${this.isUpdate() ? 'Düzenle' : 'Ekle'}`} onPress={() => navigation.goBack()} onTick={() => this.onTick()} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
                 <Modal
                     animationType='fade'
@@ -202,11 +242,10 @@ class FamilyAddMainScreen extends React.Component {
                     <View ><SwiperView onChange={(e) => this.handleSwiperChange('images', e)} image={true} models={family.images} modelClass={null} screenName='FamilyImage' title='Resim ekleyin' {...this.props} /></View>
                     <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={NoteScreen} screenName='FamilyNote' title='Not ekleyin' {...this.props} /></View>
                     <ScrollView>
-                        <Select value={family.status} onValueChange={e => this.handleChange(e, 'status')} items={FamilyModel.statusList} style={styles.input} placeholder='Durum' />
                         <Select value={family.rating} onValueChange={e => this.handleChange(e, 'rating')} items={FamilyModel.ratingList} style={styles.input} placeholder='Derece' />
+                        <ButtonCard style={{ ...styles.input, text: styles.commentButtonCard }} selected={family.aid} onPress={() => this.handleChange(!family.aid, 'aid')} noChevron={true} title='Yardım Takip' />
                         <ButtonCard style={{ ...styles.input, text: styles.commentButtonCard }} selected={family.education} onPress={() => this.handleChange(!family.education, 'education')} noChevron={true} title='Eğitim Takip' />
                         <ButtonCard style={{ ...styles.input, text: styles.commentButtonCard }} selected={family.health} onPress={() => this.handleChange(!family.health, 'health')} noChevron={true} title='Sağlık Takip' />
-
                     </ScrollView>
                 </Swiper>
             </>
@@ -218,11 +257,11 @@ function ImageScreenWrapper() {
     return (<ImageScreen navName='FamilyAddMain' />);
 }
 
-function FamilyAddScreen({ family }) {
+function FamilyAddScreen({ route }) {
     return (
         <>
             <Stack.Navigator headerMode='none'>
-                <Stack.Screen name='FamilyAddMain' component={FamilyAddMainScreen} initialParams={{ family: family }} />
+                <Stack.Screen name='FamilyAddMain' component={FamilyAddMainScreen} initialParams={{ family: route?.params?.family }} />
                 <Stack.Screen name='FamilyMember' component={MemberScreen} />
                 <Stack.Screen name='FamilyBudget' component={BudgetScreen} />
                 <Stack.Screen name='FamilyNeed' component={NeedScreen} />

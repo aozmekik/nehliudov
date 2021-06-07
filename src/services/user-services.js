@@ -1,6 +1,7 @@
 import { getHeaders, URL } from './headers';
 
-
+import store from '../reducers/store';
+const USER = store.getState().userReducer.user;
 
 async function getUsers(name) {
     const url = `${URL}/users/${name}`;
@@ -24,7 +25,22 @@ async function privilegeUser(userid, json) {
 }
 
 
+function selfIsManager() {
+    return USER.role === 2;
+}
+
+function selfIsMember() {
+    return USER.role === 1;
+}
+
+function selfUserID() {
+    return USER._id;
+}
+
 export {
     getUsers,
-    privilegeUser
+    privilegeUser,
+    selfIsManager,
+    selfIsMember,
+    selfUserID
 };

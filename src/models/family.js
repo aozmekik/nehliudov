@@ -1,14 +1,6 @@
 import store from '../reducers/store';
 
 
-export const Status = Object.freeze({
-    SUITABLE_TRACE: 0,
-    SUITABLE_ONE_TIME: 1,
-    NOT_SUITABLE: 2,
-    WILL_BE_QUESTIONED: 3,
-    CONFLICTING: 4
-});
-
 export const Rating = Object.freeze({
     VERY_LOW: 0,
     LOW: 1,
@@ -48,7 +40,7 @@ export class Note {
     constructor() {
         this._id = null;
         this.statement = null;
-        this.members = [];
+        this.registrant = store.getState().userReducer.user?._id;
     }
 }
 
@@ -89,8 +81,8 @@ export class Family {
         this.town = null;
         this.street = null;
         this.nation = null;
-        this.status = null;
         this.rating = null;
+        this.aid = null;
         this.health = false;
         this.education = false;
         this.members = [];
@@ -101,15 +93,6 @@ export class Family {
     }
 };
 
-
-const statuses = Object.freeze({
-    [Status.SUITABLE_TRACE]: 'Uygun (Takip)',
-    [Status.SUITABLE_ONE_TIME]: 'Uygun (Tek Sefer)',
-    [Status.NOT_SUITABLE]: 'Uygun Değil',
-    [Status.WILL_BE_QUESTIONED]: 'Sorgulanacak',
-    [Status.CONFLICTING]: 'Çelişkili',
-
-});
 
 const ratings = Object.freeze({
     [Rating.VERY_LOW]: 'Çok Zayıf',
@@ -138,7 +121,6 @@ const budgets = Object.freeze({
 });
 
 
-export const statusList = toArray(statuses);
 export const warmingList = toArray(warmingTypes);
 export const ratingList = toArray(ratings);
 export const genderList = toArray(genders);

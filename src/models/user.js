@@ -4,6 +4,8 @@ const Role = Object.freeze({
     MANAGER: 2,
 });
 
+
+
 const roles = ['Ziyaretçi', 'İlçe Görevlisi', 'İlçe Sorumlusu'];
 
 
@@ -18,13 +20,9 @@ class User {
     }
 }
 
-const isManager = (user) => {
-    return user.role === 2;
-}
 
 module.exports = {
     Role,
     User,
     roles,
-    isManager
 };

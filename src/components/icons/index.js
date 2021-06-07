@@ -1,3 +1,4 @@
+export { default as Book } from './Book'
 export { default as Bookmark } from './Bookmark'
 export { default as Camera } from './Camera'
 export { default as Chat } from './Chat'

@@ -72,10 +72,8 @@ async function getCurrentUser() {
         const token = await getToken();
         // // TODO. if there is no connection, do this.
         // const { exp, ...user } = JSON.parse(atob(token.split('.')[1]));
-
         // else do this.
         const user = await restoreUser(token);
-
         return { ...user, token: token };
     }
     return null;

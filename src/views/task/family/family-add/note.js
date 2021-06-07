@@ -22,11 +22,11 @@ class NoteScreen extends FormScreen {
     }
 
     static expl(model) {
-        return `${model.rating}/5`;
+        return null;
     }
 
     formIsValid() {
-        return this.state.model.statement != null && this.state.model.rating != null && this.state.model.members;
+        return this.state.model.statement;
     }
 
     render() {
@@ -37,7 +37,6 @@ class NoteScreen extends FormScreen {
                 <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Not ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
                 <ScrollView>
                     <Input value={note.statement} onChangeText={e => this.handleChange(e, 'statement')} style={styles.input} placeholder='Not' />
-                    <Input editable={false} style={styles.input} placeholder='Tespit Edenler' />
                     <Modal
                         animationType='fade'
                         transparent={true}

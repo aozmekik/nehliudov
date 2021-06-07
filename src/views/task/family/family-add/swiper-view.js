@@ -6,23 +6,8 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import RBSheet from "react-native-raw-bottom-sheet";
 
-import Button from '../../../../components/button';
-import ButtonCard from '../../../../components/button-card';
-import { Trash } from '../../../../components/icons';
+import { ButtonCard, SelectedModal } from '../../../../components/';
 import styles from './style';
-
-
-function SelectedModal({ onDelete, onClose, style }) {
-    return (
-        <View style={{ backgroundColor: '#FFFFFF', paddingVertical: 15, ...style }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }} >
-                <Button onPress={onDelete} style={{ marginHorizontal: 5 }} Icon={Trash} title='Sil' />
-                <Button onPress={onClose} color='#48515B' style={{ backgroundColor: '#E8EAED', marginHorizontal: 5 }} title='Vazgeç' />
-            </View>
-        </View >
-    );
-}
-
 
 
 class SwiperView extends React.Component {

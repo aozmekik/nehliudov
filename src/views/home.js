@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-nati
 
 import NotificationsScreen from './profile/notifications';
 import FamilyScreen from './task/family/family';
-import ResultScreen from './task/family/family-list/result';
+import FamilyListResultScreen from './task/family/family-list/result';
 import FamilyAddScreen from './task/family/family-add/family-add';
 import Member from './task/family/family-add/member';
 import Budget from './task/family/family-add/budget';
@@ -29,6 +29,7 @@ import { getHeaders } from '../services/headers';
 import SearchUserScreen from './timeline/search-user';
 import ProfileScreen from './profile/profile';
 import PrivilegeScreen from './profile/privilege';
+import FamilyListScreen from './task/family/family-list/family-list';
 
 
 function HomeScreen() {
@@ -54,7 +55,7 @@ function HomeScreen() {
             {/* <ProfileScreen /> */}
             {/* <ImageScreen /> */}
             {/* <SearchUserScreen /> */}
-            <PrivilegeScreen />
+            <FamilyListScreen />
             {/* <ProfileScreen route={{ params: { user: { name: 'semih', role: 1 } } }} /> */}
             {/* <TestScreen /> */}
             {/* <AuthScreen /> */}

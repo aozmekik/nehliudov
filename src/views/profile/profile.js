@@ -3,14 +3,16 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'rea
 
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { connect } from 'react-redux';
+
 import { Notification, Settings, TwoUser } from '../../components/icons';
 import NotificationsScreen from './notifications';
 import SettingsScreen from './settings';
-
-import { roles, isManager } from '../../models/user';
 import PrivilegeScreen from './privilege';
 
-import { connect } from 'react-redux';
+import { roles, isManager } from '../../models/user';
+import { selfIsManager } from '../../services/user-services';
+
 
 
 const Stack = createStackNavigator();
@@ -27,6 +29,8 @@ function ImageBox({ style }) {
 function MainScreen({ navigation, route, userReducer }) {
     const user = route?.params?.user;
     const self = route?.params?.self;
+
+    console.log(userReducer);
 
     return (
         <>
@@ -46,7 +50,7 @@ function MainScreen({ navigation, route, userReducer }) {
                                 </>
                             }
                             {
-                                isManager(userReducer.user) &&
+                                selfIsManager() &&
                                 <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => navigation.navigate('ProfilePrivilege', { user: user })} ><TwoUser /></TouchableOpacity>
                             }
                         </View>

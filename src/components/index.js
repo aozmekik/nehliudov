@@ -6,3 +6,4 @@ export { default as NavBar } from './nav-bar'
 export { default as SearchBar } from './search-bar'
 export { default as Select } from './select'
 export { default as TabBar } from './tab-bar'
+export { default as SelectedModal } from './selected-modal';
