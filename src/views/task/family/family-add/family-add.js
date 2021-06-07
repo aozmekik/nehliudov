@@ -174,10 +174,9 @@ class FamilyAddMainScreen extends React.Component {
                     const res = await FamilyServices.updateFamily(this.state.family);
                     if (res.status === 200) {
 
-                        console.log('selam');
                         // update the family list in stack screen
                         this.props.navigation.navigate({
-                            name: 'FamilyListResultMain',
+                            name: this.props.route.params.goBack,
                             params: {
                                 family: this.state.family
                             },

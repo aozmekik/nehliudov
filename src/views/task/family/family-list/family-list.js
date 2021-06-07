@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { ButtonCard, NavBar, Select } from '../../../../components/';
 
-import FamilyListResultScreen from './result';
+import { FamilyListResultScreen } from './result';
 import Location from '../../../../components/task/location';
 
 import * as FamilyModel from '../../../../models/family';
@@ -14,6 +14,7 @@ import { listFamilies } from '../../../../services/family-services';
 
 
 function FamilyListMainScreen({ navigation }) {
+    // FIXME. city hard-coded
     const [query, setQuery] = React.useState({
         city: 34,
         town: null,
@@ -64,7 +65,7 @@ function FamilyListMainScreen({ navigation }) {
 
     return (
         <>
-            <NavBar title='Aile Listele' />
+            <NavBar title='Aile Listele' onPress={navigation.goBack} onTick={onList} />
             <ScrollView style={styles.scrollView}>
                 <Location loc={loc} onValueChange={e => handleLocation(e)} />
                 <Select style={styles.input} value={query.warmingType} onValueChange={e => handleChange(e, 'warmingType')} items={FamilyModel.warmingList} placeholder='Isınma Tipi' />
@@ -72,7 +73,6 @@ function FamilyListMainScreen({ navigation }) {
                 <ButtonCard style={styles.buttonCard} selected={query.aid} onPress={() => handleChange(!query.aid, 'aid')} noChevron={true} title='Yardım Takip' />
                 <ButtonCard style={styles.buttonCard} selected={query.health} onPress={() => handleChange(!query.health, 'health')} noChevron={true} title='Sağlık Takip' />
                 <ButtonCard style={styles.buttonCard} selected={query.education} onPress={() => handleChange(!query.education, 'education')} noChevron={true} title='Eğitim Takip' />
-                <ButtonCard style={styles.select} onPress={onList} title='Aile listele' />
                 <View style={styles.empty} />
             </ScrollView>
         </>

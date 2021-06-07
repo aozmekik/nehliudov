@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Modal } from 'react-native';
 
+
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -20,10 +21,7 @@ function FamilyListResultMainScreen({ navigation, route }) {
     const [selectedIndex, setSelectedIndex] = React.useState(null); // selected item's index.
     const [modalVisible, setModalVisible] = React.useState(false); // selected item's index.
 
-
-    const families = route?.params?.families;
-    const family = route?.params?.family;
-
+    const { families, family, onPress } = route?.params;
 
     const updateFamilies = () => {
         if (route.params.family) {
@@ -47,7 +45,6 @@ function FamilyListResultMainScreen({ navigation, route }) {
 
     const dismissSelect = () => {
         setSelectedIndex(null);
-        refRBSheet.current.close();
     }
 
     const deleteSelected = async () => {
@@ -63,12 +60,13 @@ function FamilyListResultMainScreen({ navigation, route }) {
 
     return (
         <>
-            <NavBar onPress={navigation.goBack} title='Aile Listele' />
+            {!onPress && <NavBar onPress={navigation.goBack} title='Aile Listele' />}
 
             <RBSheet
                 ref={refRBSheet}
                 closeOnDragDown={true}
                 height={hp('27%')}
+                onClose={dismissSelect}
                 customStyles={{
                     wrapper: {
                         backgroundColor: 'transparent'
@@ -78,7 +76,7 @@ function FamilyListResultMainScreen({ navigation, route }) {
                     },
                 }}
             >
-                <SelectedModal onDelete={deleteSelected} onClose={dismissSelect} />
+                <SelectedModal onDelete={deleteSelected} onClose={() => refRBSheet.current.close()} />
             </RBSheet>
 
             <Modal
@@ -90,36 +88,39 @@ function FamilyListResultMainScreen({ navigation, route }) {
                 <Dialog title='Aile silmek için yetkiniz yok' />
             </Modal>
 
-            {families.length <= 0 && <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                <Book />
-                <Text style={{ marginTop: 15, fontFamily: 'SFProText-Semibold', fontSize: 14, color: '#48515B', textAlign: 'center' }} >Sonuç Bulunamadı</Text>
-            </View>
+            {families.length <= 0 &&
+                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: '20%' }}>
+                    <Book />
+                    <Text style={{ marginTop: 15, fontFamily: 'SFProText-Semibold', fontSize: 14, color: '#48515B', textAlign: 'center' }} >Sonuç Bulunamadı</Text>
+                </View>
 
             }
-            {families.length > 0 && <>
-                <TouchableOpacity style={styles.download}>
-                    <Download stroke='#758291' />
-                    <Text style={styles.downloadText}>İndir</Text>
-                </TouchableOpacity>
-                <ScrollView>
-                    {
-                        families.map((family, index) =>
-                            <ButtonCard style={styles.buttonCard} onLongPress={() => select(index)} onPress={() => navigation.navigate('FamilyListResultDetail', { family: family })} selected={index === selectedIndex} key={family.name} title={family.name} desc={family.regDate} />
-                        )
-                    }
-                </ScrollView>
-            </>
+            {families.length > 0 &&
+                <View style={{ marginTop: 15 }}>
+                    <TouchableOpacity style={styles.download}>
+                        <Download stroke='#758291' />
+                        <Text style={styles.downloadText}>İndir</Text>
+                    </TouchableOpacity>
+                    <ScrollView>
+                        {
+                            families.map((family, index) =>
+                                <ButtonCard style={styles.buttonCard} onLongPress={() => select(index)} onPress={() => onPress ? onPress(family) : navigation.navigate('FamilyListResultDetail', { goBack: 'FamilyListResultMain', family: family })} selected={index === selectedIndex} key={family.name} title={family.name} desc={family.regDate} />
+                            )
+                        }
+                    </ScrollView>
+                </View>
             }
         </>
     )
 }
 
-const Stack = createStackNavigator();
 
+const Stack = createStackNavigator();
 function FamilyListResultScreen({ route }) {
+
     return (
         <Stack.Navigator headerMode='none'>
-            <Stack.Screen name='FamilyListResultMain' component={FamilyListResultMainScreen} initialParams={{ families: route?.params?.families }} />
+            <Stack.Screen name='FamilyListResultMain' component={FamilyListResultMainScreen} initialParams={route.params} />
             <Stack.Screen name='FamilyListResultDetail' component={FamilyAddScreen} />
         </Stack.Navigator>
     );
@@ -147,4 +148,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default FamilyListResultScreen;
+export { FamilyListResultScreen, FamilyListResultMainScreen };

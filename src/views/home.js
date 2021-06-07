@@ -55,7 +55,7 @@ function HomeScreen() {
             {/* <ProfileScreen /> */}
             {/* <ImageScreen /> */}
             {/* <SearchUserScreen /> */}
-            <FamilyListScreen />
+            <FamilyScreen />
             {/* <ProfileScreen route={{ params: { user: { name: 'semih', role: 1 } } }} /> */}
             {/* <TestScreen /> */}
             {/* <AuthScreen /> */}
