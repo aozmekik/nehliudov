@@ -20,8 +20,8 @@ async function listPostsOfUser({ userid, before, after }) {
         url += `?before=${before}`;
     else if (after)
         url += `?after=${after}`;
-    console.log(url);
     return await apiCall(url, 'GET');
+
 }
 
 module.exports = {

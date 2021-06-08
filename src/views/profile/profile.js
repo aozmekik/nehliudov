@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, RefreshControl, FlatList, ActivityIndicator } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -28,44 +28,46 @@ const Stack = createStackNavigator();
 const storedImage = {};
 
 function ImageBox({ post, style }) {
-    const [imageid, setImageID] = React.useState(post?.image);
-    const [images, setImages] = React.useState([]);
+    // const [images, setImages] = React.useState([]);
     const [icon, setIcon] = React.useState(null);
 
     const navigation = useNavigation();
 
     const getImages = async () => {
-        if (!storedImage[post.image]) {
+        if (!storedImage[post._id]) {
 
-            console.log('downloading imagebox');
-            setImageID(post.image);
-            const res = await getImage(post.image);
-            if (res.status === 200) {
-                const data = await res.json();
-                const manipResult = await ImageManipulator.manipulateAsync(
-                    data[0],
-                    [{ resize: { width: widthPercentageToDP('33%') * 2 } }],
-                    { format: ImageManipulator.SaveFormat.PNG }
-                );
-                setImages(data);
-                setIcon(manipResult.uri);
-                storedImage[post.image] = { icon: manipResult.uri, images: data };
-            }
+            // const res = await getImage(post.image);
+            // if (res.status === 200) {
+            //     const data = await res.json();
+            const manipResult = await ImageManipulator.manipulateAsync(
+                post.icon,
+                [{ resize: { width: widthPercentageToDP('33%') * 2 } }],
+                { format: ImageManipulator.SaveFormat.PNG }
+            );
+            storedImage[post._id] = { icon: manipResult.uri };
         }
-        else {
-            setImages(storedImage[post.image].images);
-            setIcon(storedImage[post.image].icon);
-        }
+        return storedImage[post._id];
     }
 
     React.useEffect(() => {
-        getImages();
+        let isMounted = true;
+        getImages()
+            .then(data => {
+                if (isMounted) {
+                    setIcon(data.icon);
+                };
+            });
+        return () => { isMounted = false };
     }, [post]);
 
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('ProfilePostDetail', { post: post, ready: images })} style={{ ...style, ...styles.imageBox }}>
-            {icon && <Image style={styles.image} source={{ uri: icon }} />}
-        </TouchableOpacity>
+        <>
+            {!icon ? <ActivityIndicator style={{ ...styles.imageBox, height: 100 }} size="small" color="#000000" /> :
+                <TouchableOpacity onPress={() => navigation.navigate('ProfilePostDetail', { post: post, ready: images })} style={{ ...style, ...styles.imageBox }}>
+                    <Image style={styles.image} source={{ uri: icon }} />
+                </TouchableOpacity>
+            }
+        </>
     )
 }
 
@@ -127,6 +129,7 @@ function ImageList({ user }) {
     const [finished, setFinished] = React.useState(false);
     const [busy, setBusy] = React.useState(false);
     const [posts, setPosts] = React.useState([]);
+    const [chunks, setChunks] = React.useState([]);
 
 
     const getPosts = async ({ getNew, getOld }) => {
@@ -148,6 +151,7 @@ function ImageList({ user }) {
                     timeline = posts ? data.concat(posts) : data;
 
                 setPosts(timeline);
+                setChunks(chunkArray(timeline, 3));
                 setNewest(timeline[0].createdAt);
                 setOldest(timeline[timeline.length - 1].createdAt);
             }
@@ -160,8 +164,10 @@ function ImageList({ user }) {
 
 
     const onRefresh = () => {
-        setRefreshing(true);
-        getPosts({ getNew: true });
+        if (!busy) {
+            setRefreshing(true);
+            getPosts({ getNew: true });
+        }
     };
 
 
@@ -179,21 +185,30 @@ function ImageList({ user }) {
 
 
     return (
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}
+        <FlatList style={styles.scrollView} showsVerticalScrollIndicator={false}
             onScroll={handleScroll}
+            data={chunks}
+            renderItem={post => (
+                <ImageRow3 id={post.index} chunk={post.item} />
+            )}
+            keyExtractor={item => item[0]._id}
+            ListEmptyComponent={() => (<Text>List Empty</Text>)}
             refreshControl={
                 <RefreshControl
                     refreshing={refreshing}
                     onRefresh={onRefresh}
+
+
                 />
-            }>
-            <ImageRows posts={posts} />
-        </ScrollView>
+            }
+        >
+        </FlatList>
     );
 }
 
 function PostDetailScreen({ navigation, route }) {
-    const { post, ready } = route.params;
+    const { post, ready, user } = route.params;
+    post.user = user;
 
     return (
         <>
@@ -258,7 +273,7 @@ function ProfileScreen({ route }) {
             <Stack.Screen name='ProfileNotifications' component={NotificationsScreen} />
             <Stack.Screen name='ProfileSettings' component={SettingsScreen} />
             <Stack.Screen name='ProfilePrivilege' component={PrivilegeScreen} />
-            <Stack.Screen name='ProfilePostDetail' component={PostDetailScreen} />
+            <Stack.Screen name='ProfilePostDetail' component={PostDetailScreen} initialParams={route.params} />
 
 
         </Stack.Navigator>

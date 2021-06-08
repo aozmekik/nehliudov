@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, FlatList } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -66,12 +66,16 @@ function TimelineMainScreen({ navigation, route }) {
         setBusy(false);
     }
 
+    // might be other posts as well
     if (route?.params?.post) {
         getPosts({ getNew: true });
         delete route.params.post;
     }
 
+    // FIXME. unmounted component error.
+
     React.useEffect(() => {
+        console.log('selam');
         getPosts({ getOld: true });
         getPosts({ getNew: true });
     }, []);
@@ -106,30 +110,31 @@ function TimelineMainScreen({ navigation, route }) {
             {selfIsGuest() ? <View style={{ marginLeft: '70%' }} /> : <TouchableOpacity style={styles.camera} onPress={() => navigation.navigate('TimelinePostAdd')}><Camera stroke='black' /></TouchableOpacity>}
             <TouchableOpacity style={styles.more} onPress={() => refRBSheet.current.open()}><More fill='black' /></TouchableOpacity>
         </View>
-        <ScrollView
-            onScroll={handleScroll}
-            scrollEventThrottle={400} showsVerticalScrollIndicator={false}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />
-            }
-
-        >
-            <>
-                {
-                    posts?.length > 0 && posts.map(post =>
-                        <Post key={post._id} post={post} style={styles.post} />
-                    )
+        {posts &&
+            <FlatList
+                data={posts}
+                renderItem={post => (
+                    <Post key={post._id} post={post.item} style={styles.post} />
+                )}
+                keyExtractor={item => item._id}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
                 }
-                <View style={{ height: 120 }} />
-                {/* <Post />
-                <Post style={styles.post} /> */}
-            </>
+                onScroll={handleScroll}
 
-        </ScrollView >
-    </View>
+                // Performance settings
+                removeClippedSubviews={true} // Unmount components when outside of window 
+                initialNumToRender={2} // Reduce initial render amount
+                maxToRenderPerBatch={1} // Reduce number in each render batch
+                updateCellsBatchingPeriod={100} // Increase time between renders
+                windowSize={7} // Reduce the window size
+            />
+        }
+    </View >
     );
 }
 

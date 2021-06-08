@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Swiper from 'react-native-swiper';
 
 
@@ -40,16 +40,19 @@ function Post({ post, ready, style, navigation, route, ...props }) {
                     <Text style={styles.title}>{roles[post.user?.role]}</Text>
                 </View>
             </View>
-            <Swiper style={{
-                height: 380
-            }} paginationStyle={{ marginBottom: -35 }} activeDotColor='black' loop={false}>
-                {
-                    images.length > 0 &&
-                    images.map((image, index) =>
-                        <Image key={`image${index}`} style={styles.image} source={{ uri: image }} />
-                    )
-                }
-            </Swiper>
+
+            {images.length > 0 ?
+                <Swiper style={{
+                    height: 380
+                }} paginationStyle={{ marginBottom: -35 }} activeDotColor='black' loop={false}>
+                    {
+                        images.map((image, index) =>
+                            <Image key={`image${index}`} style={styles.image} source={{ uri: image }} />
+                        )
+                    }
+                </Swiper> :
+                <ActivityIndicator size='large' style={{ alignSelf: 'center', height: 380 }} color='#000000' />
+            }
 
 
             <View style={styles.section2}>
