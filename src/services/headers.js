@@ -26,7 +26,18 @@ const getHeaders = (withToken = true) => {
 
 const URL = 'http://192.168.0.11:8080/api';
 
+async function apiCall(url, method, json) {
+    const data = getHeaders();
+    data.method = method;
+    data.body = JSON.stringify(json);
+    
+    const res = await fetch(url, data)
+        .catch((e) => console.error(e));
+    return res;
+}
+
 export {
     getHeaders,
-    URL
+    URL,
+    apiCall
 };

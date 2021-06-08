@@ -1,40 +1,74 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import Swiper from 'react-native-swiper';
+
 
 import { Bookmark, Time, Chat } from '../../components/icons';
 
+import { roles } from '../../models/user';
+import { getImage } from '../../services/image-services';
+
+
 // FIXME. bookmark button has huge width
-function Post({ style, navigation, ...props }) {
+function Post({ post, ready, style, navigation, route, ...props }) {
+    const [images, setImages] = React.useState([]);
+
+    const getImages = async () => {
+        if (ready)
+            setImages(ready);
+        else {
+            const res = await getImage(post.image);
+            if (res.status === 200) {
+                const data = await res.json();
+                setImages(data);
+            }
+        }
+    }
+
+    React.useEffect(() => { getImages(); }, []);
+
     return (
         <View style={{ ...styles.container, ...style }} {...props}>
             <View style={styles.section1}>
                 <Image style={styles.profile} source={require('../../icons/woman.png')} />
                 <View style={styles.headerContent} >
                     <View style={styles.headerTitle}>
-                        <Text style={styles.name}>Özge Yılmaz</Text>
-                        <Text style={styles.district}>Ümraniye</Text>
+                        <Text style={styles.name}>{post.user?.name}</Text>
+                        <Text style={styles.district}>{post.town}</Text>
                     </View>
-                    <Text style={styles.title}>Ümraniye Temsilcisi</Text>
+                    <Text style={styles.title}>{roles[post.user?.role]}</Text>
                 </View>
             </View>
+            <Swiper style={{
+                height: 380
+            }} paginationStyle={{ marginBottom: -35 }} activeDotColor='black' loop={false}>
+                {
+                    images.length > 0 &&
+                    images.map((image, index) =>
+                        <Image key={`image${index}`} style={styles.image} source={{ uri: image }} />
+                    )
+                }
+            </Swiper>
 
-            <Image style={styles.image} source={require('../../icons/photo.png')} />
+
             <View style={styles.section2}>
                 <TouchableOpacity style={styles.chat} ><Chat /></TouchableOpacity>
                 <TouchableOpacity style={styles.bookmark}><Bookmark /></TouchableOpacity>
                 < Time style={styles.time} />
             </View>
-            <View style={{marginHorizontal: 5}}>
+            <View style={{ marginHorizontal: 5 }}>
                 <View style={styles.section3}>
-                    <Text style={styles.name}>Özge Yılmaz</Text>
-                    <Text style={styles.desc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas egestas justo ex, efficitur elementum eros pretium at. Donec id bibendum libero, et facilisis est.
-                <Text style={styles.elapsed}> 1 saat</Text>
+                    <Text style={styles.name}>{post.user?.name}</Text>
+                    <Text style={styles.desc}>{post.statement}
+                        <Text style={styles.elapsed}>1 saat önce</Text>
                     </Text>
                 </View>
-                <TouchableOpacity>
-                    <Text style={styles.comment}>4 yorumu gör</Text>
-                </TouchableOpacity>
+                {post.comments &&
+                    <TouchableOpacity>
+                        <Text style={styles.comment}>{post.comments.length} yorumu gör</Text>
+                    </TouchableOpacity>
+                }
             </View>
         </View>
     );

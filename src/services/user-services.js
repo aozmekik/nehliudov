@@ -1,7 +1,6 @@
 import { getHeaders, URL } from './headers';
 
 import store from '../reducers/store';
-const USER = store.getState().userReducer.user;
 
 async function getUsers(name) {
     const url = `${URL}/users/${name}`;
@@ -24,17 +23,20 @@ async function privilegeUser(userid, json) {
     return res;
 }
 
-
 function selfIsManager() {
-    return USER.role === 2;
+    return store.getState().userReducer.user.role === 2;
 }
 
 function selfIsMember() {
-    return USER.role === 1;
+    return store.getState().userReducer.user.role === 1;
+}
+
+function selfIsGuest() {
+    return store.getState().userReducer.user.role === 0;
 }
 
 function selfUserID() {
-    return USER._id;
+    return store.getState().userReducer.user._id;
 }
 
 export {
@@ -42,5 +44,6 @@ export {
     privilegeUser,
     selfIsManager,
     selfIsMember,
-    selfUserID
+    selfUserID,
+    selfIsGuest
 };
