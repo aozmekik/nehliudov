@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, FlatList } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
+import { useScrollToTop } from '@react-navigation/native';
 
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -31,6 +32,11 @@ function TimelineMainScreen({ navigation, route }) {
     const [posts, setPosts] = React.useState(null);
     const [busy, setBusy] = React.useState(false);
     const [refreshing, setRefreshing] = React.useState(false);
+
+    const ref = React.useRef(null);
+
+    useScrollToTop(ref);
+
 
     const onRefresh = () => {
         setRefreshing(true);
@@ -75,7 +81,6 @@ function TimelineMainScreen({ navigation, route }) {
     // FIXME. unmounted component error.
 
     React.useEffect(() => {
-        console.log('selam');
         getPosts({ getOld: true });
         getPosts({ getNew: true });
     }, []);
@@ -112,6 +117,7 @@ function TimelineMainScreen({ navigation, route }) {
         </View>
         {posts &&
             <FlatList
+                ref={ref}
                 data={posts}
                 renderItem={post => (
                     <Post key={post._id} post={post.item} style={styles.post} />

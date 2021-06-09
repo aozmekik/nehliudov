@@ -9,20 +9,34 @@ import { Bookmark, Time, Chat } from '../../components/icons';
 import { roles } from '../../models/user';
 import { getImage } from '../../services/image-services';
 
+Date.prototype.timeElapsed = function () {
+    const now = new Date();
+    const year = now.getFullYear() - this.getFullYear();
+    if (year > 0)
+        return `${year} yıl`;
+    const month = now.getMonth() - this.getMonth();
+    if (month > 0)
+        return `${month} ay`;
+    const day = now.getDay() - this.getDay();
+    if (day > 0)
+        return `${day} gün`;
+    const hours = now.getHours() - this.getHours();
+    if (hours > 0)
+        return `${hours} saat`;
+    const mins = now.getMinutes() - this.getMinutes();
+    if (mins > 0)
+        return `${mins} dakika`;
+    return 'yeni';
+}
 
-// FIXME. bookmark button has huge width
-function Post({ post, ready, style, navigation, route, ...props }) {
+function Post({ post, style, navigation, route, ...props }) {
     const [images, setImages] = React.useState([]);
 
     const getImages = async () => {
-        if (ready)
-            setImages(ready);
-        else {
-            const res = await getImage(post.image);
-            if (res.status === 200) {
-                const data = await res.json();
-                setImages(data);
-            }
+        const res = await getImage(post.image);
+        if (res.status === 200) {
+            const data = await res.json();
+            setImages(data);
         }
     }
 
@@ -55,16 +69,15 @@ function Post({ post, ready, style, navigation, route, ...props }) {
             }
 
 
-            <View style={styles.section2}>
-                <TouchableOpacity style={styles.chat} ><Chat /></TouchableOpacity>
-                <TouchableOpacity style={styles.bookmark}><Bookmark /></TouchableOpacity>
+            {/* <View style={styles.section2}>
+                <TouchableOpacity ><Chat /></TouchableOpacity>
                 < Time style={styles.time} />
-            </View>
+            </View> */}
             <View style={{ marginHorizontal: 5 }}>
                 <View style={styles.section3}>
                     <Text style={styles.name}>{post.user?.name}</Text>
                     <Text style={styles.desc}>{post.statement}
-                        <Text style={styles.elapsed}>1 saat önce</Text>
+                        <Text style={styles.elapsed}>  {new Date(post.createdAt).timeElapsed()}</Text>
                     </Text>
                 </View>
                 {post.comments &&
@@ -139,7 +152,8 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 5,
         fontFamily: 'SFProText-Regular',
-        fontSize: 12
+        fontSize: 12,
+        marginTop: 2,
     },
     elapsed: {
         fontFamily: 'SFProText-RegularItalic',

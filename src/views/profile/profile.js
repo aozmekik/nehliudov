@@ -2,11 +2,9 @@ import * as React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, RefreshControl, FlatList, ActivityIndicator } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
+import { useScrollToTop, useNavigation } from '@react-navigation/native';
 
 import { connect } from 'react-redux';
-
-import * as ImageManipulator from 'expo-image-manipulator';
 
 
 import { Notification, Settings, TwoUser } from '../../components/icons';
@@ -18,9 +16,7 @@ import Post from '../timeline/post';
 import { roles } from '../../models/user';
 import { selfIsManager } from '../../services/user-services';
 import { listPostsOfUser } from '../../services/post-services';
-import { getImage } from '../../services/image-services';
 import { NavBar } from '../../components';
-import { widthPercentageToDP } from 'react-native-responsive-screen';
 
 
 const Stack = createStackNavigator();
@@ -28,24 +24,13 @@ const Stack = createStackNavigator();
 const storedImage = {};
 
 function ImageBox({ post, style }) {
-    // const [images, setImages] = React.useState([]);
     const [icon, setIcon] = React.useState(null);
 
     const navigation = useNavigation();
 
     const getImages = async () => {
-        if (!storedImage[post._id]) {
-
-            // const res = await getImage(post.image);
-            // if (res.status === 200) {
-            //     const data = await res.json();
-            const manipResult = await ImageManipulator.manipulateAsync(
-                post.icon,
-                [{ resize: { width: widthPercentageToDP('33%') * 2 } }],
-                { format: ImageManipulator.SaveFormat.PNG }
-            );
-            storedImage[post._id] = { icon: manipResult.uri };
-        }
+        if (!storedImage[post._id])
+            storedImage[post._id] = { icon: post.icon };
         return storedImage[post._id];
     }
 
@@ -62,8 +47,8 @@ function ImageBox({ post, style }) {
 
     return (
         <>
-            {!icon ? <ActivityIndicator style={{ ...styles.imageBox, height: 100 }} size="small" color="#000000" /> :
-                <TouchableOpacity onPress={() => navigation.navigate('ProfilePostDetail', { post: post, ready: images })} style={{ ...style, ...styles.imageBox }}>
+            {icon &&
+                <TouchableOpacity onPress={() => navigation.navigate('ProfilePostDetail', { post: post })} style={{ ...style, ...styles.imageBox }}>
                     <Image style={styles.image} source={{ uri: icon }} />
                 </TouchableOpacity>
             }
@@ -131,6 +116,9 @@ function ImageList({ user }) {
     const [posts, setPosts] = React.useState([]);
     const [chunks, setChunks] = React.useState([]);
 
+    const ref = React.useRef(null);
+
+    useScrollToTop(ref);
 
     const getPosts = async ({ getNew, getOld }) => {
         setBusy(true);
@@ -155,6 +143,7 @@ function ImageList({ user }) {
                 setNewest(timeline[0].createdAt);
                 setOldest(timeline[timeline.length - 1].createdAt);
             }
+
             else if (getOld)
                 setFinished(true);
         }
@@ -186,6 +175,7 @@ function ImageList({ user }) {
 
     return (
         <FlatList style={styles.scrollView} showsVerticalScrollIndicator={false}
+            ref={ref}
             onScroll={handleScroll}
             data={chunks}
             renderItem={post => (
@@ -226,6 +216,7 @@ function MainScreen({ navigation, route, userReducer }) {
     const user = route?.params?.user;
     const self = route?.params?.self;
 
+    let width = self ? '80%' : (selfIsManager() ? '80%' : '100%');
 
     return (
         <>
@@ -233,20 +224,20 @@ function MainScreen({ navigation, route, userReducer }) {
                 <Image style={styles.profile} source={require('../../icons/woman.png')} />
                 <View style={styles.rightSection}>
                     <View style={styles.firstRow} >
-                        <Text style={styles.name}>{user.name}</Text>
-                        <View style={{ flexDirection: 'row', paddingTop: 5, width: '20%' }}>
+                        <Text style={{ ...styles.name, width: width }}>{user.name}</Text>
+                        <View style={{ flexDirection: 'row', paddingTop: 5, alignItems: 'center' }}>
+                            {
+                                !self && selfIsManager() &&
+                                <TouchableOpacity style={{ marginRight: 10 }} onPress={() => navigation.navigate('ProfilePrivilege', { user: user })} ><TwoUser /></TouchableOpacity>
+                            }
                             {
                                 self &&
                                 <>
-                                    <TouchableOpacity style={styles.notification} onPress={() => navigation.navigate('ProfileNotifications')} >
+                                    {/* <TouchableOpacity style={styles.notification} onPress={() => navigation.navigate('ProfileNotifications')} >
                                         <Notification />
-                                    </TouchableOpacity>
+                                    </TouchableOpacity> */}
                                     <TouchableOpacity style={styles.settings} onPress={() => navigation.navigate('ProfileSettings')} ><Settings /></TouchableOpacity>
                                 </>
-                            }
-                            {
-                                selfIsManager() &&
-                                <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => navigation.navigate('ProfilePrivilege', { user: user })} ><TwoUser /></TouchableOpacity>
                             }
                         </View>
 
@@ -310,16 +301,14 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#0A151F',
         flexDirection: 'row',
-        width: '75%',
+        width: '62%',
     },
     notification: {
-        marginLeft: -15,
         marginRight: 10,
-        alignSelf: 'center'
+        // alignSelf: 'center'
     },
     settings: {
-        marginRight: 10,
-        alignSelf: 'center'
+        // alignSelf: 'center'
     },
     title: {
         fontFamily: 'SFProText-MediumItalic',

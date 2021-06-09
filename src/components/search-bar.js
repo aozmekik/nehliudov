@@ -5,11 +5,14 @@ import { Search, Delete } from './icons';
 
 function SearchBar({ title, noBlurStyle, style, onFocus, onEmpty, onChangeText }) {
     const [focus, setFocus] = React.useState(false);
+    const [text, setText] = React.useState(null);
+
 
     const blurStyle = { borderWidth: 0 };
     const focusStyle = noBlurStyle ? blurStyle : { borderWidth: 0.4, borderColor: '#D1D1D1' };
 
     const onChange = (e) => {
+        setText(e);
         if (!e && onEmpty)
             onEmpty();
 
@@ -25,6 +28,7 @@ function SearchBar({ title, noBlurStyle, style, onFocus, onEmpty, onChangeText }
         <View style={[styles.container, style, focus ? focusStyle : blurStyle]} >
             <Search fill={col} style={styles.icon} />
             <TextInput
+                value={text}
                 onChangeText={onChange}
                 onBlur={() => {
                     setFocus(false);
@@ -34,7 +38,7 @@ function SearchBar({ title, noBlurStyle, style, onFocus, onEmpty, onChangeText }
                     setFocus(true);
                 }}
                 placeholder={title} placeholderTextColor={col} style={[styles.title, { color: col }]} />
-            {focus && <TouchableOpacity><Delete fill={col} style={styles.icon} /></TouchableOpacity>}
+            {focus && <TouchableOpacity><Delete onPress={() => {onChange(null)}} fill={col} style={styles.icon} /></TouchableOpacity>}
         </View>
     )
 }

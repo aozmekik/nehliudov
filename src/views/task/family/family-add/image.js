@@ -32,7 +32,7 @@ function PickImage({ onSubmit }) {
     const onTick = async () => {
         for (var image of images) {
             const base64 = await FileSystem.readAsStringAsync(image.uri, { encoding: 'base64' });
-            imagesBase64.push(`data:image/png;base64,${base64}`);
+            imagesBase64.push(`data:image/jpeg;base64,${base64}`);
         }
 
         onSubmit(imagesBase64)
@@ -102,7 +102,7 @@ function SnapImage({ onSubmit }) {
             setModalVisible(true);
             let photo = await camera.current.takePictureAsync(options);
             setModalVisible(false);
-            images.push(`data:image/png;base64,${photo.base64}`);
+            images.push(`data:image/jpeg;base64,${photo.base64}`);
             setImages(images);
         }
     };
