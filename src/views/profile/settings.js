@@ -41,7 +41,7 @@ function MainScreen({ navigation, user, dispatchLogOut }) {
     return (
         <>
             <NavBar onPress={() => navigation.goBack()} title='Ayarlar' />
-            <ButtonCard onPress={() => navigation.navigate('SettingsDetail')} style={styles.buttonCard} title='Profil ayarları' />
+            {/* <ButtonCard onPress={() => navigation.navigate('SettingsDetail')} style={styles.buttonCard} title='Profil ayarları' /> */}
             <ButtonCard onPress={onLogout} style={styles.buttonCard} title='Çıkış yap' />
         </>
     );

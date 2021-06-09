@@ -350,6 +350,14 @@ async function getTowns(city) {
     return townList;
 }
 
+async function getTownsDict(city) {
+    const towns = await getTowns(city);
+    const dict = {};
+    for (var town of towns)
+        dict[town.value] = town.label;
+    return dict;
+}
+
 // FIXME.
 // save localy used stuff from api.
 
@@ -398,5 +406,6 @@ module.exports = {
     getCities,
     getTowns,
     getDistricts,
-    getStreets
+    getStreets,
+    getTownsDict
 };

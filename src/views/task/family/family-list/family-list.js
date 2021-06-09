@@ -52,7 +52,6 @@ function FamilyListMainScreen({ navigation }) {
     };
 
     const onList = async () => {
-        console.log(query);
         const res = await listFamilies(query);
         if (res.status === 201) {
             const families = await res.json();

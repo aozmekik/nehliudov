@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
     },
     profile: {
         width: 51,
-        height: 51
+        height: 51,
+        borderRadius: 100
     },
 
     section1: {
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     headerContent: {
+        marginTop: 5,
         marginHorizontal: 10,
         flex: 1,
     },

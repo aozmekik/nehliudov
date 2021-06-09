@@ -17,6 +17,7 @@ import SearchUserScreen from './search-user';
 
 import { listPosts } from '../../services/post-services';
 import { selfIsGuest } from '../../services/user-services';
+import ProfileScreen from '../profile/profile';
 
 const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     const paddingToBottom = 20;
@@ -120,7 +121,7 @@ function TimelineMainScreen({ navigation, route }) {
                 ref={ref}
                 data={posts}
                 renderItem={post => (
-                    <Post key={post._id} post={post.item} style={styles.post} />
+                    <Post onProfileTouch={() => navigation.navigate('TimelineProfile', {user: post.item.user})} post={post.item} style={styles.post} />
                 )}
                 keyExtractor={item => item._id}
                 showsVerticalScrollIndicator={false}
@@ -152,6 +153,8 @@ function TimelineScreen() {
             <Stack.Screen name='TimelineMain' component={TimelineMainScreen} />
             <Stack.Screen name='TimelinePostAdd' component={PostAddScreen} />
             <Stack.Screen name='TimelineSearchUser' component={SearchUserScreen} />
+            <Stack.Screen name='TimelineProfile' component={ProfileScreen} />
+
         </Stack.Navigator>
     );
 }
@@ -187,7 +190,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     post: {
-        marginTop: 50,
+        marginBottom: 25,
     },
     centeredView: {
         flex: 1,

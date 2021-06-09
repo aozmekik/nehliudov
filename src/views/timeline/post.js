@@ -8,6 +8,7 @@ import { Bookmark, Time, Chat } from '../../components/icons';
 
 import { roles } from '../../models/user';
 import { getImage } from '../../services/image-services';
+import { getTownsDict } from '../../services/location-services';
 
 Date.prototype.timeElapsed = function () {
     const now = new Date();
@@ -29,8 +30,10 @@ Date.prototype.timeElapsed = function () {
     return 'yeni';
 }
 
-function Post({ post, style, navigation, route, ...props }) {
+function Post({ post, style, navigation, route, onProfileTouch, ...props }) {
     const [images, setImages] = React.useState([]);
+    const [towns, setTowns] = React.useState(null);
+
 
     const getImages = async () => {
         const res = await getImage(post.image);
@@ -40,16 +43,27 @@ function Post({ post, style, navigation, route, ...props }) {
         }
     }
 
-    React.useEffect(() => { getImages(); }, []);
+    const getTowns = async () => {
+        // FIXME. hardcoded city
+        const dict = await getTownsDict(34);
+        setTowns(dict);
+    }
+
+    React.useEffect(() => {
+        getImages();
+        getTowns();
+    }, []);
 
     return (
         <View style={{ ...styles.container, ...style }} {...props}>
             <View style={styles.section1}>
-                <Image style={styles.profile} source={require('../../icons/woman.png')} />
+                <TouchableOpacity onPress={onProfileTouch ? onProfileTouch : undefined}>
+                    <Image style={styles.profile} source={require('../../icons/woman.png')} />
+                </TouchableOpacity>
                 <View style={styles.headerContent} >
                     <View style={styles.headerTitle}>
                         <Text style={styles.name}>{post.user?.name}</Text>
-                        <Text style={styles.district}>{post.town}</Text>
+                        {towns && <Text style={styles.district}>{towns[post.town]}</Text>}
                     </View>
                     <Text style={styles.title}>{roles[post.user?.role]}</Text>
                 </View>
@@ -101,7 +115,8 @@ const styles = StyleSheet.create({
     },
     profile: {
         width: 51,
-        height: 51
+        height: 51,
+        borderRadius: 100
     },
     section2: {
         padding: 8,

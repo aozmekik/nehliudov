@@ -182,7 +182,6 @@ function ImageList({ user }) {
                 <ImageRow3 id={post.index} chunk={post.item} />
             )}
             keyExtractor={item => item[0]._id}
-            ListEmptyComponent={() => (<Text>List Empty</Text>)}
             refreshControl={
                 <RefreshControl
                     refreshing={refreshing}
@@ -227,7 +226,7 @@ function MainScreen({ navigation, route, userReducer }) {
                         <Text style={{ ...styles.name, width: width }}>{user.name}</Text>
                         <View style={{ flexDirection: 'row', paddingTop: 5, alignItems: 'center' }}>
                             {
-                                !self && selfIsManager() &&
+                                !self && selfIsManager() && user.role === 0 &&
                                 <TouchableOpacity style={{ marginRight: 10 }} onPress={() => navigation.navigate('ProfilePrivilege', { user: user })} ><TwoUser /></TouchableOpacity>
                             }
                             {
@@ -287,7 +286,9 @@ const styles = StyleSheet.create({
     },
     profile: {
         width: 51,
-        height: 51
+        height: 51,
+        borderRadius: 100
+
     },
     rightSection: {
         marginHorizontal: 15
