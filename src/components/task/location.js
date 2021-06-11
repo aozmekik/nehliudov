@@ -3,10 +3,12 @@ import * as React from 'react';
 import Select from '../../components/select';
 
 import * as LocationServices from '../../services/location-services';
+import { getCurrentUser } from '../../services/auth-services';
 
+import { restoreUser } from '../../reducers/actions';
 import { connect } from 'react-redux';
 
-function Location({ userReducer, loc, onlyTown, onValueChange }) {
+function Location({ userReducer, dispatchRestoreUser, loc, onlyTown, onValueChange }) {
     const [model, setModel] = React.useState({
         city: loc?.city,
         town: loc?.town,
@@ -23,7 +25,10 @@ function Location({ userReducer, loc, onlyTown, onValueChange }) {
     );
 
     React.useEffect(() => {
-        getTowns(model.city);
+        restoreSelf().then(() => {
+            getTowns(model.city)
+        });
+
     }, [])
 
     const sliceTowns = (towns) => {
@@ -34,6 +39,10 @@ function Location({ userReducer, loc, onlyTown, onValueChange }) {
         return slicedTowns;
     }
 
+    const restoreSelf = async () => {
+        const restoredUser = await getCurrentUser();
+        dispatchRestoreUser(restoredUser);
+    }
 
     const getTowns = (city) => {
         LocationServices.getTowns(city)
@@ -101,4 +110,9 @@ const mapStateToProps = (state) => ({
     userReducer: state.userReducer
 });
 
-export default connect(mapStateToProps)(Location);
+mapDispatchToProps = {
+    dispatchRestoreUser: (user) => restoreUser(user)
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Location);

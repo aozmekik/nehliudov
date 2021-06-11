@@ -30,10 +30,10 @@ Date.prototype.timeElapsed = function () {
     return 'yeni';
 }
 
+
 function Post({ post, style, navigation, route, onProfileTouch, ...props }) {
     const [images, setImages] = React.useState([]);
     const [towns, setTowns] = React.useState(null);
-
 
     const getImages = async () => {
         const res = await getImage(post.image);
@@ -52,7 +52,8 @@ function Post({ post, style, navigation, route, onProfileTouch, ...props }) {
     React.useEffect(() => {
         getImages();
         getTowns();
-    }, []);
+    }, [post]);
+
 
     return (
         <View style={{ ...styles.container, ...style }} {...props}>
@@ -62,13 +63,12 @@ function Post({ post, style, navigation, route, onProfileTouch, ...props }) {
                 </TouchableOpacity>
                 <View style={styles.headerContent} >
                     <View style={styles.headerTitle}>
-                        <Text style={styles.name}>{post.user?.name}</Text>
+                        <Text style={styles.name}>{post.createdBy?.name}</Text>
                         {towns && <Text style={styles.district}>{towns[post.town]}</Text>}
                     </View>
-                    <Text style={styles.title}>{roles[post.user?.role]}</Text>
+                    <Text style={styles.title}>{roles[post.createdBy?.role]}</Text>
                 </View>
             </View>
-
             {images.length > 0 ?
                 <Swiper style={{
                     height: 380
@@ -89,7 +89,7 @@ function Post({ post, style, navigation, route, onProfileTouch, ...props }) {
             </View> */}
             <View style={{ marginHorizontal: 5 }}>
                 <View style={styles.section3}>
-                    <Text style={styles.name}>{post.user?.name}</Text>
+                    <Text style={styles.name}>{post.createdBy?.name}</Text>
                     <Text style={styles.desc}>{post.statement}
                         <Text style={styles.elapsed}>  {new Date(post.createdAt).timeElapsed()}</Text>
                     </Text>

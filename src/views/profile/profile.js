@@ -196,14 +196,14 @@ function ImageList({ user }) {
 }
 
 function PostDetailScreen({ navigation, route }) {
-    const { post, ready, user } = route.params;
-    post.user = user;
+    const { post, user } = route.params;
+    post.createdBy = user;
 
     return (
         <>
             <NavBar onPress={navigation.goBack} />
             <ScrollView showsVerticalScrollIndicator={false}>
-                <Post post={post} ready={ready} />
+                <Post post={post} />
                 <View style={{ height: 30 }} />
             </ScrollView>
         </>

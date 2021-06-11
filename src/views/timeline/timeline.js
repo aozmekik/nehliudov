@@ -54,6 +54,7 @@ function TimelineMainScreen({ navigation, route }) {
 
         if (res.status === 200) {
             const data = await res.json();
+            console.log(data);
             if (data.length > 0) {
                 let timeline;
 
@@ -121,10 +122,11 @@ function TimelineMainScreen({ navigation, route }) {
                 ref={ref}
                 data={posts}
                 renderItem={post => (
-                    <Post onProfileTouch={() => navigation.navigate('TimelineProfile', {user: post.item.user})} post={post.item} style={styles.post} />
+                    <Post onProfileTouch={() => navigation.navigate('TimelineProfile', { user: post.item.createdBy })} post={post.item} style={styles.post} />
                 )}
                 keyExtractor={item => item._id}
                 showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 60 }}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
