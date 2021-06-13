@@ -55,6 +55,8 @@ function FamilyListMainScreen({ navigation }) {
         const res = await listFamilies(query);
         if (res.status === 201) {
             const families = await res.json();
+            for (let family of families)
+                family.images = family.images.data;
             navigation.navigate('FamilyListResult', { families: families });
         }
         else
@@ -66,7 +68,7 @@ function FamilyListMainScreen({ navigation }) {
         <>
             <NavBar title='Aile Listele' onPress={navigation.goBack} onTick={onList} />
             <ScrollView style={styles.scrollView}>
-                <Location loc={loc} onValueChange={e => handleLocation(e)} />
+                <Location restrict={true} loc={loc} onValueChange={e => handleLocation(e)} />
                 <Select style={styles.input} value={query.warmingType} onValueChange={e => handleChange(e, 'warmingType')} items={FamilyModel.warmingList} placeholder='Isınma Tipi' />
                 <Select style={styles.input} value={query.rating} onValueChange={e => handleChange(e, 'rating')} items={FamilyModel.ratingList} placeholder='Derece' />
                 <ButtonCard style={styles.buttonCard} selected={query.aid} onPress={() => handleChange(!query.aid, 'aid')} noChevron={true} title='Yardım Takip' />

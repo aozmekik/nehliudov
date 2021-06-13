@@ -67,7 +67,7 @@ const Stack = createStackNavigator();
 class FamilyAddMainScreen extends React.Component {
     constructor(props) {
         super(props);
-        const { family } = this.props?.route?.params;
+        const family = this.props?.route?.params?.family;
         this.state = {
             index: 0,
             family: family ? family : new FamilyModel.Family(),
@@ -151,7 +151,7 @@ class FamilyAddMainScreen extends React.Component {
     }
 
     isRegistrant() {
-        return this.state.family._registrant === selfUserID();
+        return this.state.family.createdBy._id === selfUserID();
     }
 
     canDo() {
@@ -161,6 +161,7 @@ class FamilyAddMainScreen extends React.Component {
                 authorized = true;
             else if (selfIsMember() && this.isRegistrant())
                 authorized = true;
+
         }
         else
             authorized = true;
@@ -192,6 +193,7 @@ class FamilyAddMainScreen extends React.Component {
             }
             else { // create family
                 const res = await FamilyServices.createFamily(this.state.family);
+                console.log(res.status);
                 if (res.status === 400)
                     this.showModal('Bir hata oluştu');
             }
@@ -260,7 +262,7 @@ function FamilyAddScreen({ route }) {
     return (
         <>
             <Stack.Navigator headerMode='none'>
-                <Stack.Screen name='FamilyAddMain' component={FamilyAddMainScreen} initialParams={{ family: route?.params?.family }} />
+                <Stack.Screen name='FamilyAddMain' component={FamilyAddMainScreen} initialParams={route.params} />
                 <Stack.Screen name='FamilyMember' component={MemberScreen} />
                 <Stack.Screen name='FamilyBudget' component={BudgetScreen} />
                 <Stack.Screen name='FamilyNeed' component={NeedScreen} />

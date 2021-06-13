@@ -40,7 +40,7 @@ export class Note {
     constructor() {
         this._id = null;
         this.statement = null;
-        this.registrant = store.getState().userReducer.user?._id;
+        this.createdBy = store.getState().userReducer.user?._id;
     }
 }
 
@@ -68,7 +68,7 @@ export class Member {
 export class Family {
     constructor() {
         this._id = null;
-        this.registrant = store.getState().userReducer.user?._id;
+        this.createdBy = store.getState().userReducer.user?._id;
         this.name = null;
         this.idNo = null;
         this.tel = null;
@@ -82,7 +82,7 @@ export class Family {
         this.street = null;
         this.nation = null;
         this.rating = null;
-        this.aid = null;
+        this.aid = false;
         this.health = false;
         this.education = false;
         this.members = [];

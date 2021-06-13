@@ -8,7 +8,7 @@ import { getCurrentUser } from '../../services/auth-services';
 import { restoreUser } from '../../reducers/actions';
 import { connect } from 'react-redux';
 
-function Location({ userReducer, dispatchRestoreUser, loc, onlyTown, onValueChange }) {
+function Location({ userReducer, dispatchRestoreUser, restrict, loc, onlyTown, onValueChange }) {
     const [model, setModel] = React.useState({
         city: loc?.city,
         town: loc?.town,
@@ -47,7 +47,7 @@ function Location({ userReducer, dispatchRestoreUser, loc, onlyTown, onValueChan
     const getTowns = (city) => {
         LocationServices.getTowns(city)
             .then(data => {
-                const slicedData = sliceTowns(data);
+                const slicedData = restrict ? sliceTowns(data) : data;
                 setLocation({ ...location, towns: slicedData, districts: null, streets: null });
             });
     }
