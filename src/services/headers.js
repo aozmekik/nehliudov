@@ -24,7 +24,8 @@ const getHeaders = (withToken = true) => {
     return header;
 };
 
-const URL = 'http://192.168.0.11:8080/api';
+// const URL = 'http://192.168.0.11:8080/api';
+const URL = 'https://sonyadev.herokuapp.com/api';
 
 async function apiCall(url, method, json) {
     const data = getHeaders();

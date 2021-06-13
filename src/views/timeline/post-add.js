@@ -87,7 +87,7 @@ function PostAddMainScreen({ navigation, route }) {
                     <TextInput value={post.statement} onChangeText={e => setPost(prevPost => ({ ...prevPost, statement: e }))} multiline={true} style={styles.input} placeholderTextColor='#48515B' placeholder='Açıklama yaz' />
                 </View>
                 <ButtonCard title='Resim ekleyin' onPress={() => navigation.navigate('PostAddImageAdd')} style={{ marginTop: 30, text: styles.buttonText }} />
-                <Location loc={loc} onlyTown={true} onValueChange={e => handleLocation(e)} />
+                <Location restrict={true} loc={loc} onlyTown={true} onValueChange={e => handleLocation(e)} />
             </ScrollView>
         </View>
     );

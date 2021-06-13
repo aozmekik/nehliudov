@@ -48,6 +48,8 @@ function AuthScreen({ dispatchLogIn }) {
                 showModal('E-Posta doğrulanmamış. Mailinizi kontrol edin.');
             else if (json.errorCode === 3)
                 showModal('Hesabınız henüz doğrulanmamış.');
+            else if (json.errorCode === 4)
+                showModal('Admin mobili kullanamaz.');
             else
                 dispatchLogIn({ ...json.user, token: json.token })
 

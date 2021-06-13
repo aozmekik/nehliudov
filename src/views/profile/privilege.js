@@ -59,7 +59,7 @@ function PrivilegeScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <NavBar onPress={onBack} title='Yetki Düzenle' onTick={canBeSent ? () => onTick() : null} />
-            <Location onValueChange={onLocChange} onlyTown={true} loc={loc} />
+            <Location  restrict={true} onValueChange={onLocChange} onlyTown={true} loc={loc} />
             {
                 loc.town &&
                 <ButtonCard onPress={() => setWillBePrivileged(!willBePrivileged)} style={{ marginTop: 10 }} selected={willBePrivileged} noChevron={true} title='İlçe Görevlisi' />

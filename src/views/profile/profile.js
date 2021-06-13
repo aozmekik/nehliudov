@@ -226,7 +226,7 @@ function MainScreen({ navigation, route, userReducer }) {
                         <Text style={{ ...styles.name, width: width }}>{user.name}</Text>
                         <View style={{ flexDirection: 'row', paddingTop: 5, alignItems: 'center' }}>
                             {
-                                !self && selfIsManager() && user.role === 0 &&
+                                !self && selfIsManager() && (user.role === 0 || user.role === 1) &&
                                 <TouchableOpacity style={{ marginRight: 10 }} onPress={() => navigation.navigate('ProfilePrivilege', { user: user })} ><TwoUser /></TouchableOpacity>
                             }
                             {
