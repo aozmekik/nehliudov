@@ -19,8 +19,7 @@ import { login as actionLogin } from '../../reducers/actions';
 
 
 function AuthScreen({ dispatchLogIn }) {
-    // const [userForm, setUserForm] = React.useState({ ...new User(), email2: null, password2: null });
-    const [userForm, setUserForm] = React.useState({ email: 'ahmed-semih@outlook.com', password: 'semih123' });
+    const [userForm, setUserForm] = React.useState({ ...new User(), email2: null, password2: null });
 
     const [loginScreen, setLoginScreen] = React.useState(true);
     const [modalVisible, setModalVisible] = React.useState(false);

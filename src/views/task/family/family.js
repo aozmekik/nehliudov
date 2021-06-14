@@ -38,6 +38,8 @@ function FamilyMainScreen({ navigation, route }) {
                 const res = await listFamilies({ name: name, city: 34 });
                 if (res.status === 201) {
                     const data = await res.json();
+                    for (let fam of data)
+                        fam.images = fam.images ? fam.images.data : [];
                     setFamilies(data);
                 }
                 else
@@ -55,8 +57,8 @@ function FamilyMainScreen({ navigation, route }) {
     const updateFamilies = () => {
         if (route?.params?.family) {
             for (let i = 0; i < families.length; ++i)
-                if (families[i]._id === family._id)
-                    families[i] = family;
+                if (families[i]._id === route.params.family._id)
+                    families[i] = route.params.family;
         }
     }
 

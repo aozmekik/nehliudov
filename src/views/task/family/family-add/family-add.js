@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Swiper from 'react-native-swiper';
 
+import { Download } from '../../../../components/icons';
 import { NavBar, Input, Select, Dialog, ButtonCard } from '../../../../components/';
 import Location from '../../../../components/task/location';
 
@@ -138,10 +139,12 @@ class FamilyAddMainScreen extends React.Component {
         let valid = true;
 
         valid = this.validateModel('name', 'Aile ismi');
-        // if (valid)
-        //     valid = this.validateModel('idNo', 'Kimlik Numarası', { length: 11 });
-        // if (valid)
-        //     valid = this.validateModel('tel', 'Telefon Numarası', { length: 11 });
+        if (valid)
+            valid = this.validateModel('idNo', 'Kimlik Numarası', { length: 11 });
+        if (valid)
+            valid = this.validateModel('tel', 'Telefon Numarası', { length: 11 });
+        if (valid)
+            valid = this.validateModel('town', 'İlçe');
 
         return valid;
     }
@@ -174,7 +177,6 @@ class FamilyAddMainScreen extends React.Component {
                 if (this.canDo()) {
                     const res = await FamilyServices.updateFamily(this.state.family);
                     if (res.status === 200) {
-
                         // update the family list in stack screen
                         this.props.navigation.navigate({
                             name: this.props.route.params.goBack,
@@ -193,8 +195,9 @@ class FamilyAddMainScreen extends React.Component {
             }
             else { // create family
                 const res = await FamilyServices.createFamily(this.state.family);
-                console.log(res.status);
-                if (res.status === 400)
+                if (res.status === 201)
+                    this.props.navigation.goBack();
+                else if (res.status === 400)
                     this.showModal('Bir hata oluştu');
             }
 
@@ -227,13 +230,17 @@ class FamilyAddMainScreen extends React.Component {
                 </Modal>
                 <Swiper ref={this.swiperRef} showsPagination={false} onIndexChanged={(i) => this.updateIndex(i)} loop={false}>
                     <ScrollView showsVerticalScrollIndicator={false} >
+                        {family._id && <TouchableOpacity onPress={() => FamilyServices.downloadFamily(family)} style={styles.download}>
+                            <Download stroke='#758291' />
+                            <Text style={styles.downloadText}>İndir</Text>
+                        </TouchableOpacity>}
                         <Input value={family.name} onChangeText={e => this.handleChange(e, 'name', 'alpha')} required={true} autoCapitalize='words' textContentType='name' style={styles.input} placeholder='İsim' />
                         <Input value={family.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
-                        <Input value={family.nation} style={styles.input} placeholder='Uyruk' />
+                        <Input value={family.nation} onChangeText={e => this.handleChange(e, 'nation', 'alpha')} style={styles.input} placeholder='Uyruk' />
                         <Input value={family.tel} onChangeText={e => this.handleChange(e, 'tel', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Telefon' />
                         <Location loc={loc} onValueChange={e => this.handleLocation(e)} />
                         <Input value={family.address} style={styles.input} onChangeText={e => this.handleChange(e, 'address')} placeholder='Adres' />
-                        <Input value={family.rent} style={styles.input} keyboardType='number-pad' onChangeText={e => this.handleChange(e, 'address', 'numeric')} placeholder='Kira' />
+                        <Input value={family.rent} style={styles.input} keyboardType='number-pad' onChangeText={e => this.handleChange(e, 'rent', 'numeric')} placeholder='Kira' />
                         <Select value={family.warmingType} onValueChange={e => this.handleChange(e, 'warmingType')} items={FamilyModel.warmingList} style={styles.input} placeholder='Isınma Tipi' />
                         <View style={styles.empty} />
                     </ScrollView>
@@ -305,6 +312,22 @@ const styles = StyleSheet.create({
         fontFamily: 'SFProText-Regular',
         fontSize: 14,
         color: '#48515B'
+    },
+    download: {
+        marginTop: 10,
+        padding: 10,
+        flexDirection: 'row',
+        backgroundColor: '#FFFFFF',
+        width: '25%',
+        marginLeft: 15,
+        borderRadius: 20
+    },
+    downloadText: {
+        marginTop: 1,
+        marginLeft: 8,
+        fontFamily: 'SFProText-Bold',
+        fontSize: 14,
+        color: '#758291'
     }
 });
 

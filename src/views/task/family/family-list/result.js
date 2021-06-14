@@ -97,10 +97,10 @@ function FamilyListResultMainScreen({ navigation, route }) {
             }
             {families.length > 0 &&
                 <View style={{ marginTop: 15 }}>
-                    <TouchableOpacity style={styles.download}>
+                    {/* <TouchableOpacity style={styles.download}>
                         <Download stroke='#758291' />
                         <Text style={styles.downloadText}>İndir</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <ScrollView>
                         {
                             families.map((family, index) =>

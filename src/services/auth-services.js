@@ -28,7 +28,7 @@ async function makeAuthApiCall(urlPath, user) {
 async function login(user) {
     const res = await makeAuthApiCall('login', user);
     const json = await res.json();
-    if (json.errorCode == null)
+    if (res.status === 200)
         saveToken(json.token);
     return { res, json };
 

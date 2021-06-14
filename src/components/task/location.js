@@ -25,10 +25,17 @@ function Location({ userReducer, dispatchRestoreUser, restrict, loc, onlyTown, o
     );
 
     React.useEffect(() => {
-        restoreSelf().then(() => {
-            getTowns(model.city)
+        restoreSelf().then(async () => {
+            const towns = await LocationServices.getTowns(model.city);
+            let districts = null;
+            let streets = null;
+            if (model.town)
+                districts = await LocationServices.getDistricts(model.town);
+            if (model.district)
+                streets = await LocationServices.getStreets(model.district);
+            const slicedTowns = restrict ? sliceTowns(towns) : towns;
+            setLocation({ ...location, towns: slicedTowns, districts: districts, streets: streets });
         });
-
     }, [])
 
     const sliceTowns = (towns) => {

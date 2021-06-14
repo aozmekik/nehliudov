@@ -56,7 +56,7 @@ function FamilyListMainScreen({ navigation }) {
         if (res.status === 201) {
             const families = await res.json();
             for (let family of families)
-                family.images = family.images.data;
+                family.images = family.images ? family.images.data : [];
             navigation.navigate('FamilyListResult', { families: families });
         }
         else
