@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Text, Modal } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, Text, Modal, ActivityIndicator } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import { connect } from 'react-redux'
@@ -24,23 +24,27 @@ function AuthScreen({ dispatchLogIn }) {
     const [loginScreen, setLoginScreen] = React.useState(true);
     const [modalVisible, setModalVisible] = React.useState(false);
     const [dialogText, setDialogText] = React.useState(' ');
+    const [loading, setLoading] = React.useState(false);
+
 
     const handleChange = (key, e) => {
         setUserForm(prevState => ({ ...prevState, [key]: e }));
     }
 
-    const userJSON = () => {
-        return { email: userForm.email, password: userForm.password };
-    }
 
     const onLogin = async () => {
         if (checkNull('email', 'E-posta') || checkNull('password', 'Şifre'))
             return;
         if (checkCond(!isEmail(userForm.email), 'Geçerli bir e-posta giriniz'))
             return;
+        if (checkCond(userForm.password.length < 8, 'Şifre 8 karakterden az olamaz'))
+            return;
+
 
         try {
+            setLoading(true);
             const { res, json } = await login(userForm);
+            // FIXME. a bug.
             if (json.errorCode === 1)
                 showModal('Hatalı bir e-posta ya da şifre girdiniz');
             else if (json.errorCode === 2)
@@ -50,7 +54,8 @@ function AuthScreen({ dispatchLogIn }) {
             else if (json.errorCode === 4)
                 showModal('Admin mobili kullanamaz.');
             else
-                dispatchLogIn({ ...json.user, token: json.token })
+                dispatchLogIn({ ...json.user, token: json.token });
+            setLoading(false);
 
         }
         catch (e) {
@@ -84,8 +89,11 @@ function AuthScreen({ dispatchLogIn }) {
             return;
         if (checkCond(userForm.password != userForm.password2, 'Şifreler uyuşmuyor'))
             return;
+        if (checkCond(userForm.password.length < 8, 'Şifre 8 karakterden az olamaz'))
+            return;
 
         try {
+            setLoading(true);
             const res = await register(userForm);
             if (res.status === 500)
                 showModal('E-Posta sistemde zaten kayıtlıdır');
@@ -93,6 +101,7 @@ function AuthScreen({ dispatchLogIn }) {
                 showModal('E-Mail adresinize doğrulama kodu gönderilmiştir.');
                 changeScreen();
             }
+            setLoading(false);
         } catch (e) {
             console.error(e);
         }
@@ -113,6 +122,13 @@ function AuthScreen({ dispatchLogIn }) {
         setLoginScreen(!loginScreen);
     }
 
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size='large' style={styles.image} color='#000000' />
+            </View>
+        )
+    }
     return (
         <>
             <Modal

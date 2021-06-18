@@ -34,6 +34,8 @@ function FamilyListMainScreen({ navigation }) {
         street: null,
     };
 
+    const [loading, setLoading] = React.useState(false);
+
     const handleChange = (event, name) => {
         setQuery(prevState => ({
             ...prevState,
@@ -52,11 +54,13 @@ function FamilyListMainScreen({ navigation }) {
     };
 
     const onList = async () => {
+        setLoading(true);
         const res = await listFamilies(query);
         if (res.status === 201) {
             const families = await res.json();
             for (let family of families)
                 family.images = family.images ? family.images.data : [];
+            setLoading(false);
             navigation.navigate('FamilyListResult', { families: families });
         }
         else
@@ -66,7 +70,7 @@ function FamilyListMainScreen({ navigation }) {
 
     return (
         <>
-            <NavBar title='Aile Listele' onPress={navigation.goBack} onTick={onList} />
+            <NavBar title='Aile Listele' onPress={navigation.goBack} onTick={!loading ? onList : undefined} />
             <ScrollView style={styles.scrollView}>
                 <Location restrict={true} loc={loc} onValueChange={e => handleLocation(e)} />
                 <Select style={styles.input} value={query.warmingType} onValueChange={e => handleChange(e, 'warmingType')} items={FamilyModel.warmingList} placeholder='Isınma Tipi' />

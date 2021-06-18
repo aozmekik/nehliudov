@@ -298,8 +298,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     name: {
+        marginTop: 5,
         fontFamily: 'SFProText-Bold',
-        fontSize: 24,
+        fontSize: 18,
         color: '#0A151F',
         flexDirection: 'row',
         width: '62%',

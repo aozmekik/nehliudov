@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Modal } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Modal, FlatList } from 'react-native';
 
 
 import { createStackNavigator } from '@react-navigation/stack';
@@ -34,8 +34,12 @@ function FamilyListResultMainScreen({ navigation, route }) {
     updateFamilies();
 
     const select = (index) => {
-        if (!selfIsManager())
+        if (!selfIsManager()) {
             setModalVisible(true);
+            setTimeout(() => {
+                this.setModalVisible(false)
+            }, 2000);
+        }
         else {
             setSelectedIndex(index);
             refRBSheet.current.open();
@@ -101,13 +105,16 @@ function FamilyListResultMainScreen({ navigation, route }) {
                         <Download stroke='#758291' />
                         <Text style={styles.downloadText}>İndir</Text>
                     </TouchableOpacity> */}
-                    <ScrollView>
-                        {
-                            families.map((family, index) =>
-                                <ButtonCard style={styles.buttonCard} onLongPress={() => select(index)} onPress={() => onPress ? onPress(family) : navigation.navigate('FamilyListResultDetail', { goBack: 'FamilyListResultMain', family: family })} selected={index === selectedIndex} key={family.name} title={family.name} desc={family.regDate} />
-                            )
-                        }
-                    </ScrollView>
+                    <FlatList showsVerticalScrollIndicator={false}
+                        data={families}
+                        renderItem={({ item, index }) => (
+                            <ButtonCard style={styles.buttonCard} onLongPress={() => select(index)} onPress={() => onPress ? onPress(item) : navigation.navigate('FamilyListResultDetail', { goBack: 'FamilyListResultMain', family: item })} selected={index === selectedIndex} title={item.name} desc={new Date(item.createdAt).toISOString().substring(0, 10)} />
+                        )}
+                        keyExtractor={item => item._id}
+                        contentContainerStyle={{ paddingBottom: 60 }}
+                    >
+
+                    </FlatList>
                 </View>
             }
         </>

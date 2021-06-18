@@ -15,7 +15,7 @@ import { Camera as CameraIcon, Check } from '../../../../components/icons';
 import styles from './style';
 
 
-function PickImage({ onSubmit }) {
+function PickImage({ onSubmit, navigation }) {
     let images = [];
     let imagesBase64 = [];
 
@@ -40,7 +40,7 @@ function PickImage({ onSubmit }) {
 
     return (
         <>
-            <NavBar title='Galeriden Seç' onTick={onTick} />
+            <NavBar title='Galeriden Seç' onTick={onTick} onPress={() => navigation.goBack()} />
             <ImageBrowser
                 max={4}
                 renderSelectedComponent={CheckWrapper}
@@ -67,7 +67,7 @@ function SelectedModal({ onSnap, onOkay, style }) {
 }
 
 
-function SnapImage({ onSubmit }) {
+function SnapImage({ onSubmit, navigation }) {
     const [hasPermission, setHasPermission] = React.useState(null);
     const [isCameraReady, setIsCameraReady] = React.useState(false);
     const [modalVisible, setModalVisible] = React.useState(false);
@@ -113,7 +113,7 @@ function SnapImage({ onSubmit }) {
 
     return (
         <>
-            <NavBar title='Yeni resim' onTick={onTick} />
+            <NavBar title='Yeni resim' onTick={onTick} onPress={() => navigation.goBack()} />
             <Modal
                 animationType='fade'
                 transparent={true}
@@ -136,7 +136,7 @@ function SnapImage({ onSubmit }) {
 function TestMain({ navigation }) {
     return (
         <>
-            <NavBar title='Resim Ekle' />
+            <NavBar title='Resim Ekle' onPress={() => navigation.goBack()} />
             <ButtonCard onPress={() => navigation.navigate('PickImage')} style={styles.input} title='Galeriden seç' />
             <ButtonCard onPress={() => navigation.navigate('SnapImage')} style={styles.input} title='Yeni resim' />
         </>
@@ -159,12 +159,12 @@ function ImageScreen({ navName }) {
     }
 
     const PickImageScreen = ({ navigation }) => {
-        return (<PickImage onSubmit={(images) => pushImages(images, navigation)} />
+        return (<PickImage navigation={navigation} onSubmit={(images) => pushImages(images, navigation)} />
         )
     }
 
     const SnapImageScreen = ({ navigation }) => {
-        return (<SnapImage onSubmit={(images) => pushImages(images, navigation)} />
+        return (<SnapImage navigation={navigation} onSubmit={(images) => pushImages(images, navigation)} />
         )
     }
 

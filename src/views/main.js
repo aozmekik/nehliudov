@@ -5,7 +5,7 @@
 
 import 'react-native-gesture-handler';
 import React from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, ActivityIndicator, View } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -28,6 +28,7 @@ const Tab = createBottomTabNavigator();
 
 function MainScreen({ userReducer, dispatchRestoreUser }) {
     // console.log(userReducer);
+    const [ready, setReady] = React.useState(false);
 
     React.useEffect(() => {
         async function getUser() {
@@ -43,31 +44,40 @@ function MainScreen({ userReducer, dispatchRestoreUser }) {
 
             if (restoredUser)
                 dispatchRestoreUser(restoredUser);
+            setReady(true);
         }
 
         getUser();
     }, []);
 
-    if (userReducer.user == null)
+    if (!ready)
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size='large' style={styles.image} color='#000000' />
+            </View>);
+    else if (userReducer.user == null)
         return (<AuthScreen />);
     else {
         return (
-            <SafeAreaView style={styles.container} >
-                <NavigationContainer>
-                    <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props} />}>
-                        <Tab.Screen name="Task" component={TaskScreen} />
-                        <Tab.Screen name="Home" component={TimelineScreen} />
-                        <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{ self: true, user: userReducer.user }} />
-                    </Tab.Navigator>
-                </NavigationContainer>
-            </SafeAreaView>
+            // FIXME. change this to view. or nothing
+            // <SafeAreaView style={styles.container} >
+            <NavigationContainer>
+                <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props} />}>
+                    <Tab.Screen name="Task" component={TaskScreen} />
+                    <Tab.Screen name="Home" component={TimelineScreen} />
+                    <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{ self: true, user: userReducer.user }} />
+                </Tab.Navigator>
+            </NavigationContainer>
+            // </SafeAreaView>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        height: '100%',
+        justifyContent: 'center',
+        backgroundColor: '#F2F2F2'
     },
 });
 

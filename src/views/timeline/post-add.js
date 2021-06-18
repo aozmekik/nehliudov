@@ -24,6 +24,7 @@ function PostAddMainScreen({ navigation, route }) {
     });
 
     const [modalVisible, setModalVisible] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
     const loc = {
         city: 34,
@@ -58,6 +59,7 @@ function PostAddMainScreen({ navigation, route }) {
 
     const onTick = async () => {
         if (isValid()) {
+            setLoading(true);
             const res = await createPost(post);
             if (res.status === 201) {
                 navigation.navigate('TimelineMain', { post: true })
@@ -72,7 +74,7 @@ function PostAddMainScreen({ navigation, route }) {
 
     return (
         <View>
-            <NavBar onPress={() => navigation.goBack()} onTick={onTick} title='Gönderi Ekle' />
+            <NavBar onPress={() => navigation.goBack()} onTick={!loading ? onTick : undefined} title='Gönderi Ekle' />
             <Modal
                 animationType='fade'
                 transparent={true}

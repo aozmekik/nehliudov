@@ -36,7 +36,7 @@ class NoteScreen extends FormScreen {
             <View style={styles.container}>
                 <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Not ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
                 <ScrollView>
-                    <Input value={note.statement} onChangeText={e => this.handleChange(e, 'statement')} style={styles.input} placeholder='Not' />
+                    <Input value={note.statement} multiline={true} onChangeText={e => this.handleChange(e, 'statement')} style={{ ...styles.input, paddingVertical: 30 }} placeholder='Not' />
                     <Modal
                         animationType='fade'
                         transparent={true}

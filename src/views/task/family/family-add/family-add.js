@@ -73,7 +73,8 @@ class FamilyAddMainScreen extends React.Component {
             index: 0,
             family: family ? family : new FamilyModel.Family(),
             modalVisible: false,
-            dialogText: ' '
+            dialogText: ' ',
+            loading: false
         }
         this.swiperRef = React.createRef();
     }
@@ -173,6 +174,7 @@ class FamilyAddMainScreen extends React.Component {
 
     async onTick() {
         if (this.formIsValid()) {
+            this.setState(prevState => ({ ...prevState, loading: true }));
             if (this.isUpdate()) { // update family
                 if (this.canDo()) {
                     const res = await FamilyServices.updateFamily(this.state.family);
@@ -218,7 +220,7 @@ class FamilyAddMainScreen extends React.Component {
         let loc = { city: family.city, town: family.town, district: family.district, street: family.street }
         return (
             <>
-                <NavBar title={`Aile ${this.isUpdate() ? 'Düzenle' : 'Ekle'}`} onPress={() => navigation.goBack()} onTick={() => this.onTick()} />
+                <NavBar title={`Aile ${this.isUpdate() ? 'Düzenle' : 'Ekle'}`} onPress={() => navigation.goBack()} onTick={!this.state.loading ? () => this.onTick() : undefined} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
                 <Modal
                     animationType='fade'
