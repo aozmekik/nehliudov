@@ -212,8 +212,8 @@ function PostDetailScreen({ navigation, route }) {
 
 
 function MainScreen({ navigation, route, userReducer }) {
-    const user = route?.params?.user;
     const self = route?.params?.self;
+    const user = self ? userReducer.user : route?.params?.user;
 
     let width = self ? '80%' : (selfIsManager() ? '80%' : '100%');
 

@@ -8,16 +8,21 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import RBSheet from "react-native-raw-bottom-sheet";
 
+import { connect } from 'react-redux';
+
 
 import { Camera, More, Search } from '../../components/icons';
 import Post from './post';
 import PostAddScreen from './post-add';
 import Detail from './detail';
 import SearchUserScreen from './search-user';
+import ProfileScreen from '../profile/profile';
+
+import { restoreUser } from '../../reducers/actions';
 
 import { listPosts } from '../../services/post-services';
 import { selfIsGuest } from '../../services/user-services';
-import ProfileScreen from '../profile/profile';
+import { getCurrentUser } from '../../services/auth-services';
 
 const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     const paddingToBottom = 20;
@@ -25,7 +30,7 @@ const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
         contentSize.height - paddingToBottom;
 };
 
-function TimelineMainScreen({ navigation, route }) {
+function TimelineMainScreen({ navigation, route, dispatchRestoreUser }) {
     const [newest, setNewest] = React.useState(null);
     const [oldest, setOldest] = React.useState(null);
     const [finished, setFinished] = React.useState(false);
@@ -35,6 +40,10 @@ function TimelineMainScreen({ navigation, route }) {
     const [refreshing, setRefreshing] = React.useState(false);
 
     const ref = React.useRef(null);
+    const refreshUserState = React.useCallback(async () => {
+        const restoredUser = await getCurrentUser();
+        dispatchRestoreUser(restoredUser);
+    }, []);
 
     useScrollToTop(ref);
 
@@ -42,6 +51,7 @@ function TimelineMainScreen({ navigation, route }) {
     const onRefresh = () => {
         setRefreshing(true);
         getPosts({ getNew: true });
+        refreshUserState();
     };
 
     const getPosts = async ({ getNew, getOld }) => {
@@ -54,7 +64,6 @@ function TimelineMainScreen({ navigation, route }) {
 
         if (res.status === 200) {
             const data = await res.json();
-            console.log(data);
             if (data.length > 0) {
                 let timeline;
 
@@ -146,6 +155,12 @@ function TimelineMainScreen({ navigation, route }) {
     </View >
     );
 }
+
+mapDispatchToProps = {
+    dispatchRestoreUser: (user) => restoreUser(user)
+};
+
+TimelineMainScreen = connect(null, mapDispatchToProps)(TimelineMainScreen);
 
 const Stack = createStackNavigator();
 

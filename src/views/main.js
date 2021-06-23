@@ -65,7 +65,7 @@ function MainScreen({ userReducer, dispatchRestoreUser }) {
                 <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props} />}>
                     <Tab.Screen name="Task" component={TaskScreen} />
                     <Tab.Screen name="Home" component={TimelineScreen} />
-                    <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{ self: true, user: userReducer.user }} />
+                    <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{ self: true }} />
                 </Tab.Navigator>
             </NavigationContainer>
             // </SafeAreaView>
