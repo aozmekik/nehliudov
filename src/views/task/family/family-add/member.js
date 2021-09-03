@@ -52,6 +52,7 @@ class MemberScreen extends FormScreen {
                     <Input value={member.income} onChangeText={e => this.handleChange(e, 'income', 'numeric')} keyboardType='number-pad' style={styles.input} placeholder='Gelir' />
                     <Input value={member.job} onChangeText={e => this.handleChange(e, 'job', 'alpha')} style={styles.input} placeholder='Meslek' />
                     <Input value={member.size} onChangeText={e => this.handleChange(e, 'size')} style={styles.input} placeholder='Beden' />
+                    <Input value={member.shoe} onChangeText={e => this.handleChange(e, 'shoe')} style={styles.input} placeholder='Ayakkabı Numarası' />
                     <Input value={member.disease} onChangeText={e => this.handleChange(e, 'disease')} style={styles.input} placeholder='Hastalık / Engel' />
                     <Input value={member.school} onChangeText={e => this.handleChange(e, 'school')} style={styles.input} placeholder='Okul' />
                     <Input value={member.grade} onChangeText={e => this.handleChange(e, 'grade', 'numeric')} keyboardType='number-pad' style={styles.input} placeholder='Sınıf' />

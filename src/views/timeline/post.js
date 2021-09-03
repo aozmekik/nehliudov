@@ -87,7 +87,7 @@ function Post({ post, style, navigation, route, onProfileTouch, ...props }) {
                 <TouchableOpacity ><Chat /></TouchableOpacity>
                 < Time style={styles.time} />
             </View> */}
-            <View style={{ marginHorizontal: 5 }}>
+            <View style={{ marginTop: 10, marginHorizontal: 5 }}>
                 <View style={styles.section3}>
                     <Text style={styles.name}>{post.createdBy?.name}</Text>
                     <Text style={styles.desc}>{post.statement}

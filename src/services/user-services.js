@@ -23,6 +23,16 @@ async function privilegeUser(userid, json) {
     return res;
 }
 
+async function changePassword(password) {
+    const url = `${URL}/change/`;
+    const data = getHeaders();
+    data.method = 'POST';
+    data.body = JSON.stringify({ password: password });
+    const res = await fetch(url, data)
+        .catch((e) => console.error(e));
+    return res;
+}
+
 function selfIsManager() {
     return store.getState().userReducer.user.role === 2;
 }
@@ -45,5 +55,6 @@ export {
     selfIsManager,
     selfIsMember,
     selfUserID,
-    selfIsGuest
+    selfIsGuest,
+    changePassword
 };

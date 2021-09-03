@@ -5,7 +5,6 @@ import { URL, getHeaders } from './headers';
 import * as StorageServices from './storage-services';
 // import { connect } from 'react-redux'
 
-
 async function getToken() {
     return StorageServices.load('token');
 }

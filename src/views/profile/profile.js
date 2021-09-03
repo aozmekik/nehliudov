@@ -196,8 +196,7 @@ function ImageList({ user }) {
 }
 
 function PostDetailScreen({ navigation, route }) {
-    const { post, user } = route.params;
-    post.createdBy = user;
+    const { post} = route.params;
 
     return (
         <>
