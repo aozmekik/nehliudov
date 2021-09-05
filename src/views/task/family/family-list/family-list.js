@@ -21,9 +21,9 @@ function FamilyListMainScreen({ navigation }) {
         district: null,
         street: null,
         rating: null,
-        aid: false,
-        health: false,
-        education: false,
+        // aid: false,
+        // health: false,
+        // education: false,
         warmingType: null,
     });
 
@@ -75,9 +75,9 @@ function FamilyListMainScreen({ navigation }) {
                 <Location restrict={true} loc={loc} onValueChange={e => handleLocation(e)} />
                 <Select style={styles.input} value={query.warmingType} onValueChange={e => handleChange(e, 'warmingType')} items={FamilyModel.warmingList} placeholder='Isınma Tipi' />
                 <Select style={styles.input} value={query.rating} onValueChange={e => handleChange(e, 'rating')} items={FamilyModel.ratingList} placeholder='Derece' />
-                <ButtonCard style={styles.buttonCard} selected={query.aid} onPress={() => handleChange(!query.aid, 'aid')} noChevron={true} title='Yardım Takip' />
+                {/* <ButtonCard style={styles.buttonCard} selected={query.aid} onPress={() => handleChange(!query.aid, 'aid')} noChevron={true} title='Yardım Takip' />
                 <ButtonCard style={styles.buttonCard} selected={query.health} onPress={() => handleChange(!query.health, 'health')} noChevron={true} title='Sağlık Takip' />
-                <ButtonCard style={styles.buttonCard} selected={query.education} onPress={() => handleChange(!query.education, 'education')} noChevron={true} title='Eğitim Takip' />
+                <ButtonCard style={styles.buttonCard} selected={query.education} onPress={() => handleChange(!query.education, 'education')} noChevron={true} title='Eğitim Takip' /> */}
                 <View style={styles.empty} />
             </ScrollView>
         </>

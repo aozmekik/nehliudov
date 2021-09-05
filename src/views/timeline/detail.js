@@ -7,7 +7,9 @@ function About() {
     return (
         <View style={styles.container}>
             <Image style={styles.image} source={require('../../assets/logo/logo-detail.png')} />
-            <Text style={styles.aboutText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate dapibus diam at gravida. Donec vitae quam sollicitudin, vehicula ante et, gravida nisi. Proin sed aliquet sem, at blandit nisl. Quisque a velit id ipsum egestas laoreet.</Text>
+            <Text style={styles.aboutText}>v1.0.1 Beta</Text>
+            <Text style={styles.aboutText}>İyilik Rengi Uygulaması, faaliyetlerimizi koordineli yapabilmek ve otomasyonla raporlayabilmek üzere, sadece gönüllüler için tasarlanmış uygulamadır. Hata, görüş ve öneri bildirmek için lütfen e-posta gönderin:</Text>
+            <Text style={styles.aboutText}>iyilikrengi.noreply@gmail.com</Text>
         </ View>
     )
 };
@@ -23,7 +25,7 @@ function Address({ title, desc }) {
 
 function Contact() {
     return (
-        <View style={{ ...styles.container, marginLeft: 15, paddingTop: 10}}>
+        <View style={{ ...styles.container, marginLeft: 15, paddingTop: 10 }}>
             <View style={styles.phone}>
                 <Phone fill='#E11E3C' />
                 <Text style={styles.phoneNumber}>+90 412 457 52 00</Text>

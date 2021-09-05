@@ -109,7 +109,7 @@ function TimelineMainScreen({ navigation, route, dispatchRestoreUser }) {
         <RBSheet
             ref={refRBSheet}
             closeOnDragDown={true}
-            height={hp('60%')}
+            height={hp('70%')}
             customStyles={{
                 container: {
                     borderRadius: 10
@@ -123,7 +123,8 @@ function TimelineMainScreen({ navigation, route, dispatchRestoreUser }) {
 
         <View style={styles.header}>
             <TouchableOpacity style={styles.search} onPress={() => navigation.navigate('TimelineSearchUser')}><Search fill='black' /></TouchableOpacity>
-            {selfIsGuest() ? <View style={{ marginLeft: '70%' }} /> : <TouchableOpacity style={styles.camera} onPress={() => navigation.navigate('TimelinePostAdd')}><Camera stroke='black' /></TouchableOpacity>}
+            {/* selfIsGuest() */}
+            {true ? <View style={{ marginLeft: '70%' }} /> : <TouchableOpacity style={styles.camera} onPress={() => navigation.navigate('TimelinePostAdd')}><Camera stroke='black' /></TouchableOpacity>}
             <TouchableOpacity style={styles.more} onPress={() => refRBSheet.current.open()}><More fill='black' /></TouchableOpacity>
         </View>
         {posts &&

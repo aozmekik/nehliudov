@@ -42,6 +42,8 @@ function TaskMain({ userReducer, navigation }) {
             <TaskCard onPress={() => { canDo() ? navigation.navigate('TaskFamily') : showModal('Yetkiniz yok') }} style={styles.taskItem} title="Aile" desc="Kendi ailelerinizi listeleyin, ekleyin ve düzenleyin" />
             <TaskCard onPress={() => showModal('Daha orayı kodlamadım')} style={styles.taskItem} title="Stok" desc="Tüm bölgelerdeki stokları görüntüleyin, stok ekleyin ve düzenleyin" />
             <TaskCard onPress={() => showModal('Orayı da kodlamadım')} style={styles.taskItem} title="Faaliyet" desc="Bölgenizdeki faaliyetlere katılın, faaliyet planlayın" />
+            <TaskCard onPress={() => showModal('Çok yakında...')} style={styles.taskItem} title="Sağlık" desc="Tüm bölgelerdeki kan ihtiyacını görüntüleyin, kan vermek için iletişime geçin" />
+
         </View>
     );
 }
