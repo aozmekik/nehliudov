@@ -50,7 +50,7 @@ function TabBar({ state, descriptors, navigation }) {
 
                 return label === 'Home' ? (
                     <View key={label} style={styles.midContainer} >
-                        <TouchableOpacity style={[styles.button, styles.midButton]} onPress={onPress}>
+                        <TouchableOpacity style={[styles.button, styles.midButton]}>
                             <Logo />
                         </TouchableOpacity>
                     </View>

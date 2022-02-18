@@ -16,15 +16,17 @@ import { connect } from 'react-redux';
 import TabBar from '../components/tab-bar';
 import ProfileScreen from './profile/profile';
 import TaskScreen from './task/task';
-import TimelineScreen from './timeline/timeline';
 import HomeScreen from './home';
 import AuthScreen from './auth/auth';
 
 
 import { restoreUser } from '../reducers/actions';
 import { isLoggedIn, getCurrentUser } from '../services/auth-services';
+import TimelineScreen from './timeline/timeline';
 
 const Tab = createBottomTabNavigator();
+
+
 
 function MainScreen({ userReducer, dispatchRestoreUser }) {
     // console.log(userReducer);

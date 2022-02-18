@@ -11,7 +11,6 @@ import Note from './task/family/family-add/note';
 import Location from '../components/task/location';
 import Dialog from '../components/dialog';
 import ButtonCard from '../components/button-card';
-import TimelineScreen from '../views/timeline/timeline';
 import * as FamilyModel from '../models/family';
 import ImageScreen from './task/family/family-add/image';
 import AuthScreen from './auth/auth';
@@ -26,7 +25,6 @@ function Test({ text }) {
 }
 
 import { getHeaders } from '../services/headers';
-import SearchUserScreen from './timeline/search-user';
 import ProfileScreen from './profile/profile';
 import PrivilegeScreen from './profile/privilege';
 import FamilyListScreen from './task/family/family-list/family-list';
