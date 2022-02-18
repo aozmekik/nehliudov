@@ -199,8 +199,11 @@ class FamilyAddMainScreen extends React.Component {
                 const res = await FamilyServices.createFamily(this.state.family);
                 if (res.status === 201)
                     this.props.navigation.goBack();
-                else if (res.status === 400)
+                else if (res.status === 400){
+                    const js = await res.json();
+                    console.log(js);
                     this.showModal('Bir hata oluştu');
+                }
             }
 
             // this.props.navigation.goBack();

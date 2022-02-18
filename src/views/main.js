@@ -64,7 +64,7 @@ function MainScreen({ userReducer, dispatchRestoreUser }) {
             // FIXME. change this to view. or nothing
             // <SafeAreaView style={styles.container} >
             <NavigationContainer>
-                <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props} />}>
+                <Tab.Navigator initialRouteName="Task" tabBar={props => <TabBar {...props} />}>
                     <Tab.Screen name="Task" component={TaskScreen} />
                     <Tab.Screen name="Home" component={TimelineScreen} />
                     <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{ self: true }} />

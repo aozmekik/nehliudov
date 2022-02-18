@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { connect } from 'react-redux';
 
 
-import {  Settings, TwoUser} from '../../components/icons';
+import { Settings, TwoUser } from '../../components/icons';
 import NotificationsScreen from './notifications';
 import SettingsScreen from './settings';
 import PrivilegeScreen from './privilege';
@@ -52,6 +52,31 @@ function MainScreen({ navigation, route, userReducer }) {
                 </View>
             </View>
 
+
+            <View style={{ marginTop: 50, opacity: 0.8}}>
+                <Text style={{
+                    fontFamily: 'SFProText-Regular', color: '#0A151F',
+                    fontSize: 14,
+                    margin: 10,
+                    paddingHorizontal: 10
+                }}>
+                    Sistemde 3 farklı rol vardır. {"\n\n"}
+                    1. Ziyaretçi{"\n"}
+                    
+                    Herhangi bir yetkisi yoktur. {"\n\n"}
+                    2. İlçe Görevlisi{"\n"}
+                    Herhangi bir bölgede Aile kaydı ekleyebilir.  {"\n"}
+                    İlçe Sorumlusu, İlçe Görevlisi'ne belirli bölgelerde yetki verebilir.
+                    Bu durumda İlçe Görevlisi bu bölgelerdeki Aile kayıtlarını görebilir. {"\n\n"}
+
+
+                    3. İlçe Sorumlusu{"\n"}
+                    İlçe Görevlisi'nin tüm yetkilerini miras alır. {"\n"}
+                    İlçe Görevlisi'ni belirli bölgelerde yetkilendirebilir. Böylece İlçe Görevlisi o bölgedeki Aile kayıtlarını görebilir. 
+
+
+                </Text>
+            </View>
         </>
     )
 }
@@ -70,7 +95,7 @@ function ProfileScreen({ route }) {
             <Stack.Screen name='ProfileNotifications' component={NotificationsScreen} />
             <Stack.Screen name='ProfileSettings' component={SettingsScreen} />
             <Stack.Screen name='ProfilePrivilege' component={PrivilegeScreen} />
-            
+
         </Stack.Navigator>
     )
 }
