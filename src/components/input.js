@@ -22,7 +22,8 @@ function Input({ placeholder, required, value, style, ...props }) {
     customLabelStyles={{
         colorFocused: '#E11E3C',
         colorBlurred: styles.input.color,
-        fontSizeFocused: 12,
+        fontSizeFocused: 11,
+        topFocused: -16,
         fontFamily: 'SFProText-Regular',
       }}
       labelStyles={{

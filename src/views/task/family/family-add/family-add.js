@@ -239,9 +239,9 @@ class FamilyAddMainScreen extends React.Component {
                             <Download stroke='#758291' />
                             <Text style={styles.downloadText}>İndir</Text>
                         </TouchableOpacity>}
-                        <Input value={family.name} onChangeText={e => this.handleChange(e, 'name', 'alpha')} required={true} autoCapitalize='words' textContentType='name' style={styles.input} placeholder='İsim' />
+                        <Input value={family.name} onChangeText={e => this.handleChange(e, 'name')} required={true} autoCapitalize='words' textContentType='name' style={styles.input} placeholder='İsim' />
                         <Input value={family.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
-                        <Input value={family.nation} onChangeText={e => this.handleChange(e, 'nation', 'alpha')} style={styles.input} placeholder='Uyruk' />
+                        <Input value={family.nation} onChangeText={e => this.handleChange(e, 'nation')} style={styles.input} placeholder='Uyruk' />
                         <Input value={family.tel} onChangeText={e => this.handleChange(e, 'tel', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Telefon' />
                         <Location loc={loc} onValueChange={e => this.handleLocation(e)} />
                         <Input value={family.address} style={styles.input} onChangeText={e => this.handleChange(e, 'address')} placeholder='Adres' />
