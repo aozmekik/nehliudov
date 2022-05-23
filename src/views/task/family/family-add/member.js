@@ -8,13 +8,11 @@ import styles from './style';
 
 import * as FamilyModel from '../../../../models/family';
 import FormScreen from './form';
-import mountPreventGoingBack from './utils';
 
 
 class MemberScreen extends FormScreen {
     constructor(props) {
         super(FamilyModel.Member, 'FamilyMember', props);
-        mountPreventGoingBack.bind(this)();
     }
 
     static title(model) {

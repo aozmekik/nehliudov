@@ -9,14 +9,12 @@ import styles from './style';
 
 import * as FamilyModel from '../../../../models/family';
 import FormScreen from './form';
-import mountPreventGoingBack from './utils';
 
 
 
 class NoteScreen extends FormScreen {
     constructor(props) {
         super(FamilyModel.Note, 'FamilyNote', props);
-        mountPreventGoingBack.bind(this)();
     }
 
     static title(model) {

@@ -48,7 +48,7 @@ function Pagination({ index, swiperRef }) {
     });
 
     return (
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} ref={scrollRef} scrollEnabled={false} showsHorizontalScrollIndicator={false} horizontal={true} style={styles.pagination}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} ref={scrollRef} showsHorizontalScrollIndicator={false} horizontal={true} style={styles.pagination}>
             <PaginationItem onPress={() => swiperRef.current.scrollTo(0)} active={index === 0} title="Genel" />
             <PaginationItem onPress={() => swiperRef.current.scrollTo(1)} active={index === 1} title="Aile Üyeleri" />
             <PaginationItem onPress={() => swiperRef.current.scrollTo(2)} active={index === 2} title="Bütçe" />
@@ -75,7 +75,8 @@ class FamilyAddMainScreen extends React.Component {
             family: family ? family : new FamilyModel.Family(),
             modalVisible: false,
             dialogText: ' ',
-            loading: false
+            loading: false,
+            exit: false
         }
         this.swiperRef = React.createRef();
         this.backHandler = null;
@@ -187,6 +188,7 @@ class FamilyAddMainScreen extends React.Component {
                     const res = await FamilyServices.updateFamily(this.state.family);
                     if (res.status === 200) {
                         // update the family list in stack screen
+                        this.setState(prevState => ({ ...prevState, exit: true }));
                         this.props.navigation.navigate({
                             name: this.props.route.params.goBack,
                             params: {
@@ -205,6 +207,7 @@ class FamilyAddMainScreen extends React.Component {
             else { // create family
                 const res = await FamilyServices.createFamily(this.state.family);
                 if (res.status === 201) {
+                    this.setState(prevState => ({ ...prevState, exit: true }));
                     this.props.navigation.goBack();
                     return;
                 }

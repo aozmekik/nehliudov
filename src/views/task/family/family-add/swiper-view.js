@@ -106,7 +106,6 @@ class SwiperView extends React.Component {
 
     getCardView(index, model) {
         const { navigation, modelClass } = this.props;
-        console.log(this.props);
         let view;
         if (!this.image)
             view = <ButtonCard key={`${this.screenName}${index}`} onLongPress={() => this.select(index)} onPress={() => navigation.navigate(this.screenName, { model: model, index: index })} style={styles.input} title={modelClass.title(model)} desc={modelClass.expl(model)} />
@@ -174,7 +173,6 @@ class SwiperView extends React.Component {
 
 
     render() {
-        console.log(this.state.quickModel, this.state.quickModel.name != null, this.state.quickModel != '');
         const { navigation } = this.props;
         return (
             <>

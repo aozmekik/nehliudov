@@ -61,7 +61,7 @@ function FamilyListMainScreen({ navigation }) {
             for (let family of families)
                 family.images = family.images ? family.images.data : [];
             setLoading(false);
-            navigation.navigate('FamilyListResult', { families: families });
+            navigation.navigate('FamilyListResult', { query: query, families: families });
         }
         else
             console.error('on family listing', res);

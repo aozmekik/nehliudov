@@ -100,12 +100,13 @@ function FamilyListResultMainScreen({ navigation, route }) {
 
             }
             {families.length > 0 &&
-                <View style={{ marginTop: 15 }}>
+                <View style={{ marginTop: 15, marginBottom: 50 }}>
+                    <Text style={styles.downloadText}>Ekleme tarihine göre sıralanmakta ve maksimum 20 aile kaydı gösterilmektedir. </Text>
                     {/* <TouchableOpacity style={styles.download}>
                         <Download stroke='#758291' />
                         <Text style={styles.downloadText}>İndir</Text>
                     </TouchableOpacity> */}
-                    <FlatList showsVerticalScrollIndicator={false}
+                    <FlatList
                         data={families}
                         renderItem={({ item, index }) => (
                             <ButtonCard style={styles.buttonCard} onLongPress={() => select(index)} onPress={() => onPress ? onPress(item) : navigation.navigate('FamilyListResultDetail', { goBack: 'FamilyListResultMain', family: item })} selected={index === selectedIndex} title={item.name} desc={new Date(item.createdAt).toISOString().substring(0, 10)} />
@@ -148,7 +149,8 @@ const styles = StyleSheet.create({
     },
     downloadText: {
         marginTop: 1,
-        marginLeft: 8,
+        marginHorizontal: 15,
+        marginBottom: 10,
         fontFamily: 'SFProText-Bold',
         fontSize: 14,
         color: '#758291'

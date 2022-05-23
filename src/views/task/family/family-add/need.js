@@ -6,13 +6,11 @@ import { NavBar, Input, Dialog } from '../../../../components/';
 
 import FormScreen from './form';
 import styles from './style';
-import mountPreventGoingBack from './utils';
 
 
 class NeedScreen extends FormScreen {
     constructor(props) {
         super(null, 'FamilyNeed', props);
-        mountPreventGoingBack.bind(this)();
     }
 
     static title(model) {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import * as Validator from '../../../../utils/validator';
+import mountPreventGoingBack from './utils';
 
 class FormScreen extends React.Component {
     constructor(Model, key, props) {
@@ -11,9 +12,12 @@ class FormScreen extends React.Component {
         this.state = {
             model: this.isEdit() ? props.route.params.model : (Model ? new Model() : null),
             modalVisible: false,
-            dialogText: ' '
+            dialogText: ' ',
+            exit: false
         }
         this.key = key;
+        mountPreventGoingBack.bind(this)();
+
     }
 
     isEdit() {
@@ -77,8 +81,10 @@ class FormScreen extends React.Component {
     }
 
     onTick() {
-        if (this.formIsValid())
+        if (this.formIsValid()) {
+            this.setState(prevState => ({ ...prevState, exit: true }));
             this.pushModel();
+        }
         else
             this.showModal();
     }

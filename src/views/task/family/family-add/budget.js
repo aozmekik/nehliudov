@@ -8,12 +8,10 @@ import styles from './style';
 import FormScreen from './form';
 
 import * as FamilyModel from '../../../../models/family';
-import mountPreventGoingBack from './utils';
 
 class BudgetScreen extends FormScreen {
     constructor(props) {
         super(FamilyModel.Budget, 'FamilyBudget', props);
-        mountPreventGoingBack.bind(this)();
     }
 
     static title(model) {
