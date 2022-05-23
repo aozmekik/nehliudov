@@ -9,14 +9,14 @@ import styles from './style';
 
 import * as FamilyModel from '../../../../models/family';
 import FormScreen from './form';
-import showAlert from './utils';
+import mountPreventGoingBack from './utils';
 
 
 
 class NoteScreen extends FormScreen {
     constructor(props) {
         super(FamilyModel.Note, 'FamilyNote', props);
-        this.showAlert = showAlert.bind(this);
+        mountPreventGoingBack.bind(this)();
     }
 
     static title(model) {
@@ -36,7 +36,7 @@ class NoteScreen extends FormScreen {
         const { navigation } = this.props;
         return (
             <View style={styles.container}>
-                <NavBar onPress={() => this.showAlert()} onTick={() => this.onTick()} title={`Not ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
+                <NavBar onPress={navigation.goBack()} onTick={() => this.onTick()} title={`Not ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
                 <ScrollView>
                     <Input value={note.statement} multiline={true} onChangeText={e => this.handleChange(e, 'statement')} style={{ ...styles.input, paddingVertical: 30 }} placeholder='Not' />
                     <Modal

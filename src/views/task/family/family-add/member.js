@@ -8,13 +8,13 @@ import styles from './style';
 
 import * as FamilyModel from '../../../../models/family';
 import FormScreen from './form';
-import showAlert from './utils';
+import mountPreventGoingBack from './utils';
 
 
 class MemberScreen extends FormScreen {
     constructor(props) {
         super(FamilyModel.Member, 'FamilyMember', props);
-        this.showAlert = showAlert.bind(this);
+        mountPreventGoingBack.bind(this)();
     }
 
     static title(model) {
@@ -44,7 +44,7 @@ class MemberScreen extends FormScreen {
         const member = this.state.model;
         return (
             <View style={styles.container}>
-                <NavBar onPress={() => this.showAlert()} onTick={() => this.onTick()} title={`Aile Üyesi ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
+                <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Aile Üyesi ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Input value={member.name} onChangeText={e => this.handleChange(e, 'name')} style={styles.input} required={true} placeholder='İsim' />
                     <Input value={member.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />

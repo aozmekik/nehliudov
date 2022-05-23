@@ -8,12 +8,12 @@ import styles from './style';
 import FormScreen from './form';
 
 import * as FamilyModel from '../../../../models/family';
-import showAlert from './utils';
+import mountPreventGoingBack from './utils';
 
 class BudgetScreen extends FormScreen {
     constructor(props) {
         super(FamilyModel.Budget, 'FamilyBudget', props);
-        this.showAlert = showAlert.bind(this);
+        mountPreventGoingBack.bind(this)();
     }
 
     static title(model) {
@@ -51,7 +51,7 @@ class BudgetScreen extends FormScreen {
         const { navigation } = this.props;
         return (
             <View style={styles.container}>
-                <NavBar onPress={() => this.showAlert()} onTick={() => this.onTick()} title={`Bütçe ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
+                <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Bütçe ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
                 <ScrollView>
                     <Select value={budget.type} onValueChange={e => this.handleChange(e, 'type')} items={FamilyModel.budgetList} style={styles.input} placeholder='Tip' />
                     <Input required={true} value={budget.name} onChangeText={e => this.handleChange(e, 'name')} style={styles.input} placeholder='Bütçe Adı' />

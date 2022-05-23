@@ -174,6 +174,7 @@ class SwiperView extends React.Component {
 
 
     render() {
+        console.log(this.state.quickModel, this.state.quickModel.name != null, this.state.quickModel != '');
         const { navigation } = this.props;
         return (
             <>
@@ -199,8 +200,7 @@ class SwiperView extends React.Component {
                     {this.enableQuick &&
                     <View style={styles.input}>
                         <Input disableLabel={true} value={this.state.quickModel.name} onChangeText={(e) =>  this.setState(prevState => ({ ...prevState, quickModel: {name: e} }))} placeholder={`Hızlı ${this.title.toLowerCase()}`}/>
-
-                        { this.state.quickModel.name &&
+                        { this.state.quickModel.name?.length > 0 &&
                         <TouchableOpacity onPress={() => this.quickAdd()} style={{position: 'absolute', top: 15, right: 15}}  >
                             <Check style={{ backgroundColor: '#E11E3C', borderRadius: 10, }} fill="#FFFFFF" />
                         </TouchableOpacity>

@@ -19,7 +19,7 @@ import NeedScreen from './need';
 import NoteScreen from './note';
 import ImageScreen from './image';
 import SwiperView from './swiper-view';
-import showAlert from './utils';
+import mountPreventGoingBack from './utils';
 
 import * as FamilyModel from '../../../../models/family';
 import * as Validator from '../../../../utils/validator';
@@ -78,16 +78,12 @@ class FamilyAddMainScreen extends React.Component {
             loading: false
         }
         this.swiperRef = React.createRef();
+        this.backHandler = null;
 
     }
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', () => this.showAlert());
-        this.showAlert = showAlert.bind(this);
-    }
-    
-    componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', () => this.showAlert());
+        mountPreventGoingBack.bind(this)();
     }
 
     updateIndex(i) {
@@ -232,11 +228,12 @@ class FamilyAddMainScreen extends React.Component {
     }
 
     render() {
+        const { navigation } = this.props;
         let { family } = this.state;
         let loc = { city: family.city, town: family.town, district: family.district, street: family.street }
         return (
             <>
-                <NavBar title={`Aile ${this.isUpdate() ? 'Düzenle' : 'Ekle'}`} onPress={() => this.showAlert()} onTick={!this.state.loading ? () => this.onTick() : undefined} />
+                <NavBar title={`Aile ${this.isUpdate() ? 'Düzenle' : 'Ekle'}`} onPress={() => navigation.goBack()} onTick={!this.state.loading ? () => this.onTick() : undefined} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
                 <Modal
                     animationType='fade'
