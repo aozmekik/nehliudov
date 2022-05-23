@@ -1,13 +1,15 @@
 import * as React from 'react';
 
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import RBSheet from "react-native-raw-bottom-sheet";
 
-import { ButtonCard, SelectedModal } from '../../../../components/';
+import { ButtonCard, SelectedModal, Input } from '../../../../components/';
 import styles from './style';
+import { Check, Plus } from '../../../../components/icons';
+import MemberScreen from './member';
 
 
 class SwiperView extends React.Component {
@@ -16,6 +18,10 @@ class SwiperView extends React.Component {
         this.state = {
             models: props.models,
             views: [],
+            quickModel: {
+                name: null,
+                title: () => this.name
+            },
         };
 
         this.selected = null;
@@ -25,6 +31,7 @@ class SwiperView extends React.Component {
         this.refRBSheet = React.createRef();
         this.onChange = props.onChange;
         this.image = props.image;
+        this.enableQuick = props.enableQuick;
 
         this.state.views = this.modelToView(props.models);
 
@@ -99,6 +106,7 @@ class SwiperView extends React.Component {
 
     getCardView(index, model) {
         const { navigation, modelClass } = this.props;
+        console.log(this.props);
         let view;
         if (!this.image)
             view = <ButtonCard key={`${this.screenName}${index}`} onLongPress={() => this.select(index)} onPress={() => navigation.navigate(this.screenName, { model: model, index: index })} style={styles.input} title={modelClass.title(model)} desc={modelClass.expl(model)} />
@@ -149,6 +157,21 @@ class SwiperView extends React.Component {
 
     }
 
+    quickAdd() {
+        const newIndex = this.state.models.length;
+
+        let newModel = this.state.quickModel;
+        if (this.screenName === 'FamilyNeed')
+            newModel = this.state.quickModel.name;
+        else if (this.screenName === 'FamilyNote')
+            newModel.statement = this.state.quickModel.name;
+
+        const newModels = [...this.state.models, newModel];
+        this.setState(prevState => ({ ...prevState, models: newModels, quickModel: {name: null} }));
+        const view = this.getCardView(newIndex, newModels[newIndex]);
+        this.pushButtonCard(view);
+    }
+
 
     render() {
         const { navigation } = this.props;
@@ -173,6 +196,17 @@ class SwiperView extends React.Component {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <ButtonCard onPress={() => navigation.navigate(this.screenName)} style={styles.input} title={this.title} />
                     <View>{this.state.views}</View>
+                    {this.enableQuick &&
+                    <View style={styles.input}>
+                        <Input disableLabel={true} value={this.state.quickModel.name} onChangeText={(e) =>  this.setState(prevState => ({ ...prevState, quickModel: {name: e} }))} placeholder={`Hızlı ${this.title.toLowerCase()}`}/>
+
+                        { this.state.quickModel.name &&
+                        <TouchableOpacity onPress={() => this.quickAdd()} style={{position: 'absolute', top: 15, right: 15}}  >
+                            <Check style={{ backgroundColor: '#E11E3C', borderRadius: 10, }} fill="#FFFFFF" />
+                        </TouchableOpacity>
+                        }
+                    </View>
+                    }
                     <View style={styles.empty} />
 
                 </ScrollView>

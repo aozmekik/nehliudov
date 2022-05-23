@@ -7,7 +7,7 @@ function About() {
     return (
         <View style={styles.container}>
             <Image style={styles.image} source={require('../../assets/logo/logo-detail.png')} />
-            <Text style={styles.aboutText}>v1.0.1 Beta</Text>
+            <Text style={styles.aboutText}>v2.0.0</Text>
             <Text style={styles.aboutText}>İyilik Rengi Uygulaması, faaliyetlerimizi koordineli yapabilmek ve raporlayabilmek üzere, sadece gönüllüler için tasarlanmış uygulamadır. Hata, görüş ve öneri bildirmek için lütfen e-posta gönderin:</Text>
             <Text style={styles.aboutText}>iyilikrengi.noreply@gmail.com</Text>
         </ View>

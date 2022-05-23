@@ -16,7 +16,7 @@ import { FamilyListResultMainScreen } from './family-list/result';
 function SearchHistory() {
     return (
         <>
-            <Text style={styles.searchText}>SON ARAMALAR</Text>
+            {/* <Text style={styles.searchText}>SON ARAMALAR</Text> */}
             <View style={{ justifyContent: 'center', alignItems: 'center', margin: '20%' }}>
                 <History fill="#C6CBD2" />
                 <Text style={{ color: '#48515B', fontFamily: 'SFProText-Semibold', fontSize: 12, marginTop: 5 }} >Henüz arama yok</Text>

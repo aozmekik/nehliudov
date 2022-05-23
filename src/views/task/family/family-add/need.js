@@ -24,7 +24,7 @@ class NeedScreen extends FormScreen {
         return this.state.model != null;
     }
 
-    handeChange(e) {
+    handleChange(e) {
         this.setState(prevState => ({ ...prevState, model: e }))
     }
 
@@ -35,7 +35,7 @@ class NeedScreen extends FormScreen {
             <View style={styles.container}>
                 <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`İhtiyaç ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
                 <ScrollView>
-                    <Input multiline={true} value={this.state.model} onChangeText={e => this.handeChange(e)} style={{ ...styles.input, paddingVertical: 30 }} placeholder='İhtiyaç' />
+                    <Input multiline={true} value={this.state.model} onChangeText={e => this.handleChange(e)} style={{ ...styles.input, paddingVertical: 30 }} placeholder='İhtiyaç' />
                     <Modal
                         animationType='fade'
                         transparent={true}

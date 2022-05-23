@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { Provider } from 'react-redux'
 import MainScreen from './src/views/main';
@@ -11,11 +11,23 @@ import store from './src/reducers/store';
 
 class App extends React.Component {
   state = {
-    fontLoaded: false,
+    appIsReady: false,
   };
 
   componentDidMount() {
-    this.loadAssetsAsync();
+    const prepare = async () => {
+      // Keep the splash screen visible while we fetch resources
+      await SplashScreen.preventAutoHideAsync();
+      // Pre-load fonts, make any API calls you need to do here
+      await this.loadAssetsAsync();
+
+      this.setState(prevState => ({ appIsReady: true }));
+      
+      await SplashScreen.hideAsync();
+    }; 
+
+    prepare();
+
   }
 
   async loadAssetsAsync() {
@@ -33,12 +45,11 @@ class App extends React.Component {
       'SFProText-Semibold': require('./src/assets/fonts/SFProText-Semibold.otf'),
       'SFProText-SemiboldItalic': require('./src/assets/fonts/SFProText-SemiboldItalic.otf'),
     });
-    this.setState(prevState => ({ fontLoaded: true }));
   }
 
   render() {
-    if (!this.state.fontLoaded)
-      return (<AppLoading />);
+    if (!this.state.appIsReady)
+      return null;
     else {
       return (
         <Provider store={store}>

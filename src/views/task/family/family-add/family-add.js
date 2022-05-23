@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Modal, Alert, BackHandler } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -19,6 +19,7 @@ import NeedScreen from './need';
 import NoteScreen from './note';
 import ImageScreen from './image';
 import SwiperView from './swiper-view';
+import showAlert from './utils';
 
 import * as FamilyModel from '../../../../models/family';
 import * as Validator from '../../../../utils/validator';
@@ -77,6 +78,16 @@ class FamilyAddMainScreen extends React.Component {
             loading: false
         }
         this.swiperRef = React.createRef();
+
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', () => this.showAlert());
+        this.showAlert = showAlert.bind(this);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', () => this.showAlert());
     }
 
     updateIndex(i) {
@@ -173,8 +184,8 @@ class FamilyAddMainScreen extends React.Component {
     }
 
     async onTick() {
+        this.setState(prevState => ({ ...prevState, loading: true }));
         if (this.formIsValid()) {
-            this.setState(prevState => ({ ...prevState, loading: true }));
             if (this.isUpdate()) { // update family
                 if (this.canDo()) {
                     const res = await FamilyServices.updateFamily(this.state.family);
@@ -187,9 +198,9 @@ class FamilyAddMainScreen extends React.Component {
                             },
                             merge: true
                         });
-
+                        return;
                     }
-                    if (res.status === 400)
+                    if (res.status === 400) 
                         this.showModal('Bir hata oluştu');
                 }
                 else
@@ -197,8 +208,10 @@ class FamilyAddMainScreen extends React.Component {
             }
             else { // create family
                 const res = await FamilyServices.createFamily(this.state.family);
-                if (res.status === 201)
+                if (res.status === 201) {
                     this.props.navigation.goBack();
+                    return;
+                }
                 else if (res.status === 400){
                     const js = await res.json();
                     console.log(js);
@@ -210,6 +223,7 @@ class FamilyAddMainScreen extends React.Component {
         }
         else
             this.showModal();
+        this.setState(prevState => ({ ...prevState, loading: false }));
     }
 
 
@@ -218,12 +232,11 @@ class FamilyAddMainScreen extends React.Component {
     }
 
     render() {
-        const { navigation } = this.props;
         let { family } = this.state;
         let loc = { city: family.city, town: family.town, district: family.district, street: family.street }
         return (
             <>
-                <NavBar title={`Aile ${this.isUpdate() ? 'Düzenle' : 'Ekle'}`} onPress={() => navigation.goBack()} onTick={!this.state.loading ? () => this.onTick() : undefined} />
+                <NavBar title={`Aile ${this.isUpdate() ? 'Düzenle' : 'Ekle'}`} onPress={() => this.showAlert()} onTick={!this.state.loading ? () => this.onTick() : undefined} />
                 <Pagination swiperRef={this.swiperRef} index={this.state.index} />
                 <Modal
                     animationType='fade'
@@ -240,20 +253,20 @@ class FamilyAddMainScreen extends React.Component {
                             <Text style={styles.downloadText}>İndir</Text>
                         </TouchableOpacity>}
                         <Input value={family.name} onChangeText={e => this.handleChange(e, 'name')} required={true} autoCapitalize='words' textContentType='name' style={styles.input} placeholder='İsim' />
-                        <Input value={family.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
+                        <Input value={family.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} required={true} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
                         <Input value={family.nation} onChangeText={e => this.handleChange(e, 'nation')} style={styles.input} placeholder='Uyruk' />
-                        <Input value={family.tel} onChangeText={e => this.handleChange(e, 'tel', 'numeric')} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Telefon' />
+                        <Input value={family.tel} onChangeText={e => this.handleChange(e, 'tel', 'numeric')} required={true}  keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Telefon' />
                         <Location loc={loc} onValueChange={e => this.handleLocation(e)} />
                         <Input value={family.address} style={styles.input} onChangeText={e => this.handleChange(e, 'address')} placeholder='Adres' />
                         <Input value={family.rent} style={styles.input} keyboardType='number-pad' onChangeText={e => this.handleChange(e, 'rent', 'numeric')} placeholder='Kira' />
                         <Select value={family.warmingType} onValueChange={e => this.handleChange(e, 'warmingType')} items={FamilyModel.warmingList} style={styles.input} placeholder='Isınma Tipi' />
                         <View style={styles.empty} />
                     </ScrollView>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} models={family.members} modelClass={MemberScreen} screenName='FamilyMember' title='Üye ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('members', e)} models={family.members} modelClass={MemberScreen} screenName='FamilyMember' enableQuick={true} title='Üye ekleyin' {...this.props} /></View>
                     <View><SwiperView onChange={(e) => this.handleSwiperChange('budgets', e)} models={family.budgets} modelClass={BudgetScreen} screenName='FamilyBudget' title='Bütçe ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={NeedScreen} screenName='FamilyNeed' title='İhtiyaç ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('needs', e)} models={family.needs} modelClass={NeedScreen} screenName='FamilyNeed' enableQuick={true} title='İhtiyaç ekleyin' {...this.props} /></View>
                     <View ><SwiperView onChange={(e) => this.handleSwiperChange('images', e)} image={true} models={family.images} modelClass={null} screenName='FamilyImage' title='Resim ekleyin' {...this.props} /></View>
-                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={NoteScreen} screenName='FamilyNote' title='Not ekleyin' {...this.props} /></View>
+                    <View><SwiperView onChange={(e) => this.handleSwiperChange('notes', e)} models={family.notes} modelClass={NoteScreen} screenName='FamilyNote' enableQuick={true} title='Not ekleyin' {...this.props} /></View>
                     <ScrollView>
                         <Select value={family.rating} onValueChange={e => this.handleChange(e, 'rating')} items={FamilyModel.ratingList} style={styles.input} placeholder='Derece' />
                         <ButtonCard style={{ ...styles.input, text: styles.commentButtonCard }} selected={family.aid} onPress={() => this.handleChange(!family.aid, 'aid')} noChevron={true} title='Yardım Takip' />

@@ -44,6 +44,8 @@ function AuthScreen({ dispatchLogIn }) {
         try {
             setLoading(true);
             const { res, json } = await login(userForm);
+            setLoading(false);
+
             // FIXME. a bug.
             if (json.errorCode === 1)
                 showModal('Hatalı bir e-posta ya da şifre girdiniz');
@@ -55,7 +57,6 @@ function AuthScreen({ dispatchLogIn }) {
                 showModal('Admin mobili kullanamaz.');
             else
                 dispatchLogIn({ ...json.user, token: json.token });
-            setLoading(false);
 
         }
         catch (e) {
