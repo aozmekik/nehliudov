@@ -33,6 +33,8 @@ function AuthScreen({ dispatchLogIn }) {
 
 
     const onLogin = async () => {
+        setUserForm(...userForm, { email: userForm.email.trim()});
+
         if (checkNull('email', 'E-posta') || checkNull('password', 'Şifre'))
             return;
         if (checkCond(!isEmail(userForm.email), 'Geçerli bir e-posta giriniz'))
@@ -82,6 +84,9 @@ function AuthScreen({ dispatchLogIn }) {
 
 
     const onRegister = async () => {
+        setUserForm(...userForm, { name: userForm.name.trim(), email: userForm.email.trim(), email2: userForm.email2.trim() });
+
+
         if (checkNull('name', 'Ad Soyad') || checkNull('email', 'E-posta') || checkNull('password', 'Şifre'))
             return;
         if (checkCond(!isEmail(userForm.email), 'Geçerli bir e-posta giriniz'))

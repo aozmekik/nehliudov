@@ -100,7 +100,7 @@ function FamilyListResultMainScreen({ navigation, route }) {
 
             }
             {families.length > 0 &&
-                <View style={{ marginTop: 15, marginBottom: 50 }}>
+                <View style={{ marginTop: 15, marginBottom: 100 }}>
                     <Text style={styles.downloadText}>Ekleme tarihine göre sıralanmakta ve maksimum 20 aile kaydı gösterilmektedir. </Text>
                     {/* <TouchableOpacity style={styles.download}>
                         <Download stroke='#758291' />
