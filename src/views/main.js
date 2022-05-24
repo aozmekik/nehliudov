@@ -16,13 +16,11 @@ import { connect } from 'react-redux';
 import TabBar from '../components/tab-bar';
 import ProfileScreen from './profile/profile';
 import TaskScreen from './task/task';
-import HomeScreen from './home';
 import AuthScreen from './auth/auth';
 
 
 import { restoreUser } from '../reducers/actions';
 import { isLoggedIn, getCurrentUser } from '../services/auth-services';
-import TimelineScreen from './timeline/timeline';
 
 const Tab = createBottomTabNavigator();
 
@@ -66,7 +64,7 @@ function MainScreen({ userReducer, dispatchRestoreUser }) {
             <NavigationContainer>
                 <Tab.Navigator initialRouteName="Task" tabBar={props => <TabBar {...props} />}>
                     <Tab.Screen name="Task" component={TaskScreen} />
-                    <Tab.Screen name="Home" component={TimelineScreen} />
+                    <Tab.Screen name="Home" component={TaskScreen} />
                     <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{ self: true }} />
                 </Tab.Navigator>
             </NavigationContainer>

@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 
 import { Settings, TwoUser } from '../../components/icons';
-import NotificationsScreen from './notifications';
 import SettingsScreen from './settings';
 import PrivilegeScreen from './privilege';
 
@@ -92,7 +91,6 @@ function ProfileScreen({ route }) {
     return (
         <Stack.Navigator headerMode='none'>
             <Stack.Screen name='ProfileMain' component={MainScreen} initialParams={route.params} />
-            <Stack.Screen name='ProfileNotifications' component={NotificationsScreen} />
             <Stack.Screen name='ProfileSettings' component={SettingsScreen} />
             <Stack.Screen name='ProfilePrivilege' component={PrivilegeScreen} />
 

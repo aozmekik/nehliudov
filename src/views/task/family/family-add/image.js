@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, Modal } from 'react-native';
+import { Text, View, Modal, Alert } from 'react-native';
 
 import { ImageBrowser } from 'expo-image-picker-multiple';
 import { Camera } from 'expo-camera';
@@ -16,8 +16,17 @@ import styles from './style';
 
 
 function PickImage({ onSubmit, navigation }) {
+    const [access, setAccess] = React.useState(false);
     let images = [];
     let imagesBase64 = [];
+
+    React.useEffect(() => {
+        Alert.alert(
+            'Medya İzni',
+            'İyilik Rengi uygulaması aile kaydına resim eklemek için medyayı kullanmaktadır.',
+            [{text: 'Tamam', onPress: () => setAccess(true)}]
+        );
+      }, []);
 
     const CheckWrapper = () => {
         return (<Check style={{ margin: 5, backgroundColor: '#FFFFFF', borderRadius: 10 }} fill="#E11E3C" />)
@@ -41,14 +50,14 @@ function PickImage({ onSubmit, navigation }) {
     return (
         <>
             <NavBar title='Galeriden Seç' onTick={onTick} onPress={() => navigation.goBack()} />
-            <ImageBrowser
+            {access && <ImageBrowser
                 max={4}
                 renderSelectedComponent={CheckWrapper}
                 onChange={(num, onSubmit) => {
                     onSubmit();
                 }}
                 callback={imagesCallback}
-            />
+            />}
         </>
     );
 }
@@ -80,8 +89,16 @@ function SnapImage({ onSubmit, navigation }) {
 
     React.useEffect(() => {
         (async () => {
-            const { status } = await Camera.requestCameraPermissionsAsync();
-            setHasPermission(status === 'granted');
+            Alert.alert(
+                'Kamera İzni',
+                'İyilik Rengi uygulaması aile kaydına resim eklemek için kamerayı kullanmaktadır.',
+                [{text: 'Tamam', onPress: async () => {
+                    const { status } = await Camera.requestCameraPermissionsAsync();
+                    setHasPermission(status === 'granted');
+                }
+            }]
+            );
+            
         })();
     }, []);
 

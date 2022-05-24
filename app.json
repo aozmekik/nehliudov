@@ -2,7 +2,7 @@
   "expo": {
     "name": "İyilik Rengi",
     "slug": "iyilik-rengi",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -20,11 +20,12 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.colorfavor.nehliudov",
       "infoPlist": {
-        "NSCameraUsageDescription": "Bu uygulama Aile kaydına resim eklemek için kamerayı kullanmaktadır."
+        "NSCameraUsageDescription": "Bu uygulama Aile kaydına resim eklemek için kamerayı kullanmaktadır.",
+        "NSPhotoLibraryAddUsageDescription": "Bu uygulama Aile kaydına resim eklemek için medyayı kullanmaktadır."
       }
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
