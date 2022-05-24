@@ -167,6 +167,7 @@ class SwiperView extends React.Component {
 
         const newModels = [...this.state.models, newModel];
         this.setState(prevState => ({ ...prevState, models: newModels, quickModel: {name: null} }));
+        this.onChange(newModels);
         const view = this.getCardView(newIndex, newModels[newIndex]);
         this.pushButtonCard(view);
     }
