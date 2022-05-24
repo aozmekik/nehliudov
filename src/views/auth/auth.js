@@ -28,12 +28,12 @@ function AuthScreen({ dispatchLogIn }) {
 
 
     const handleChange = (key, e) => {
-        setUserForm(prevState => ({ ...prevState, [key]: e }));
+            setUserForm(prevState => ({ ...prevState, [key]: key === 'name' ? e: e.trim() }));
     }
 
 
     const onLogin = async () => {
-        setUserForm(...userForm, { email: userForm.email.trim()});
+        setUserForm({...userForm,  email: userForm.email.trim()});
 
         if (checkNull('email', 'E-posta') || checkNull('password', 'Şifre'))
             return;
@@ -84,8 +84,7 @@ function AuthScreen({ dispatchLogIn }) {
 
 
     const onRegister = async () => {
-        setUserForm(...userForm, { name: userForm.name.trim(), email: userForm.email.trim(), email2: userForm.email2.trim() });
-
+        // setUserForm({...userForm, name: form.name, email: form.email, email2: form.email2 });
 
         if (checkNull('name', 'Ad Soyad') || checkNull('email', 'E-posta') || checkNull('password', 'Şifre'))
             return;
@@ -101,6 +100,8 @@ function AuthScreen({ dispatchLogIn }) {
         try {
             setLoading(true);
             const res = await register(userForm);
+            const data = await res.json();
+            console.log(data);
             if (res.status === 500)
                 showModal('E-Posta sistemde zaten kayıtlıdır');
             else if (res.status === 200) {

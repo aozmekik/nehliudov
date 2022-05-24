@@ -5,10 +5,11 @@ import { StyleSheet, Text, TextInput, View} from 'react-native';
 
 function Input({ placeholder, required, value, style, disableLabel, ...props }) {
     // const requiredStyle = required ? { borderWidth: 1, borderColor: '#E11E3C' } : null;
+    
     return (
         <View style={style}>
             {!disableLabel && <Text style={styles.text}> {placeholder} </Text>}
-            <TextInput label={placeholder} value={value?.toString()} {...props} placeholder={placeholder} placeholderTextColor={required ? '#E11E3C' : styles.input.color} style={[styles.input]} />
+            <TextInput label={placeholder} value={value?.toString()}  {...props} placeholder={placeholder} placeholderTextColor={required ? '#E11E3C' : styles.input.color} style={[styles.input]} />
         </View>
     )
 }
