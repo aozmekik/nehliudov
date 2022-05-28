@@ -1,9 +1,6 @@
 import { getHeaders, URL } from './headers';
 import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
-
-
-
+import * as IntentLauncher from 'expo-intent-launcher';
 
 async function createFamily(fam) {
     const url = URL + '/families/create/';
@@ -48,29 +45,25 @@ async function deleteFamily(fam) {
     return res;
 }
 
-
-
-
 async function downloadFamily(fam) {
     const uri = `${URL}/families/pdf/${fam._id}`;
-    let fileUri = FileSystem.documentDirectory + `${fam.name}.pdf`;
+    let fileUri = FileSystem.documentDirectory + `Aile-${fam.name}.pdf`;
     FileSystem.downloadAsync(uri, fileUri, { headers: getHeaders().headers })
         .then(({ uri }) => {
             console.log('File downloaded ', uri);
-            saveFile(uri);
+            FileSystem.getContentUriAsync(uri).then(cUri => {
+                IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+                    data: cUri,
+                    flags: 1,
+                    type: 'application/pdf'
+                });
+            });
         })
         .catch(error => {
             console.error(error);
         })
 }
 
-const saveFile = async (fileUri) => {
-    const { status } = await MediaLibrary.requestPermissionsAsync();
-    if (status === "granted") {
-        const asset = await MediaLibrary.createAssetAsync(fileUri)
-        await MediaLibrary.createAlbumAsync("Download", asset, false)
-    }
-}
 
 export {
     createFamily,

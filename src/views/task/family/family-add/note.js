@@ -34,7 +34,7 @@ class NoteScreen extends FormScreen {
         const { navigation } = this.props;
         return (
             <View style={styles.container}>
-                <NavBar onPress={navigation.goBack()} onTick={() => this.onTick()} title={`Not ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
+                <NavBar onPress={() => navigation.goBack()} onTick={() => this.onTick()} title={`Not ${this.isEdit() ? 'Düzenle' : 'Ekle'}`} />
                 <ScrollView>
                     <Input value={note.statement} multiline={true} onChangeText={e => this.handleChange(e, 'statement')} style={{ ...styles.input, paddingVertical: 30 }} placeholder='Not' />
                     <Modal

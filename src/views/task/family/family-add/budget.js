@@ -53,7 +53,8 @@ class BudgetScreen extends FormScreen {
                 <ScrollView>
                     <Select value={budget.type} onValueChange={e => this.handleChange(e, 'type')} items={FamilyModel.budgetList} style={styles.input} placeholder='Tip' />
                     <Input required={true} value={budget.name} onChangeText={e => this.handleChange(e, 'name')} style={styles.input} placeholder='Bütçe Adı' />
-                    <Input required={true} value={budget.amount} onChangeText={e => this.handleChange(e, 'amount', 'numeric')} keyboardType='number-pad' style={styles.input} placeholder='Tutar' />
+                    <Input required={true} value={budget.amount} onChangeText={e => this.handleChange(e, 'amount', 'numeric')} keyboardType='number-pad' style={styles.input} 
+                    placeholder={this.state.model.type === FamilyModel.BudgetType.BILL ? 'Mukavele No': 'Tutar'} />
                     <Modal
                         animationType='fade'
                         transparent={true}

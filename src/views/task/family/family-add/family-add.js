@@ -76,7 +76,8 @@ class FamilyAddMainScreen extends React.Component {
             modalVisible: false,
             dialogText: ' ',
             loading: false,
-            exit: false
+            exit: false,
+            goBack: this.props?.route?.params?.goBack
         }
         this.swiperRef = React.createRef();
         this.backHandler = null;
@@ -188,9 +189,10 @@ class FamilyAddMainScreen extends React.Component {
                     const res = await FamilyServices.updateFamily(this.state.family);
                     if (res.status === 200) {
                         // update the family list in stack screen
+                        console.log('goBack', this.state.goBack);
                         this.setState(prevState => ({ ...prevState, exit: true }));
                         this.props.navigation.navigate({
-                            name: this.props.route.params.goBack,
+                            name: this.state.goBack,
                             params: {
                                 family: this.state.family
                             },

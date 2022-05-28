@@ -13,8 +13,8 @@ class User {
     // FIXME. add default image.
     constructor() {
         this._id = null;
-        this.email = 'exbat_76@hotmail.com';
-        this.password = 'semih123';
+        this.email = null;
+        this.password = null;
         this.name = null;
         this.role = 0;
         this.image = null;

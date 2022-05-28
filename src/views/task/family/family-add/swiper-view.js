@@ -10,6 +10,7 @@ import { ButtonCard, SelectedModal, Input } from '../../../../components/';
 import styles from './style';
 import { Check, Plus } from '../../../../components/icons';
 import MemberScreen from './member';
+import { Note } from '../../../../models/family';
 
 
 class SwiperView extends React.Component {
@@ -162,8 +163,10 @@ class SwiperView extends React.Component {
         let newModel = this.state.quickModel;
         if (this.screenName === 'FamilyNeed')
             newModel = this.state.quickModel.name;
-        else if (this.screenName === 'FamilyNote')
+        else if (this.screenName === 'FamilyNote') {
+            newModel = new Note();
             newModel.statement = this.state.quickModel.name;
+        }
 
         const newModels = [...this.state.models, newModel];
         this.setState(prevState => ({ ...prevState, models: newModels, quickModel: {name: null} }));
@@ -200,7 +203,7 @@ class SwiperView extends React.Component {
                     <View style={styles.input}>
                         <Input disableLabel={true} value={this.state.quickModel.name} onChangeText={(e) =>  this.setState(prevState => ({ ...prevState, quickModel: {name: e} }))} placeholder={`Hızlı ${this.title.toLowerCase()}`}/>
                         { this.state.quickModel.name?.length > 0 &&
-                        <TouchableOpacity onPress={() => this.quickAdd()} style={{position: 'absolute', top: 15, right: 15}}  >
+                        <TouchableOpacity onPress={() => this.quickAdd()} style={{position: 'absolute', right: 1, padding: 16}}  >
                             <Check style={{ backgroundColor: '#E11E3C', borderRadius: 10, }} fill="#FFFFFF" />
                         </TouchableOpacity>
                         }

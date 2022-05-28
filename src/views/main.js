@@ -11,6 +11,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { connect } from 'react-redux';
+import * as Network from 'expo-network';
+
 
 
 import TabBar from '../components/tab-bar';
@@ -34,19 +36,22 @@ function MainScreen({ userReducer, dispatchRestoreUser }) {
 
     React.useEffect(() => {
         async function getUser() {
+            const netState = await Network.getNetworkStateAsync();
+            if (netState.isInternetReachable) {
+                let restoredUser = null;
+                try {
+                    const loggedIn = await isLoggedIn();
+                    if (loggedIn)
+                        restoredUser = await getCurrentUser();
+                } catch (e) {
+                    console.error(e);
+                }
 
-            let restoredUser = null;
-            try {
-                const loggedIn = await isLoggedIn();
-                if (loggedIn)
-                    restoredUser = await getCurrentUser();
-            } catch (e) {
-                console.error(e);
+                if (restoredUser)
+                    dispatchRestoreUser(restoredUser);
+                setReady(true);
             }
-
-            if (restoredUser)
-                dispatchRestoreUser(restoredUser);
-            setReady(true);
+            
         }
 
         getUser();
