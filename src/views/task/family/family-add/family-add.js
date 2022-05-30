@@ -151,8 +151,8 @@ class FamilyAddMainScreen extends React.Component {
         valid = this.validateModel('name', 'Aile ismi');
         if (valid)
             valid = this.validateModel('idNo', 'Kimlik Numarası', { length: 11 });
-        if (valid)
-            valid = this.validateModel('tel', 'Telefon Numarası', { length: 11 });
+        // if (valid)
+            // valid = this.validateModel('tel', 'Telefon Numarası', { length: 10 });
         if (valid)
             valid = this.validateModel('town', 'İlçe');
 
@@ -200,8 +200,10 @@ class FamilyAddMainScreen extends React.Component {
                         });
                         return;
                     }
-                    if (res.status === 400) 
-                        this.showModal('Bir hata oluştu');
+                    if (res.status === 400) {
+                        const js = await res.json();
+                        this.showModal('Bir hata oluştu' + JSON.stringify(js));
+                    }
                 }
                 else
                     this.showModal('İşlemi yapmaya yetkiniz yok!');
@@ -215,8 +217,7 @@ class FamilyAddMainScreen extends React.Component {
                 }
                 else if (res.status === 400){
                     const js = await res.json();
-                    console.log(js);
-                    this.showModal('Bir hata oluştu');
+                    this.showModal('Bir hata oluştu' + JSON.stringify(js));
                 }
             }
 
@@ -257,7 +258,7 @@ class FamilyAddMainScreen extends React.Component {
                         <Input value={family.name} onChangeText={e => this.handleChange(e, 'name')} required={true} autoCapitalize='words' textContentType='name' style={styles.input} placeholder='İsim' />
                         <Input value={family.idNo} onChangeText={e => this.handleChange(e, 'idNo', 'numeric')} required={true} keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Kimlik Numarası' />
                         <Input value={family.nation} onChangeText={e => this.handleChange(e, 'nation')} style={styles.input} placeholder='Uyruk' />
-                        <Input value={family.tel} onChangeText={e => this.handleChange(e, 'tel', 'numeric')} required={true}  keyboardType='number-pad' maxLength={11} style={styles.input} placeholder='Telefon' />
+                        <Input value={family.tel} onChangeText={e => this.handleChange(e, 'tel', 'numeric')} required={true}  keyboardType='number-pad' style={styles.input} placeholder='Telefon' />
                         <Location loc={loc} onValueChange={e => this.handleLocation(e)} />
                         <Input value={family.address} style={styles.input} onChangeText={e => this.handleChange(e, 'address')} placeholder='Adres' />
                         <Input value={family.rent} style={styles.input} keyboardType='number-pad' onChangeText={e => this.handleChange(e, 'rent', 'numeric')} placeholder='Kira' />

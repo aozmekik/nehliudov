@@ -57,6 +57,7 @@ export class Member {
         this.size = null;
         this.shoe = null;
         this.disease = null;
+        this.medicine = null;
         this.note = null;
         this.school = null;
         this.grade = null;

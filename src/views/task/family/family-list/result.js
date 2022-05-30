@@ -37,7 +37,7 @@ function FamilyListResultMainScreen({ navigation, route }) {
         if (!selfIsManager()) {
             setModalVisible(true);
             setTimeout(() => {
-                this.setModalVisible(false)
+                setModalVisible(false)
             }, 2000);
         }
         else {
