@@ -2,7 +2,7 @@
   "expo": {
     "name": "İyilik Rengi",
     "slug": "iyilik-rengi",
-    "version": "2.0.2",
+    "version": "2.0.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -26,14 +26,14 @@
       }
     },
     "android": {
-      "versionCode": 4,
+      "versionCode": 8,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.colorfavor.nehliudov",
       "permissions": [
-        "CAMERA", 
+        "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
         "INTERNET"

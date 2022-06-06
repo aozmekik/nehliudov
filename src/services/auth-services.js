@@ -1,5 +1,5 @@
-import { decode as atob } from 'base-64'
 import { URL, getHeaders } from './headers';
+import { Buffer } from "buffer";
 
 
 import * as StorageServices from './storage-services';
@@ -39,6 +39,10 @@ async function register(user) {
 
 async function logout() {
     StorageServices.remove('token');
+}
+
+function atob(token) {
+    return Buffer.from(token, 'base64').toString('utf8');
 }
 
 async function isLoggedIn() {
